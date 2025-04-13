@@ -17,5 +17,10 @@
     "url": "https://github.com/arpitcs/dock-pilot/issues"
   },
   "homepage": "https://github.com/arpitcs/dock-pilot#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "morgan": "^1.10.0"
+  }
 }
