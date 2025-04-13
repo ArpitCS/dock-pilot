@@ -150,6 +150,120 @@ app.get("/system-resources", (req, res) => {
   });
 });
 
+app.get("/get-containers", (req, res) => {
+  const scriptPath = path.join(
+    __dirname,
+    "scripts",
+    "containers/get-containers.sh"
+  ); // Change to your script path
+  execFile(scriptPath, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing script: ${error}`);
+      return res.status(500).send(`Error executing script: ${error.message}`);
+    }
+    console.log(`Script output: ${stdout}`);
+    res.send(stdout.trim());
+  });
+});
+
+app.get("/get-logs/:containerId", (req, res) => {
+  const { containerId } = req.params;
+  const scriptPath = path.join(__dirname, "scripts", "containers/get-logs.sh"); // Change to your script path
+  execFile(scriptPath, [containerId], (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing script: ${error}`);
+      return res.status(500).send(`Error executing script: ${error.message}`);
+    }
+    console.log(`Script output: ${stdout}`);
+    res.send(stdout.trim());
+  });
+});
+
+app.get("/start-container/:containerId", (req, res) => {
+  const { containerId } = req.params;
+  const scriptPath = path.join(
+    __dirname,
+    "scripts",
+    "containers/start-container.sh"
+  ); // Change to your script path
+  execFile(scriptPath, [containerId], (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing script: ${error}`);
+      return res.status(500).send(`Error executing script: ${error.message}`);
+    }
+    console.log(`Script output: ${stdout}`);
+    res.send(stdout.trim());
+  });
+});
+
+app.get("/stop-container/:containerId", (req, res) => {
+  const { containerId } = req.params;
+  const scriptPath = path.join(
+    __dirname,
+    "scripts",
+    "containers/stop-container.sh"
+  ); // Change to your script path
+  execFile(scriptPath, [containerId], (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing script: ${error}`);
+      return res.status(500).send(`Error executing script: ${error.message}`);
+    }
+    console.log(`Script output: ${stdout}`);
+    res.send(stdout.trim());
+  });
+});
+
+app.get("/delete-container/:containerId", (req, res) => {
+  const { containerId } = req.params;
+  const scriptPath = path.join(
+    __dirname,
+    "scripts",
+    "containers/delete-container.sh"
+  ); // Change to your script path
+  execFile(scriptPath, [containerId], (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing script: ${error}`);
+      return res.status(500).send(`Error executing script: ${error.message}`);
+    }
+    console.log(`Script output: ${stdout}`);
+    res.send(stdout.trim());
+  });
+});
+
+app.get("/restart-container/:containerId", (req, res) => {
+  const { containerId } = req.params;
+  const scriptPath = path.join(
+    __dirname,
+    "scripts",
+    "containers/restart-container.sh"
+  ); // Change to your script path
+  execFile(scriptPath, [containerId], (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing script: ${error}`);
+      return res.status(500).send(`Error executing script: ${error.message}`);
+    }
+    console.log(`Script output: ${stdout}`);
+    res.send(stdout.trim());
+  });
+});
+
+app.get("/inspect-container/:containerId", (req, res) => {
+  const { containerId } = req.params;
+  const scriptPath = path.join(
+    __dirname,
+    "scripts",
+    "containers/inspect-container.sh"
+  ); // Change to your script path
+  execFile(scriptPath, [containerId], (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing script: ${error}`);
+      return res.status(500).send(`Error executing script: ${error.message}`);
+    }
+    console.log(`Script output: ${stdout}`);
+    res.send(stdout.trim());
+  });
+});
+
 // Start the server
 const PORT = 3030;
 app.listen(PORT, () => {

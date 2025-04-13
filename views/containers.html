@@ -1,99 +1,1710 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DockPilot | Containers</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
     />
     <style>
-      :root {
-        --primary-color: #0f243a;
-        --secondary-color: #2563eb;
+      .hover-lift {
+        transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
       }
-      .bg-primary {
-        background-color: var(--primary-color);
+      .hover-lift:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
       }
-      .text-primary {
-        color: var(--primary-color);
-      }
-      .hover-effect:hover {
-        transform: translateY(-2px);
+      .status-badge {
         transition: all 0.3s ease;
       }
-      .nav-link {
-        position: relative;
+      .glass-effect {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.8);
       }
-      .nav-link::after {
+      .console-line {
+        line-height: 1.5;
+        padding: 2px 0;
+      }
+      .container-card {
+        transition: all 0.2s ease-in-out;
+      }
+      .container-card:hover {
+        border-color: #3b82f6;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+      }
+      .sidebar-link.active {
+        background-color: #f3f4f6;
+        border-left: 4px solid #3b82f6;
+      }
+      .tooltip {
+        position: relative;
+        display: inline-block;
+      }
+      .tooltip .tooltip-text {
+        visibility: hidden;
+        width: 180px;
+        background-color: rgba(17, 24, 39, 0.95);
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 8px;
+        position: absolute;
+        z-index: 1000;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s, transform 0.3s;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        font-size: 0.8rem;
+        pointer-events: none;
+      }
+      .tooltip .tooltip-text::after {
         content: "";
         position: absolute;
-        width: 0;
-        height: 2px;
-        bottom: -4px;
-        left: 0;
-        background-color: var(--secondary-color);
-        transition: width 0.3s ease;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: rgba(17, 24, 39, 0.95) transparent transparent transparent;
       }
-      .nav-link:hover::after {
-        width: 100%;
+      .tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+        transform: translateX(-50%) translateY(-5px);
       }
-      .active::after {
+      .modal {
+        transition: all 0.3s ease;
+      }
+      .modal-overlay {
+        transition: opacity 0.3s ease;
+      }
+      .table-container {
+        overflow-x: auto;
+      }
+      table {
         width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+      th {
+        position: sticky;
+        top: 0;
+        background-color: white;
+        z-index: 10;
+      }
+      th,
+      td {
+        padding: 0.75rem 1rem;
+        text-align: left;
+      }
+      tbody tr {
+        border-bottom: 1px solid #e5e7eb;
+        transition: background-color 0.2s;
+      }
+      tbody tr:hover {
+        background-color: #f9fafb;
+      }
+      .action-btn {
+        transition: all 0.2s;
+      }
+      .action-btn:hover {
+        transform: translateY(-2px);
+      }
+      .grid-view-item {
+        transition: all 0.2s ease;
+      }
+      .grid-view-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+      .tooltip button {
+        transition: all 0.2s ease;
+      }
+      .tooltip button:hover {
+        transform: translateY(-2px);
+      }
+      .tooltip button:active {
+        transform: translateY(0);
       }
     </style>
-    <title>Dock Pilot | Containers</title>
-</head>
-<body>
-    <header class="bg-white shadow-md">
-        <div class="container mx-auto px-4">
-          <div class="flex justify-between items-center py-4">
-            <!-- Logo Section -->
-            <div class="flex items-center space-x-2 hover-effect">
-              <a href="/">
-                <img src="/dockpilot-logo.png" alt="Logo" class="w-40 h-auto" />
-              </a>
+  </head>
+  <body class="bg-gray-50 font-sans">
+    <!-- Overall layout: Sidebar + Content -->
+    <div class="flex min-h-screen">
+      <!-- Sidebar (Desktop) -->
+      <aside
+        class="fixed inset-y-0 left-0 w-64 bg-white shadow-lg z-30 transition-transform duration-300 transform md:translate-x-0 -translate-x-full"
+        id="sidebar"
+      >
+        <!-- Logo Section -->
+        <div class="p-5 border-b border-gray-200">
+          <a href="/" class="flex items-center justify-center">
+            <img src="/dockpilot-logo.png" alt="DockPilot Logo" class="h-15" />
+          </a>
+        </div>
+        <!-- Navigation Links -->
+        <nav class="mt-6 px-3">
+          <div class="space-y-1">
+            <a
+              href="/"
+              class="sidebar-link flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100 transition-all duration-200"
+            >
+              <i class="fas fa-tachometer-alt mr-3 text-blue-500"></i>
+              <span>Dashboard</span>
+            </a>
+            <a
+              href="/containers"
+              class="sidebar-link active flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100 transition-all duration-200"
+            >
+              <i class="fas fa-th-large mr-3 text-blue-500"></i>
+              <span>Containers</span>
+            </a>
+            <a
+              href="/images"
+              class="sidebar-link flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100 transition-all duration-200"
+            >
+              <i class="fas fa-image mr-3 text-blue-500"></i>
+              <span>Images</span>
+            </a>
+            <a
+              href="/lab"
+              class="sidebar-link flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100 transition-all duration-200"
+            >
+              <i class="fas fa-flask mr-3 text-blue-500"></i>
+              <span>Container Lab</span>
+            </a>
+          </div>
+        </nav>
+        <!-- System Status -->
+        <div
+          class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200"
+        >
+          <div class="flex items-center justify-between text-sm">
+            <div class="flex items-center">
+              <div
+                class="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-2"
+              ></div>
+              <span class="text-green-700">Docker Engine</span>
             </div>
-    
-            <!-- Navigation -->
-            <nav class="hidden md:flex space-x-8">
-              <a href="/" class="nav-link text-primary font-medium"
-                >Dashboard</a
-              >
-              <a href="/containers" class="nav-link active text-primary font-medium">Containers</a>
-              <a href="/images" class="nav-link text-primary font-medium">Images</a>
-              <a href="/lab" class="nav-link text-primary font-medium"
-                >Container Lab</a
-              >
-            </nav>
-    
-            <!-- Right Side Icons -->
+            <span class="text-green-700">Online</span>
+          </div>
+          <div class="mt-2 text-xs text-gray-500" id="sidebarLastUpdated">
+            Last updated: Just now
+          </div>
+        </div>
+      </aside>
+
+      <!-- Mobile Overlay -->
+      <div
+        class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden"
+        id="overlay"
+      ></div>
+
+      <!-- Main Content -->
+      <div class="flex-1 md:ml-64">
+        <!-- Top Navigation Bar -->
+        <header class="bg-white shadow-sm sticky top-0 z-10">
+          <div class="flex items-center justify-between px-4 py-3">
+            <!-- Mobile menu button -->
+            <button id="mobile-menu-btn" class="md:hidden focus:outline-none">
+              <i class="fas fa-bars text-gray-700 text-xl"></i>
+            </button>
+            <!-- Page Title -->
+            <div class="flex-1 mx-4">
+              <h1 class="text-xl font-semibold text-gray-800">Containers</h1>
+              <p class="text-sm text-gray-500">
+                Manage and monitor your Docker containers
+              </p>
+            </div>
+            <!-- Right Actions -->
             <div class="flex items-center space-x-4">
+              <div class="flex items-center">
+                <button
+                  id="viewToggle"
+                  class="tooltip flex items-center px-3 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 focus:outline-none transition"
+                >
+                  <span class="tooltip-text"
+                    >Toggle between table and grid view</span
+                  >
+                  <i id="viewIcon" class="fas fa-table mr-1"></i>
+                  <span id="viewLabel" class="text-sm">Table View</span>
+                </button>
+              </div>
               <button
-                class="hover-effect flex items-center justify-center w-10 h-10 rounded-full bg-blue-100 text-blue-600"
+                id="refreshBtn"
+                onclick="refreshContainers()"
+                class="flex items-center px-3 py-1 bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 focus:outline-none transition"
               >
-                <i class="fas fa-circle-info"></i>
+                <i id="refreshIcon" class="fas fa-sync-alt mr-1"></i>
+                <span class="text-sm">Refresh</span>
               </button>
-              <button class="md:hidden text-primary">
-                <i class="fas fa-bars text-xl"></i>
+              <button
+                id="createContainerBtn"
+                class="flex items-center px-4 py-1 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none transition"
+              >
+                <i class="fas fa-plus mr-1"></i>
+                <span class="text-sm">New Container</span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <!-- Filter and Search Bar -->
+        <div class="bg-white border-b border-gray-200 px-6 py-4">
+          <div class="flex flex-col md:flex-row gap-4">
+            <div class="flex-1">
+              <div class="relative">
+                <div
+                  class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+                >
+                  <i class="fas fa-search text-gray-400"></i>
+                </div>
+                <input
+                  type="text"
+                  id="containerSearch"
+                  placeholder="Search containers..."
+                  class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+                />
+              </div>
+            </div>
+            <div class="flex gap-3">
+              <select
+                id="statusFilter"
+                class="border border-gray-300 rounded-md text-sm py-2 px-3 bg-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="all">All Statuses</option>
+                <option value="running">Running</option>
+                <option value="stopped">Stopped</option>
+                <option value="created">Created</option>
+                <option value="paused">Paused</option>
+              </select>
+              <button
+                id="filterBtn"
+                class="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none transition"
+              >
+                <i class="fas fa-filter mr-2"></i>
+                <span>Filter</span>
               </button>
             </div>
           </div>
         </div>
-    
-        <!-- Mobile Menu (Hidden by default) -->
-        <div class="hidden md:hidden bg-white pb-4 px-4">
-          <a href="#" class="block py-2 text-primary font-medium">Dashboard</a>
-          <a href="#" class="block py-2 text-primary font-medium">Containers</a>
-          <a href="#" class="block py-2 text-primary font-medium">Images</a>
-          <a href="#" class="block py-2 text-primary font-medium"
-            >Container Lab</a
-          >
+
+        <!-- Main Page Content -->
+        <main class="p-6">
+          <!-- Table View -->
+          <div id="tableView" class="fade-in">
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+              <div class="table-container">
+                <table class="min-w-full">
+                  <thead>
+                    <tr class="border-b border-gray-200">
+                      <th
+                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        <div class="flex items-center cursor-pointer">
+                          Container Name
+                          <i class="fas fa-sort ml-1 text-gray-400"></i>
+                        </div>
+                      </th>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        <div class="flex items-center cursor-pointer">
+                          Image
+                          <i class="fas fa-sort ml-1 text-gray-400"></i>
+                        </div>
+                      </th>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        <div class="flex items-center cursor-pointer">
+                          Status
+                          <i class="fas fa-sort ml-1 text-gray-400"></i>
+                        </div>
+                      </th>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        <div class="flex items-center cursor-pointer">
+                          Created At
+                          <i class="fas fa-sort ml-1 text-gray-400"></i>
+                        </div>
+                      </th>
+                      <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Ports
+                      </th>
+                      <th
+                        class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="containerTableBody">
+                    <!-- Table rows will be dynamically added here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Grid View (Hidden by default) -->
+          <div id="gridView" class="fade-in hidden">
+            <div
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              id="containersGrid"
+            >
+              <!-- Grid items will be dynamically added here -->
+            </div>
+          </div>
+
+          <!-- Pagination Controls -->
+          <div class="mt-6 flex items-center justify-between">
+            <div class="text-sm text-gray-700">
+              Showing <span class="font-medium">1-3</span> of
+              <span class="font-medium">3</span> containers
+            </div>
+            <div class="flex space-x-1">
+              <button
+                class="px-3 py-1 rounded-md text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Previous
+              </button>
+              <button
+                class="px-3 py-1 rounded-md text-sm bg-blue-500 text-white hover:bg-blue-600"
+              >
+                1
+              </button>
+              <button
+                class="px-3 py-1 rounded-md text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </main>
+
+        <!-- Footer -->
+        <footer
+          class="bg-white border-t border-gray-200 py-4 px-6 text-center text-sm text-gray-500"
+        >
+          <p>DockPilot &copy; 2025 | Simple Docker Management</p>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Modals (Logs, Terminal, Delete, Inspect, Create) -->
+
+    <!-- Container Logs Modal -->
+    <div id="logsModal" class="fixed inset-0 z-50 hidden">
+      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+      <div
+        class="modal relative bg-white rounded-lg shadow-xl max-w-4xl mx-auto mt-10 max-h-screen flex flex-col"
+      >
+        <div
+          class="flex justify-between items-center px-6 py-4 border-b border-gray-200"
+        >
+          <h3 class="text-lg font-medium text-gray-900">
+            Container Logs: <span id="logContainerName">Container</span>
+          </h3>
+          <button id="closeLogsModal" class="text-gray-400 hover:text-gray-500">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
-      </header>
-</body>
+        <div class="flex-1 overflow-auto p-6">
+          <div class="console-output p-4 h-96 overflow-y-auto">
+            <!-- Sample logs (will be replaced after loading) -->
+            <div class="console-line">
+              <span class="console-timestamp">[10:24:32]</span>
+              <span class="console-output-text">Nginx starting...</span>
+            </div>
+          </div>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-200 flex justify-between">
+          <div class="flex space-x-2">
+            <button
+              class="px-3 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded focus:outline-none"
+            >
+              <i class="fas fa-download mr-2"></i>Download
+            </button>
+            <button
+              class="px-3 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded focus:outline-none"
+            >
+              <i class="fas fa-sync-alt mr-2"></i>Refresh
+            </button>
+          </div>
+          <button
+            id="closeLogsBtn"
+            class="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded focus:outline-none"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terminal Modal -->
+    <div id="terminalModal" class="fixed inset-0 z-50 hidden">
+      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+      <div
+        class="modal relative bg-white rounded-lg shadow-xl max-w-4xl mx-auto mt-10 max-h-screen flex flex-col"
+      >
+        <div
+          class="flex justify-between items-center px-6 py-4 border-b border-gray-200 bg-gray-800 text-white"
+        >
+          <h3 class="text-lg font-medium">
+            Terminal: <span id="terminalContainerName">Container</span>
+          </h3>
+          <button
+            id="closeTerminalModal"
+            class="text-gray-400 hover:text-gray-300"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="flex-1 overflow-hidden">
+          <div
+            class="bg-gray-900 p-4 h-96 overflow-y-auto font-mono text-sm text-gray-300"
+          >
+            <div class="mb-2">Connected to container. Type 'exit' to close.</div>
+            <div class="mb-1">root@container:/# ls -la</div>
+          </div>
+        </div>
+        <div class="px-4 py-4 border-t border-gray-200 bg-gray-800">
+          <div class="flex items-center">
+            <span class="text-green-400 mr-2">root@container:/#</span>
+            <input
+              type="text"
+              class="flex-1 bg-gray-900 text-white border border-gray-700 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              placeholder="Enter command..."
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 z-50 hidden">
+      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+      <div
+        class="modal relative bg-white rounded-lg shadow-xl max-w-md mx-auto mt-24"
+      >
+        <div class="px-6 py-4">
+          <div class="text-center">
+            <div
+              class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4"
+            >
+              <i class="fas fa-exclamation-triangle text-red-600"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">
+              Delete Container
+            </h3>
+            <p class="text-sm text-gray-500">
+              Are you sure you want to delete container
+              <span id="deleteContainerName" class="font-semibold">Container</span>?
+              This action cannot be undone.
+            </p>
+          </div>
+        </div>
+        <div class="px-6 py-4 bg-gray-50 flex justify-end rounded-b-lg">
+          <button
+            id="cancelDeleteBtn"
+            class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded mr-2 focus:outline-none"
+          >
+            Cancel
+          </button>
+          <button
+            id="confirmDeleteBtn"
+            class="px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inspect Container Modal -->
+    <div id="inspectModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
+      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+      <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="modal relative bg-white rounded-lg shadow-xl w-full max-w-4xl mx-auto max-h-[85vh] flex flex-col">
+          <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200 sticky top-0 bg-white z-10">
+            <h3 class="text-lg font-medium text-gray-900">
+              Inspect Container: <span id="inspectContainerName">Container</span>
+            </h3>
+            <button id="closeInspectModal" class="text-gray-400 hover:text-gray-500">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="flex-1 overflow-auto p-6" id="inspectContentContainer">
+            <div class="flex justify-center items-center h-full">
+              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+              <span class="ml-2">Loading container details...</span>
+            </div>
+          </div>
+          <div class="px-6 py-4 border-t border-gray-200 flex justify-between sticky bottom-0 bg-white">
+            <div class="flex space-x-2">
+              <button id="toggleJsonView" class="px-3 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded focus:outline-none">
+                <i class="fas fa-code mr-2"></i>View JSON
+              </button>
+            </div>
+            <button id="closeInspectBtn" class="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded focus:outline-none">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create Container Modal -->
+    <div id="createContainerModal" class="fixed inset-0 z-50 hidden">
+      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+      <div
+        class="modal relative bg-white rounded-lg shadow-xl max-w-3xl mx-auto mt-10 max-h-screen flex flex-col"
+      >
+        <div
+          class="flex justify-between items-center px-6 py-4 border-b border-gray-200"
+        >
+          <h3 class="text-lg font-medium text-gray-900">
+            Create New Container
+          </h3>
+          <button
+            id="closeCreateModal"
+            class="text-gray-400 hover:text-gray-500"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="flex-1 overflow-auto p-6">
+          <form id="createContainerForm">
+            <div class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label
+                    for="containerName"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Container Name</label
+                  >
+                  <input
+                    type="text"
+                    id="containerName"
+                    name="containerName"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="my-container"
+                  />
+                </div>
+                <div>
+                  <label
+                    for="containerImage"
+                    class="block text-sm font-medium text-gray-700 mb-1"
+                    >Image</label
+                  >
+                  <input
+                    type="text"
+                    id="containerImage"
+                    name="containerImage"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    placeholder="nginx:latest"
+                  />
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Port Mapping</label
+                >
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <input
+                      type="text"
+                      name="hostPort"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Host Port (e.g. 8080)"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      name="containerPort"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Container Port (e.g. 80)"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  class="mt-2 text-sm text-blue-600 hover:text-blue-800"
+                >
+                  <i class="fas fa-plus-circle mr-1"></i> Add Port Mapping
+                </button>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Environment Variables</label
+                >
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <input
+                      type="text"
+                      name="envKey"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Key"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      name="envValue"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Value"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  class="mt-2 text-sm text-blue-600 hover:text-blue-800"
+                >
+                  <i class="fas fa-plus-circle mr-1"></i> Add Environment
+                  Variable
+                </button>
+              </div>
+              <div>
+                <label
+                  for="volumeMapping"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Volume Mapping</label
+                >
+                <div class="grid grid-cols-2 gap-4">
+                  <div>
+                    <input
+                      type="text"
+                      name="hostPath"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Host Path"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      name="containerPath"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                      placeholder="Container Path"
+                    />
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  class="mt-2 text-sm text-blue-600 hover:text-blue-800"
+                >
+                  <i class="fas fa-plus-circle mr-1"></i> Add Volume Mapping
+                </button>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1"
+                  >Advanced Options</label
+                >
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      for="networkMode"
+                      class="block text-sm text-gray-600 mb-1"
+                      >Network Mode</label
+                    >
+                    <select
+                      id="networkMode"
+                      name="networkMode"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="bridge">bridge</option>
+                      <option value="host">host</option>
+                      <option value="none">none</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label
+                      for="restartPolicy"
+                      class="block text-sm text-gray-600 mb-1"
+                      >Restart Policy</label
+                    >
+                    <select
+                      id="restartPolicy"
+                      name="restartPolicy"
+                      class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="no">No</option>
+                      <option value="always">Always</option>
+                      <option value="on-failure">On-failure</option>
+                      <option value="unless-stopped">Unless-stopped</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
+          <button
+            id="cancelCreateBtn"
+            class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded mr-3 focus:outline-none"
+          >
+            Cancel
+          </button>
+          <button
+            id="createContainerBtn"
+            class="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded focus:outline-none"
+          >
+            Create Container
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Mobile menu toggle
+      document
+        .getElementById("mobile-menu-btn")
+        .addEventListener("click", function () {
+          const sidebar = document.getElementById("sidebar");
+          const overlay = document.getElementById("overlay");
+          if (sidebar.classList.contains("-translate-x-full")) {
+            sidebar.classList.remove("-translate-x-full");
+            overlay.classList.remove("hidden");
+          } else {
+            sidebar.classList.add("-translate-x-full");
+            overlay.classList.add("hidden");
+          }
+        });
+
+      // Toggle between table and grid view
+      document
+        .getElementById("viewToggle")
+        .addEventListener("click", function () {
+          const tableView = document.getElementById("tableView");
+          const gridView = document.getElementById("gridView");
+          const viewIcon = document.getElementById("viewIcon");
+          const viewLabel = document.getElementById("viewLabel");
+          if (tableView.classList.contains("hidden")) {
+            tableView.classList.remove("hidden");
+            gridView.classList.add("hidden");
+            viewIcon.className = "fas fa-table mr-1";
+            viewLabel.textContent = "Table View";
+          } else {
+            tableView.classList.add("hidden");
+            gridView.classList.remove("hidden");
+            viewIcon.className = "fas fa-th-large mr-1";
+            viewLabel.textContent = "Grid View";
+          }
+        });
+
+      // Modal open/close functions
+      function openModal(modalId) {
+        document.getElementById(modalId).classList.remove("hidden");
+      }
+      function closeModal(modalId) {
+        document.getElementById(modalId).classList.add("hidden");
+      }
+
+      // Event listeners for Create Container modal
+      document
+        .querySelectorAll("#createContainerBtn")
+        .forEach((btn) => {
+          btn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            openModal("createContainerModal");
+          });
+        });
+      document
+        .getElementById("closeCreateModal")
+        .addEventListener("click", function () {
+          closeModal("createContainerModal");
+        });
+      document
+        .getElementById("cancelCreateBtn")
+        .addEventListener("click", function () {
+          closeModal("createContainerModal");
+        });
+
+      // Event listeners for other modals (Logs, Terminal, Delete, Inspect)
+      document.querySelectorAll(".fa-file-alt").forEach((icon) => {
+        icon.addEventListener("click", function (e) {
+          e.stopPropagation();
+          const containerName =
+            e.target.closest("tr")?.querySelector(".text-sm.font-medium.text-gray-900")
+              ?.innerText || "Container";
+          document.getElementById("logContainerName").textContent = containerName;
+          openModal("logsModal");
+        });
+      });
+      document
+        .getElementById("closeLogsModal")
+        .addEventListener("click", function () {
+          closeModal("logsModal");
+        });
+      document
+        .getElementById("closeLogsBtn")
+        .addEventListener("click", function () {
+          closeModal("logsModal");
+        });
+      document.querySelectorAll(".fa-terminal").forEach((icon) => {
+        icon.addEventListener("click", function (e) {
+          e.stopPropagation();
+          const containerName =
+            e.target.closest("tr")?.querySelector(".text-sm.font-medium.text-gray-900")
+              ?.innerText || "Container";
+          document.getElementById("terminalContainerName").textContent = containerName;
+          openModal("terminalModal");
+        });
+      });
+      document
+        .getElementById("closeTerminalModal")
+        .addEventListener("click", function () {
+          closeModal("terminalModal");
+        });
+      document.querySelectorAll(".fa-trash").forEach((icon) => {
+        icon.addEventListener("click", function (e) {
+          e.stopPropagation();
+          const containerName =
+            e.target.closest("tr")?.querySelector(".text-sm.font-medium.text-gray-900")
+              ?.innerText || "Container";
+          document.getElementById("deleteContainerName").textContent = containerName;
+          openModal("deleteModal");
+        });
+      });
+      document
+        .getElementById("cancelDeleteBtn")
+        .addEventListener("click", function () {
+          closeModal("deleteModal");
+        });
+      document
+        .getElementById("confirmDeleteBtn")
+        .addEventListener("click", function () {
+          // Logic for deleting container would go here
+          closeModal("deleteModal");
+        });
+      document.querySelectorAll(".fa-info-circle").forEach((icon) => {
+        icon.addEventListener("click", function (e) {
+          e.stopPropagation();
+          const containerName =
+            e.target.closest("tr")?.querySelector(".text-sm.font-medium.text-gray-900")
+              ?.innerText || "Container";
+          document.getElementById("inspectContainerName").textContent = containerName;
+          openModal("inspectModal");
+        });
+      });
+      document
+        .getElementById("closeInspectModal")
+        .addEventListener("click", function () {
+          closeModal("inspectModal");
+        });
+      document
+        .getElementById("closeInspectBtn")
+        .addEventListener("click", function () {
+          closeModal("inspectModal");
+        });
+      // Overlay click to close sidebar
+      document.getElementById("overlay").addEventListener("click", function () {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("overlay");
+        sidebar.classList.add("-translate-x-full");
+        overlay.classList.add("hidden");
+      });
+      // Close modals when clicking outside of them
+      document.addEventListener("click", function (event) {
+        if (
+          event.target.closest(".modal") ||
+          event.target.closest(".fa-file-alt") ||
+          event.target.closest(".fa-terminal") ||
+          event.target.closest(".fa-trash") ||
+          event.target.closest(".fa-info-circle") ||
+          event.target.closest("#createContainerBtn")
+        ) {
+          return;
+        }
+        const modals = [
+          "logsModal",
+          "terminalModal",
+          "deleteModal",
+          "inspectModal",
+          "createContainerModal",
+        ];
+        modals.forEach((modalId) => {
+          const modal = document.getElementById(modalId);
+          if (modal && !modal.classList.contains("hidden")) {
+            closeModal(modalId);
+          }
+        });
+      });
+      document.querySelectorAll(".modal").forEach((modal) => {
+        modal.addEventListener("click", function (e) {
+          e.stopPropagation();
+        });
+      });
+      // Fix event listeners for grid view buttons
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".grid-view-item .action-btn").forEach((btn) => {
+          btn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            const action = e.currentTarget.querySelector(".tooltip-text").textContent;
+            const containerName = e.currentTarget
+              .closest(".grid-view-item")
+              .querySelector("h3").textContent;
+            if (action.includes("Logs")) {
+              document.getElementById("logContainerName").textContent = containerName;
+              openModal("logsModal");
+            } else if (action.includes("Terminal")) {
+              document.getElementById("terminalContainerName").textContent = containerName;
+              openModal("terminalModal");
+            } else if (action.includes("Delete")) {
+              document.getElementById("deleteContainerName").textContent = containerName;
+              openModal("deleteModal");
+            } else if (action.includes("Inspect")) {
+              document.getElementById("inspectContainerName").textContent = containerName;
+              openModal("inspectModal");
+            }
+          });
+        });
+      });
+
+      // Function to show notification
+      function showNotification(message, type = "success") {
+        const notificationContainer = document.getElementById('notification-container') || createNotificationContainer();
+        const notification = document.createElement("div");
+        const bgColor =
+          type === "success"
+            ? "bg-green-100 border-green-400 text-green-700"
+            : "bg-red-100 border-red-400 text-red-700"
+            "bg-blue-100 border-blue-400 text-blue-700";
+        const icon =
+          type === "success"
+            ? "fa-check-circle"
+            : type === "error"
+            ? "fa-exclamation-circle"
+            : "fa-info-circle";
+        notification.className = `${bgColor} border px-4 py-3 rounded shadow-md mb-2 flex items-center animate-fade-in`;
+        notification.style.transition = "all 0.3s ease-in-out";
+        notification.style.opacity = "0";
+        notification.innerHTML = `
+          <div class="flex items-center">
+            <i class="fas ${icon} mr-2"></i>
+            <span>${message}</span>
+          </div>
+        `;
+        notification.dataset.time = Date.now();
+        notificationContainer.appendChild(notification);
+        
+        // Animate the notification appearance
+        setTimeout(() => {
+          notification.style.opacity = "1";
+        }, 10);
+        
+        setTimeout(() => {
+          notification.style.opacity = "0";
+          setTimeout(() => {
+            notification.remove();
+            // If no more notifications, remove the container
+            if (notificationContainer.children.length === 0) {
+              notificationContainer.remove();
+            }
+          }, 300);
+        }, 3000);
+        
+        // Adjust positions of existing notifications
+        adjustNotificationPositions();
+      }
+      
+      // Function to create the notification container
+      function createNotificationContainer() {
+        const container = document.createElement("div");
+        container.id = "notification-container";
+        container.className = "fixed bottom-5 right-5 flex flex-col items-end z-50";
+        document.body.appendChild(container);
+        return container;
+      }
+      
+      // Function to add a fade-in animation
+      function addFadeInAnimation() {
+        const style = document.createElement('style');
+        style.textContent = `
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+      
+      // Function to adjust notification positions
+      function adjustNotificationPositions() {
+        const container = document.getElementById('notification-container');
+        if (!container) return;
+        
+        // Sort notifications by time (newest at the bottom)
+        const notifications = Array.from(container.children);
+        notifications.sort((a, b) => {
+          return parseInt(a.dataset.time) - parseInt(b.dataset.time);
+        });
+        
+        // Reorder in the DOM
+        notifications.forEach(notification => {
+          container.appendChild(notification);
+        });
+      }
+      
+      // Initialize animation
+      addFadeInAnimation();
+
+      // NEW: Function to parse console output and populate the UI dynamically
+      function populateContainers(data) {
+        const tableBody = document.getElementById("containerTableBody");
+        tableBody.innerHTML = "";
+        const gridContainer = document.getElementById("containersGrid");
+        gridContainer.innerHTML = "";
+        let lines = data.split(/\r?\n/).filter(line => line.trim() !== "");
+        if (lines[0].startsWith("Containers loaded:")) {
+          lines.shift();
+        }
+        if (
+          lines.length > 0 &&
+          lines[0].includes("NAMES") &&
+          lines[0].includes("IMAGE")
+        ) {
+          lines.shift();
+        }
+        lines.forEach(line => {
+          const cols = line.trim().split(/\s{2,}/);
+          const containerName = cols[0];
+          const containerId = cols[1];
+          const image = cols[2];
+          const status = cols[3];
+          const created = cols[4];
+          const ports = cols.length >= 6 ? cols[5] : "-N/A-";
+
+            const createdAt = new Date(created.split(' ')[0]).toLocaleString();
+
+          // Create table row
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td class="px-4 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <i class="fas fa-cube text-blue-500 mr-2"></i>
+                <div>
+                  <div class="text-sm font-medium text-gray-900">${containerName}</div>
+                  <div class="text-xs text-gray-500">ID: ${containerId}</div>
+                </div>
+              </div>
+            </td>
+            <td class="px-4 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-900">${image}</div>
+            </td>
+            <td class="px-4 py-4 whitespace-nowrap">
+              <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                status.toLowerCase().includes("up")
+                  ? "bg-green-100 text-green-800"
+                  : "bg-red-100 text-red-800"
+              }">
+                <div class="w-2 h-2 ${
+                  status.toLowerCase().includes("up")
+                    ? "bg-green-500"
+                    : "bg-red-500"
+                } rounded-full mr-1 self-center"></div>
+                ${status}
+              </span>
+            </td>
+            <td class="px-4 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-900">${createdAt}</div>
+            </td>
+            <td class="px-4 py-4 whitespace-nowrap">
+              <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                ${ports}
+              </span>
+            </td>
+            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium" data-container-name="${containerName}" data-container-id="${containerId}">
+              <div class="flex justify-start items-center space-x-3">
+                <button class="tooltip p-1.5 rounded hover:bg-gray-100">
+                  <span class="tooltip-text">${
+                    status.toLowerCase().includes("up")
+                      ? "Stop Container"
+                      : "Start Container"
+                  }</span>
+                  <i class="fas ${
+                    status.toLowerCase().includes("up")
+                      ? "fa-stop text-red-600"
+                      : "fa-play text-green-600"
+                  }"></i>
+                </button>
+                <button class="tooltip p-1.5 rounded hover:bg-gray-100">
+                  <span class="tooltip-text">Restart Container</span>
+                  <i class="fas fa-redo-alt text-blue-600"></i>
+                </button>
+                <button class="tooltip p-1.5 rounded hover:bg-gray-100">
+                  <span class="tooltip-text">View Logs</span>
+                  <i class="fas fa-file-alt text-gray-600"></i>
+                </button>
+                <button class="tooltip p-1.5 rounded hover:bg-gray-100">
+                  <span class="tooltip-text">Terminal Access</span>
+                  <i class="fas fa-terminal text-gray-600"></i>
+                </button>
+                <button class="tooltip p-1.5 rounded hover:bg-gray-100">
+                  <span class="tooltip-text">Inspect Container</span>
+                  <i class="fas fa-info-circle text-gray-600"></i>
+                </button>
+                <button class="tooltip p-1.5 rounded hover:bg-gray-100">
+                  <span class="tooltip-text">Delete Container</span>
+                  <i class="fas fa-trash text-gray-600"></i>
+                </button>
+              </div>
+            </td>
+          `;
+          tableBody.appendChild(tr);
+
+          // Create grid view item
+          const gridItem = document.createElement("div");
+          gridItem.className = "bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 grid-view-item";
+          gridItem.innerHTML = `
+            <div class="px-5 py-4 border-b border-gray-100">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <i class="fas fa-cube text-blue-500 mr-2"></i>
+                  <h3 class="font-medium text-gray-800">${containerName}</h3>
+                </div>
+                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                  status.toLowerCase().includes("up")
+                    ? "bg-green-100 text-green-800"
+                    : "bg-red-100 text-red-800"
+                }">
+                  <div class="w-2 h-2 ${
+                    status.toLowerCase().includes("up")
+                      ? "bg-green-500"
+                      : "bg-red-500"
+                  } rounded-full mr-1 self-center"></div>
+                  ${status}
+                </span>
+              </div>
+            </div>
+            <div class="px-5 py-3 bg-gray-50">
+              <div class="text-xs font-medium text-gray-500 uppercase">Image</div>
+              <div class="text-sm text-gray-700">${image}</div>
+            </div>
+            <div class="grid grid-cols-2 divide-x divide-gray-100">
+              <div class="px-5 py-3">
+                <div class="text-xs font-medium text-gray-500 uppercase">Created</div>
+                <div class="text-sm text-gray-700">${createdAt}</div>
+              </div>
+              <div class="px-5 py-3">
+                <div class="text-xs font-medium text-gray-500 uppercase">Ports</div>
+                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                  ${ports}
+                </span>
+              </div>
+            </div>
+            <div class="px-5 py-3 bg-gray-50 border-t border-gray-100" data-container-name="${containerName}" data-container-id="${containerId}">
+              <div class="flex justify-between items-center">
+                <div class="text-xs text-gray-500">ID: ${containerId}</div>
+                <div class="flex space-x-2">
+                  <button class="tooltip action-btn text-${
+                    status.toLowerCase().includes("up") ? "red" : "green"
+                  }-600 hover:text-${
+            status.toLowerCase().includes("up") ? "red" : "green"
+          }-900">
+                    <span class="tooltip-text">${
+                      status.toLowerCase().includes("up")
+                        ? "Stop Container"
+                        : "Start Container"
+                    }</span>
+                    <i class="fas ${
+                      status.toLowerCase().includes("up") ? "fa-stop" : "fa-play"
+                    }"></i>
+                  </button>
+                  <button class="tooltip action-btn text-blue-600 hover:text-blue-900">
+                    <span class="tooltip-text">Restart Container</span>
+                    <i class="fas fa-redo-alt"></i>
+                  </button>
+                  <button class="tooltip action-btn text-gray-600 hover:text-gray-900">
+                    <span class="tooltip-text">View Logs</span>
+                    <i class="fas fa-file-alt"></i>
+                  </button>
+                  <button class="tooltip action-btn text-gray-600 hover:text-gray-900">
+                    <span class="tooltip-text">Terminal Access</span>
+                    <i class="fas fa-terminal"></i>
+                  </button>
+                  <button class="tooltip action-btn text-gray-600 hover:text-gray-900">
+                    <span class="tooltip-text">Inspect Container</span>
+                    <i class="fas fa-info-circle"></i>
+                  </button>
+                  <button class="tooltip action-btn text-gray-600 hover:text-gray-900">
+                    <span class="tooltip-text">Delete Container</span>
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+          gridContainer.appendChild(gridItem);
+        });
+      }
+
+      // Function to load containers by fetching and parsing the console output
+      function loadContainers() {
+        const refreshIcon = document.getElementById("refreshIcon");
+        refreshIcon.classList.add("fa-spin");
+        fetch("/get-containers")
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Failed to fetch containers");
+            }
+            return response.text();
+          })
+          .then(data => {
+            console.log("Containers loaded:", data);
+            populateContainers(data);
+            showNotification("Containers loaded successfully", "success");
+          })
+          .catch(error => {
+            console.error("Error loading containers:", error);
+            showNotification("Failed to load containers: " + error.message, "error");
+          })
+          .finally(() => {
+            refreshIcon.classList.remove("fa-spin");
+          });
+      }
+
+      // Functions for container actions (start, stop, restart, delete, logs, inspect)
+      function startContainer(containerId, containerName) {
+        showNotification(`Starting container ${containerName}...`, "info");
+        fetch(`/start-container/${containerId}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Failed to start container");
+            }
+            return response.text();
+          })
+          .then(data => {
+            console.log("Container started:", data);
+            showNotification(data, "success");
+            refreshContainers();
+          })
+          .catch(error => {
+            console.error("Error starting container:", error);
+            showNotification("Failed to start container: " + error.message, "error");
+          });
+      }
+      function stopContainer(containerId, containerName) {
+        showNotification(`Stopping container ${containerName}...`, "info");
+        fetch(`/stop-container/${containerId}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Failed to stop container");
+            }
+            return response.text();
+          })
+          .then(data => {
+            console.log("Container stopped:", data);
+            showNotification(data, "success");
+            refreshContainers();
+          })
+          .catch(error => {
+            console.error("Error stopping container:", error);
+            showNotification("Failed to stop container: " + error.message, "error");
+          });
+      }
+      function restartContainer(containerId, containerName) {
+        showNotification(`Restarting container ${containerName}...`, "info");
+        fetch(`/restart-container/${containerId}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Failed to restart container");
+            }
+            return response.text();
+          })
+          .then(data => {
+            console.log("Container restarted:", data);
+            showNotification(data, "success");
+            refreshContainers();
+          })
+          .catch(error => {
+            console.error("Error restarting container:", error);
+            showNotification("Failed to restart container: " + error.message, "error");
+          });
+      }
+      function deleteContainer(containerId, containerName) {
+        showNotification(`Deleting container ${containerName}...`, "info");
+        fetch(`/delete-container/${containerId}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Failed to delete container");
+            }
+            return response.text();
+          })
+          .then(data => {
+            console.log("Container deleted:", data);
+            showNotification(data, "success");
+            refreshContainers();
+            closeModal("deleteModal");
+          })
+          .catch(error => {
+            console.error("Error deleting container:", error);
+            showNotification("Failed to delete container: " + error.message, "error");
+          });
+      }
+      function getContainerLogs(containerId, containerName) {
+        document.getElementById("logContainerName").textContent = containerName;
+        const logsContainer = document.querySelector("#logsModal .console-output");
+        logsContainer.innerHTML = '<div class="flex justify-center items-center h-full"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div><span class="ml-2">Loading logs...</span></div>';
+        openModal("logsModal");
+        fetch(`/get-logs/${containerId}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Failed to fetch logs");
+            }
+            return response.text();
+          })
+          .then(data => {
+            const formattedLogs = data.split('\n').map((line, index) => {
+              const timestamp = new Date();
+              timestamp.setSeconds(timestamp.getSeconds() - (data.split('\n').length - index));
+              const timeStr = timestamp.toTimeString().split(' ')[0];
+              return `<div class="console-line">
+                <span class="console-timestamp">[${timeStr}]</span>
+                <span class="console-output-text">${line}</span>
+              </div>`;
+            }).join('');
+            logsContainer.innerHTML = formattedLogs || '<div class="p-4 text-gray-500">No logs available for this container.</div>';
+          })
+          .catch(error => {
+            console.error("Error fetching logs:", error);
+            logsContainer.innerHTML = `<div class="p-4 text-red-500">Error fetching logs: ${error.message}</div>`;
+          });
+      }
+      function inspectContainer(containerId, containerName) {
+        document.getElementById("inspectContainerName").textContent = containerName;
+        const inspectContent = document.querySelector("#inspectModal .flex-1");
+        inspectContent.innerHTML = '<div class="flex justify-center items-center h-full"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div><span class="ml-2">Loading container details...</span></div>';
+        openModal("inspectModal");
+        fetch(`/inspect-container/${containerId}`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("Failed to inspect container");
+            }
+            return response.text();
+          })
+          .then(data => {
+            try {
+              const containerData = JSON.parse(data);
+              updateInspectModalContent(containerData, containerName);
+            } catch (e) {
+              inspectContent.innerHTML = `<div class="p-6"><pre class="whitespace-pre-wrap bg-gray-50 p-4 rounded overflow-auto max-h-96 text-sm">${data}</pre></div>`;
+            }
+          })
+          .catch(error => {
+            console.error("Error inspecting container:", error);
+            inspectContent.innerHTML = `<div class="p-6 text-red-500">Error inspecting container: ${error.message}</div>`;
+          });
+      }
+      // Replace the existing updateInspectModalContent function with this improved version
+      function updateInspectModalContent(containerData, containerName) {
+        const inspectContent = document.querySelector("#inspectContentContainer");
+        const container = containerData[0] || {};
+        
+        // Extract important information
+        const id = container.Id || 'Unknown';
+        const shortId = id.substring(0, 12);
+        const created = container.Created || 'Unknown';
+        const createdDate = new Date(created).toLocaleString();
+        const image = container.Config?.Image || 'Unknown';
+        const status = container.State?.Status || 'Unknown';
+        const running = container.State?.Running || false;
+        const statusClass = running ? 'bg-green-500' : 'bg-red-500';
+        const ports = Object.entries(container.NetworkSettings?.Ports || {})
+          .map(([key, val]) => `${key} → ${val ? val[0].HostPort : 'N/A'}`)
+          .join(', ') || 'None';
+        const cmd = container.Config?.Cmd ? container.Config.Cmd.join(' ') : 'N/A';
+        const env = container.Config?.Env || [];
+        const volumes = container.Mounts || [];
+        const networks = container.NetworkSettings?.Networks || {};
+        
+        // Prepare HTML for detailed info sections
+        const htmlContent = `
+          <div id="basicInfo" class="space-y-6">
+            <!-- Basic Information -->
+            <div class="mb-4">
+              <h4 class="text-md font-semibold text-gray-800 mb-3 flex items-center">
+                <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                Basic Information
+              </h4>
+              <div class="bg-gray-50 rounded-lg p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <div class="text-sm font-medium text-gray-500">Container ID</div>
+                  <div class="text-gray-900 font-mono">${shortId}</div>
+                  <div class="text-xs text-gray-500 mt-1">Full: ${id}</div>
+                </div>
+                <div>
+                  <div class="text-sm font-medium text-gray-500">Created</div>
+                  <div class="text-gray-900">${createdDate}</div>
+                </div>
+                <div>
+                  <div class="text-sm font-medium text-gray-500">Image</div>
+                  <div class="text-gray-900">${image}</div>
+                </div>
+                <div>
+                  <div class="text-sm font-medium text-gray-500">Status</div>
+                  <div class="text-gray-900 flex items-center">
+                    <div class="w-2 h-2 ${statusClass} rounded-full mr-2"></div>
+                    ${status.charAt(0).toUpperCase() + status.slice(1)}
+                    ${running ? '(Running)' : '(Stopped)'}
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Network Information -->
+            <div class="mb-4">
+              <h4 class="text-md font-semibold text-gray-800 mb-3 flex items-center">
+                <i class="fas fa-network-wired mr-2 text-blue-500"></i>
+                Network Information
+              </h4>
+              <div class="bg-gray-50 rounded-lg p-5">
+                <div class="mb-3">
+                  <div class="text-sm font-medium text-gray-500">Network Mode</div>
+                  <div class="text-gray-900">${container.HostConfig?.NetworkMode || 'bridge'}</div>
+                </div>
+                <div class="mb-3">
+                  <div class="text-sm font-medium text-gray-500">Port Mappings</div>
+                  <div class="text-gray-900">${ports}</div>
+                </div>
+                <div>
+                  <div class="text-sm font-medium text-gray-500">Networks</div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+                    ${Object.entries(networks).map(([name, net]) => `
+                      <div class="bg-white p-3 rounded border border-gray-200">
+                        <div class="font-medium">${name}</div>
+                        <div class="text-sm">IP: ${net.IPAddress || 'N/A'}</div>
+                        <div class="text-sm">Gateway: ${net.Gateway || 'N/A'}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Configuration -->
+            <div class="mb-4">
+              <h4 class="text-md font-semibold text-gray-800 mb-3 flex items-center">
+                <i class="fas fa-cog mr-2 text-blue-500"></i>
+                Configuration
+              </h4>
+              <div class="bg-gray-50 rounded-lg p-5">
+                <div class="mb-3">
+                  <div class="text-sm font-medium text-gray-500">Command</div>
+                  <div class="text-gray-900 font-mono text-sm bg-gray-100 p-2 rounded mt-1">${cmd}</div>
+                </div>
+                <div class="mb-3">
+                  <div class="text-sm font-medium text-gray-500">Restart Policy</div>
+                  <div class="text-gray-900">${container.HostConfig?.RestartPolicy?.Name || 'none'}</div>
+                </div>
+                <div>
+                  <div class="text-sm font-medium text-gray-500">Environment Variables</div>
+                  ${env.length > 0 ? 
+                    `<div class="bg-gray-100 p-2 rounded mt-1 max-h-32 overflow-y-auto">
+                      ${env.map(e => `<div class="font-mono text-sm">${e}</div>`).join('')}
+                     </div>` : 
+                    '<div class="text-gray-900">None defined</div>'}
+                </div>
+              </div>
+            </div>
+            
+            <!-- Volumes & Mounts -->
+            ${volumes.length > 0 ? `
+            <div class="mb-4">
+              <h4 class="text-md font-semibold text-gray-800 mb-3 flex items-center">
+                <i class="fas fa-hdd mr-2 text-blue-500"></i>
+                Volumes & Mounts
+              </h4>
+              <div class="bg-gray-50 rounded-lg p-5">
+                <div class="overflow-x-auto">
+                  <table class="min-w-full divide-y divide-gray-200">
+                    <thead>
+                      <tr>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Destination</th>
+                        <th class="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mode</th>
+                      </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                      ${volumes.map(v => `
+                        <tr>
+                          <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-900">${v.Type || 'volume'}</td>
+                          <td class="px-3 py-2 whitespace-nowrap text-sm font-mono">${v.Source || v.Name || 'N/A'}</td>
+                          <td class="px-3 py-2 whitespace-nowrap text-sm font-mono">${v.Destination || 'N/A'}</td>
+                          <td class="px-3 py-2 whitespace-nowrap text-sm">${v.Mode || 'rw'}</td>
+                        </tr>
+                      `).join('')}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            ` : ''}
+            
+            <!-- Resource Limits -->
+            <div class="mb-4">
+              <h4 class="text-md font-semibold text-gray-800 mb-3 flex items-center">
+                <i class="fas fa-microchip mr-2 text-blue-500"></i>
+                Resource Limits
+              </h4>
+              <div class="bg-gray-50 rounded-lg p-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <div class="text-sm font-medium text-gray-500">Memory Limit</div>
+                  <div class="text-gray-900">
+                    ${container.HostConfig?.Memory ? (container.HostConfig.Memory / (1024*1024)).toFixed(0) + ' MB' : 'No limit'}
+                  </div>
+                </div>
+                <div>
+                  <div class="text-sm font-medium text-gray-500">CPU Limit</div>
+                  <div class="text-gray-900">
+                    ${container.HostConfig?.NanoCpus ? (container.HostConfig.NanoCpus / 1000000000).toFixed(1) : 'No limit'}
+                  </div>
+                </div>
+                <div>
+                  <div class="text-sm font-medium text-gray-500">Privileged Mode</div>
+                  <div class="text-gray-900">${container.HostConfig?.Privileged ? 'Yes' : 'No'}</div>
+                </div>
+                <div>
+                  <div class="text-sm font-medium text-gray-500">OOM Kill Disabled</div>
+                  <div class="text-gray-900">${container.HostConfig?.OomKillDisable ? 'Yes' : 'No'}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- JSON Data (hidden by default) -->
+          <div id="jsonData" class="hidden">
+            <h4 class="text-md font-semibold text-gray-800 mb-3 flex items-center">
+              <i class="fas fa-code mr-2 text-blue-500"></i>
+              Complete JSON Data
+            </h4>
+            <div class="bg-gray-50 rounded-lg p-4 overflow-x-auto">
+              <pre class="text-xs font-mono whitespace-pre-wrap">${JSON.stringify(containerData, null, 2)}</pre>
+            </div>
+          </div>
+        `;
+        
+        inspectContent.innerHTML = htmlContent;
+        
+        // Setup toggle JSON view
+        document.getElementById('toggleJsonView').addEventListener('click', function() {
+          const jsonData = document.getElementById('jsonData');
+          const basicInfo = document.getElementById('basicInfo');
+          const button = this;
+          
+          if (jsonData.classList.contains('hidden')) {
+            jsonData.classList.remove('hidden');
+            basicInfo.classList.add('hidden');
+            button.innerHTML = '<i class="fas fa-list mr-2"></i>View Details';
+          } else {
+            jsonData.classList.add('hidden');
+            basicInfo.classList.remove('hidden');
+            button.innerHTML = '<i class="fas fa-code mr-2"></i>View JSON';
+          }
+        });
+      }
+
+      // Unified refresh containers function
+      function refreshContainers() {
+        loadContainers();
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        loadContainers();
+        // Set up event delegation for table row actions
+        document.addEventListener("click", function (e) {
+          if (e.target.closest(".fa-play")) {
+            const row = e.target.closest("tr");
+            if (!row) return;
+            const containerName = row.querySelector(".text-sm.font-medium.text-gray-900")?.innerText;
+            const containerId =
+              row.querySelector(".text-xs.text-gray-500")?.innerText.replace("ID: ", "") ||
+              containerName;
+            startContainer(containerId, containerName);
+          } else if (e.target.closest(".fa-stop")) {
+            const row = e.target.closest("tr");
+            if (!row) return;
+            const containerName = row.querySelector(".text-sm.font-medium.text-gray-900")?.innerText;
+            const containerId =
+              row.querySelector(".text-xs.text-gray-500")?.innerText.replace("ID: ", "") ||
+              containerName;
+            stopContainer(containerId, containerName);
+          } else if (e.target.closest(".fa-redo-alt")) {
+            const row = e.target.closest("tr");
+            if (!row) return;
+            const containerName = row.querySelector(".text-sm.font-medium.text-gray-900")?.innerText;
+            const containerId =
+              row.querySelector(".text-xs.text-gray-500")?.innerText.replace("ID: ", "") ||
+              containerName;
+            restartContainer(containerId, containerName);
+          } else if (e.target.closest(".fa-file-alt")) {
+            const row = e.target.closest("tr");
+            if (!row) return;
+            const containerName = row.querySelector(".text-sm.font-medium.text-gray-900")?.innerText;
+            const containerId =
+              row.querySelector(".text-xs.text-gray-500")?.innerText.replace("ID: ", "") ||
+              containerName;
+            getContainerLogs(containerId, containerName);
+          } else if (e.target.closest(".fa-info-circle")) {
+            const row = e.target.closest("tr");
+            if (!row) return;
+            const containerName = row.querySelector(".text-sm.font-medium.text-gray-900")?.innerText;
+            const containerId =
+              row.querySelector(".text-xs.text-gray-500")?.innerText.replace("ID: ", "") ||
+              containerName;
+            inspectContainer(containerId, containerName);
+          } else if (e.target.closest(".fa-trash")) {
+            const row = e.target.closest("tr");
+            if (!row) return;
+            const containerName = row.querySelector(".text-sm.font-medium.text-gray-900")?.innerText;
+            const containerId =
+              row.querySelector(".text-xs.text-gray-500")?.innerText.replace("ID: ", "") ||
+              containerName;
+            document.getElementById("deleteContainerName").textContent = containerName;
+            
+            // Store container ID in the modal for later use
+            document.getElementById("confirmDeleteBtn").dataset.containerId = containerId;
+            document.getElementById("confirmDeleteBtn").dataset.containerName = containerName;
+            
+            openModal("deleteModal");
+          }
+        });
+        
+        // Add proper event handler for delete confirmation button
+        document.getElementById("confirmDeleteBtn").addEventListener("click", function() {
+          const containerId = this.dataset.containerId;
+          const containerName = this.dataset.containerName;
+          if (containerId && containerName) {
+            deleteContainer(containerId, containerName);
+          } else {
+            showNotification("Container information not found", "error");
+          }
+        });
+      });
+    </script>
+  </body>
 </html>
