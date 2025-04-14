@@ -268,6 +268,46 @@ app.get("/inspect-container/:containerId", (req, res) => {
   });
 });
 
+app.post("/create-container", (req, res) => {
+  const {
+    containerName,
+    containerImage,
+    ports,
+    envVars,
+    volumes,
+    networkMode,
+    restartPolicy,
+  } = req.body;
+
+  const args = [
+    containerName,
+    containerImage,
+    JSON.stringify(ports || []),
+    JSON.stringify(envVars || []),
+    JSON.stringify(volumes || []),
+    networkMode || "bridge",
+    restartPolicy || "no",
+  ];
+
+  execFile(scriptPath, args, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing script: ${error}`);
+      return res.status(500).send({
+        success: false,
+        message: `Error executing script: ${error.message}`,
+        details: stderr
+      });
+    }
+
+    console.log(`Script output: ${stdout}`);
+    res.send({
+      success: true,
+      message: `Container ${containerName} created successfully.`,
+      details: stdout.trim()
+    });
+  });
+});
+
 // Start the server
 const PORT = 3030;
 app.listen(PORT, () => {
