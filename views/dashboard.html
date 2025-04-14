@@ -9,6 +9,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     />
+    <link rel="stylesheet" href="/global.css">
     <style>
       .hover-lift {
         transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -338,36 +339,26 @@
 
           <!-- Container Status Summary -->
           <section class="mb-8 fade-in">
-            <h2
-              class="text-lg font-semibold text-gray-800 flex items-center mb-4"
-            >
+            <h2 class="text-lg font-semibold text-gray-800 flex items-center mb-4">
               <i class="fas fa-chart-pie mr-2 text-blue-500"></i>
               Container Status
             </h2>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
               <!-- Running Containers -->
-              <div
-                class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-green-500 hover-lift"
-              >
+              <div class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-green-500 hover-lift">
                 <div class="flex justify-between items-center">
-                  <div class="rounded-full bg-green-100 p-3">
+                  <div class="rounded-full bg-green-100 p-3 w-12 h-12 flex items-center justify-center">
                     <i class="fas fa-play text-green-600"></i>
                   </div>
                   <div class="text-right">
-                    <div
-                      id="runningContainersValue"
-                      class="text-3xl font-bold text-gray-800"
-                    >
+                    <div id="runningContainersValue" class="text-3xl font-bold text-gray-800">
                       -
                     </div>
                     <div class="text-sm text-gray-500">Running Containers</div>
                   </div>
                 </div>
-                <div
-                  id="runningContainersOutput"
-                  class="text-xs text-gray-500 mt-3 hidden"
-                ></div>
+                <div id="runningContainersOutput" class="text-xs text-gray-500 mt-3 hidden"></div>
               </div>
 
               <!-- Stopped Containers -->
@@ -375,7 +366,7 @@
                 class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-red-500 hover-lift"
               >
                 <div class="flex justify-between items-center">
-                  <div class="rounded-full bg-red-100 p-3">
+                  <div class="rounded-full bg-red-100 p-3 w-12 h-12 flex items-center justify-center">
                     <i class="fas fa-stop text-red-600"></i>
                   </div>
                   <div class="text-right">
@@ -399,7 +390,7 @@
                 class="bg-white rounded-xl shadow-sm p-5 border-l-4 border-blue-500 hover-lift"
               >
                 <div class="flex justify-between items-center">
-                  <div class="rounded-full bg-blue-100 p-3">
+                  <div class="rounded-full bg-blue-100 p-3 w-12 h-12 flex items-center justify-center">
                     <i class="fas fa-image text-blue-600"></i>
                   </div>
                   <div class="text-right">
