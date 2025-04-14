@@ -18,6 +18,10 @@ app.use("/scripts", express.static(path.join(__dirname, "scripts")));
 
 // Routes
 app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "homepage.html"));
+});
+
+app.get("/dashboard", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "dashboard.html"));
 });
 
