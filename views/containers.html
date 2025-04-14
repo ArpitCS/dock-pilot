@@ -2424,5 +2424,159 @@
         });
       });
     </script>
+    <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Get the correct buttons with more specific selectors
+    const openModalBtn = document.querySelector("header #createContainerBtn");
+    const submitFormBtn = document.querySelector("#createContainerModal #createContainerBtn");
+    
+    // Track dynamic form elements
+    let portMappings = [];
+    let envVars = [];
+    let volumeMappings = [];
+    
+    // Handle opening the modal with the "New Container" button
+    openModalBtn.addEventListener("click", function() {
+      openModal("createContainerModal");
+    });
+    
+    // Add port mapping
+    document.querySelector("button.text-blue-600").addEventListener("click", function() {
+      const hostPortField = document.querySelector("input[name='hostPort']");
+      const containerPortField = document.querySelector("input[name='containerPort']");
+      
+      if (hostPortField.value && containerPortField.value) {
+        portMappings.push({
+          hostPort: hostPortField.value,
+          containerPort: containerPortField.value
+        });
+        
+        // Clear fields
+        hostPortField.value = "";
+        containerPortField.value = "";
+        
+        showNotification("Port mapping added", "success");
+      } else {
+        showNotification("Please enter both host and container ports", "error");
+      }
+    });
+    
+    // Add environment variable
+    document.querySelectorAll("button.text-blue-600")[1].addEventListener("click", function() {
+      const envKeyField = document.querySelector("input[name='envKey']");
+      const envValueField = document.querySelector("input[name='envValue']");
+      
+      if (envKeyField.value) {
+        envVars.push({
+          key: envKeyField.value,
+          value: envValueField.value || ""
+        });
+        
+        // Clear fields
+        envKeyField.value = "";
+        envValueField.value = "";
+        
+        showNotification("Environment variable added", "success");
+      } else {
+        showNotification("Please enter environment variable key", "error");
+      }
+    });
+    
+    // Add volume mapping
+    document.querySelectorAll("button.text-blue-600")[2].addEventListener("click", function() {
+      const hostPathField = document.querySelector("input[name='hostPath']");
+      const containerPathField = document.querySelector("input[name='containerPath']");
+      
+      if (hostPathField.value && containerPathField.value) {
+        volumeMappings.push({
+          hostPath: hostPathField.value,
+          containerPath: containerPathField.value
+        });
+        
+        // Clear fields
+        hostPathField.value = "";
+        containerPathField.value = "";
+        
+        showNotification("Volume mapping added", "success");
+      } else {
+        showNotification("Please enter both host and container paths", "error");
+      }
+    });
+    
+    // Handle form submission
+    submitFormBtn.addEventListener("click", function() {
+      console.log("Create container button clicked");
+      
+      const containerName = document.getElementById("containerName").value;
+      const containerImage = document.getElementById("containerImage").value;
+      const networkMode = document.getElementById("networkMode").value;
+      const restartPolicy = document.getElementById("restartPolicy").value;
+      
+      if (!containerImage) {
+        showNotification("Container image is required", "error");
+        return;
+      }
+      
+      // Prepare data for API call
+      const containerData = {
+        containerName: containerName,
+        containerImage: containerImage,
+        ports: portMappings,
+        envVars: envVars,
+        volumes: volumeMappings,
+        networkMode: networkMode,
+        restartPolicy: restartPolicy
+      };
+      
+      console.log("Sending container data:", containerData);
+      
+      // Show loading state
+      submitFormBtn.disabled = true;
+      submitFormBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Creating...';
+      
+      // Send API request
+      fetch("/create-container", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(containerData)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log("Response:", data);
+        if (data.success) {
+          showNotification(data.message, "success");
+          closeModal("createContainerModal");
+          
+          // Reset form
+          document.getElementById("createContainerForm").reset();
+          portMappings = [];
+          envVars = [];
+          volumeMappings = [];
+          
+          // Refresh container list
+          refreshContainers();
+        } else {
+          showNotification(data.message || "Error creating container", "error");
+        }
+      })
+      .catch(error => {
+        console.error("Error creating container:", error);
+        showNotification("Failed to create container: " + error.message, "error");
+      })
+      .finally(() => {
+        // Restore button state
+        submitFormBtn.disabled = false;
+        submitFormBtn.innerHTML = 'Create Container';
+      });
+    });
+  });
+</script>
   </body>
 </html>

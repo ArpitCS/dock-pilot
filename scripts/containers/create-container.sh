@@ -22,7 +22,7 @@ if [ -n "$container_name" ]; then
 fi
 
 # Add Restart Policy
-if [ -n "$container_restart_policy" ]; then
+if [ -n "$container_restart_policy" ] && [ "$container_restart_policy" != "no" ]; then
     CMD="$CMD --restart $container_restart_policy"
 fi
 
@@ -32,42 +32,78 @@ if [ -n "$container_network" ]; then
 fi
 
 # Add Ports
-if [ -n "$container_port_json" ]; then
-    # Convert JSON to bash array
-    IFS=',' read -r -a ports <<< "$container_port_json"
-    for port in "${ports[@]}"; do
-        CMD="$CMD -p $port"
-    done
+if [ -n "$container_port_json" ] && [ "$container_port_json" != "[]" ]; then
+    # Use a simple parsing approach for JSON array of objects
+    # Remove brackets and split by },{
+    without_brackets=$(echo "$container_port_json" | sed 's/^\[//g' | sed 's/\]$//g')
+    
+    # If not empty, process each item
+    if [ -n "$without_brackets" ]; then
+        # Split by },{ and process each item
+        echo "$without_brackets" | sed 's/},{/}\n{/g' | while read -r item; do
+            # Extract hostPort and containerPort from JSON object
+            host_port=$(echo "$item" | grep -o '"hostPort":"[^"]*"' | cut -d':' -f2- | tr -d '"')
+            container_port=$(echo "$item" | grep -o '"containerPort":"[^"]*"' | cut -d':' -f2- | tr -d '"')
+            
+            if [ -n "$host_port" ] && [ -n "$container_port" ]; then
+                CMD="$CMD -p $host_port:$container_port"
+            fi
+        done
+    fi
 fi
 
 # Add Environment Variables
-if [ -n "$container_env_json" ]; then
-    # Convert JSON to bash array
-    IFS=',' read -r -a envs <<< "$container_env_json"
-    for env in "${envs[@]}"; do
-        CMD="$CMD -e $env"
-    done
+if [ -n "$container_env_json" ] && [ "$container_env_json" != "[]" ]; then
+    # Use a simple parsing approach for JSON array of objects
+    without_brackets=$(echo "$container_env_json" | sed 's/^\[//g' | sed 's/\]$//g')
+    
+    # If not empty, process each item
+    if [ -n "$without_brackets" ]; then
+        # Split by },{ and process each item
+        echo "$without_brackets" | sed 's/},{/}\n{/g' | while read -r item; do
+            # Extract key and value from JSON object
+            key=$(echo "$item" | grep -o '"key":"[^"]*"' | cut -d':' -f2- | tr -d '"')
+            value=$(echo "$item" | grep -o '"value":"[^"]*"' | cut -d':' -f2- | tr -d '"')
+            
+            if [ -n "$key" ]; then
+                CMD="$CMD -e $key=$value"
+            fi
+        done
+    fi
 fi
 
 # Add Volumes
-if [ -n "$container_volume_json" ]; then
-    # Convert JSON to bash array
-    IFS=',' read -r -a volumes <<< "$container_volume_json"
-    for volume in "${volumes[@]}"; do
-        CMD="$CMD -v $volume"
-    done
+if [ -n "$container_volume_json" ] && [ "$container_volume_json" != "[]" ]; then
+    # Use a simple parsing approach for JSON array of objects
+    without_brackets=$(echo "$container_volume_json" | sed 's/^\[//g' | sed 's/\]$//g')
+    
+    # If not empty, process each item
+    if [ -n "$without_brackets" ]; then
+        # Split by },{ and process each item
+        echo "$without_brackets" | sed 's/},{/}\n{/g' | while read -r item; do
+            # Extract hostPath and containerPath from JSON object
+            host_path=$(echo "$item" | grep -o '"hostPath":"[^"]*"' | cut -d':' -f2- | tr -d '"')
+            container_path=$(echo "$item" | grep -o '"containerPath":"[^"]*"' | cut -d':' -f2- | tr -d '"')
+            
+            if [ -n "$host_path" ] && [ -n "$container_path" ]; then
+                CMD="$CMD -v $host_path:$container_path"
+            fi
+        done
+    fi
 fi
 
 # Add Image
 CMD="$CMD $container_image"
 
-# Check if Container Created
-cho "Executing: $CMD"
-RESULT=$(eval $CMD)
+# Execute the command
+echo "Executing: $CMD"
+RESULT=$(eval "$CMD")
+
+# Check if container was created successfully
 if [ $? -eq 0 ]; then
     echo "Container Created Successfully: $RESULT"
     exit 0
 else
-    echo "Failed to Create Container: $RESULT"
+    echo "Failed to Create Container: $RESULT" >&2
     exit 1
 fi

@@ -269,6 +269,12 @@ app.get("/inspect-container/:containerId", (req, res) => {
 });
 
 app.post("/create-container", (req, res) => {
+  const scriptPath = path.join(
+    __dirname,
+    "scripts",
+    "containers/create-container.sh"
+  );
+
   const {
     containerName,
     containerImage,
@@ -295,7 +301,7 @@ app.post("/create-container", (req, res) => {
       return res.status(500).send({
         success: false,
         message: `Error executing script: ${error.message}`,
-        details: stderr
+        details: stderr,
       });
     }
 
@@ -303,7 +309,7 @@ app.post("/create-container", (req, res) => {
     res.send({
       success: true,
       message: `Container ${containerName} created successfully.`,
-      details: stdout.trim()
+      details: stdout.trim(),
     });
   });
 });
