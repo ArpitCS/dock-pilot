@@ -423,7 +423,7 @@
                 />
               </div>
             </div>
-            <div class="flex gap-3">
+            <div class="flex flex-wrap gap-3">
               <select
                 id="statusFilter"
                 class="border border-gray-300 rounded-md text-sm py-2 px-3 bg-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
@@ -433,14 +433,41 @@
                 <option value="stopped">Stopped</option>
                 <option value="created">Created</option>
                 <option value="paused">Paused</option>
+                <option value="exited">Exited</option>
+                <option value="restarting">Restarting</option>
               </select>
+              
+              <select
+                id="imageFilter"
+                class="border border-gray-300 rounded-md text-sm py-2 px-3 bg-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="all">All Images</option>
+                <!-- Will be populated dynamically -->
+              </select>
+              
               <button
-                id="filterBtn"
-                class="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none transition"
+                id="applyFilters"
+                class="flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none transition"
               >
                 <i class="fas fa-filter mr-2"></i>
-                <span>Filter</span>
+                <span>Apply</span>
               </button>
+              
+              <button
+                id="clearFilters"
+                class="flex items-center px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none transition"
+              >
+                <i class="fas fa-times mr-2"></i>
+                <span>Clear</span>
+              </button>
+            </div>
+          </div>
+          
+          <!-- Active Filters Display -->
+          <div id="activeFiltersBar" class="mt-3 flex-wrap gap-2 hidden flex">
+            <div class="text-sm text-gray-500 self-center mr-2">Active filters:</div>
+            <div id="activeFilters" class="flex flex-wrap gap-2">
+              <!-- Active filter tags will be added here dynamically -->
             </div>
           </div>
         </div>
@@ -1897,6 +1924,502 @@
               document.getElementById("confirmDeleteBtn").dataset.containerName = containerName;
               openModal("deleteModal");
               break;
+          }
+        });
+      });
+      
+      // Container search and filter functionality
+      document.addEventListener("DOMContentLoaded", function() {
+        // Store all containers data
+        let allContainers = [];
+        let uniqueImages = new Set();
+        
+        // Initialize filter state
+        const filterState = {
+          search: '',
+          status: 'all',
+          image: 'all'
+        };
+        
+        // Get filter UI elements
+        const containerSearch = document.getElementById('containerSearch');
+        const statusFilter = document.getElementById('statusFilter');
+        const imageFilter = document.getElementById('imageFilter');
+        
+        // Get filter action buttons
+        const applyFilters = document.getElementById('applyFilters');
+        const clearFilters = document.getElementById('clearFilters');
+        const activeFiltersBar = document.getElementById('activeFiltersBar');
+        const activeFilters = document.getElementById('activeFilters');
+        
+        // Apply filters button
+        applyFilters.addEventListener('click', function() {
+          filterState.search = containerSearch.value.toLowerCase();
+          filterState.status = statusFilter.value;
+          filterState.image = imageFilter.value;
+          applyContainerFilters();
+          showNotification('Filters applied', 'info');
+        });
+        
+        // Clear all filters
+        clearFilters.addEventListener('click', function() {
+          // Reset all form fields
+          containerSearch.value = '';
+          statusFilter.value = 'all';
+          imageFilter.value = 'all';
+          
+          // Reset filter state
+          filterState.search = '';
+          filterState.status = 'all';
+          filterState.image = 'all';
+          
+          // Apply the cleared filters (show all containers)
+          applyContainerFilters();
+          
+          // Hide active filters bar since no filters are active
+          activeFiltersBar.classList.add('hidden');
+          
+          // Show a notification
+          showNotification('All filters cleared', 'info');
+        });
+        
+        // Function to apply all active filters to containers
+        function applyContainerFilters() {
+          // Update UI to show active filters
+          updateActiveFiltersDisplay();
+          
+          // Filter containers based on current filter state
+          const filteredContainers = allContainers.filter(container => {
+            // Basic search filter (name, id, image)
+            if (filterState.search && 
+                !container.name.toLowerCase().includes(filterState.search) && 
+                !container.id.toLowerCase().includes(filterState.search) && 
+                !container.image.toLowerCase().includes(filterState.search)) {
+              return false;
+            }
+            
+            // Status filter
+            if (filterState.status !== 'all') {
+              const containerStatus = container.status.toLowerCase();
+              if (filterState.status === 'running' && !containerStatus.includes('up')) {
+                return false;
+              } else if (filterState.status === 'stopped' && !containerStatus.includes('exited')) {
+                return false;
+              } else if (filterState.status === 'created' && !containerStatus.includes('created')) {
+                return false;
+              } else if (filterState.status === 'paused' && !containerStatus.includes('paused')) {
+                return false;
+              } else if (filterState.status === 'exited' && !containerStatus.includes('exited')) {
+                return false;
+              } else if (filterState.status === 'restarting' && !containerStatus.includes('restarting')) {
+                return false;
+              }
+            }
+            
+            // Image filter
+            if (filterState.image !== 'all' && container.image !== filterState.image) {
+              return false;
+            }
+            
+            return true;
+          });
+          
+          // Update UI with filtered containers
+          updateContainersDisplay(filteredContainers);
+          
+          // Update container count
+          updateContainerCount(filteredContainers.length, allContainers.length);
+        }
+        
+        // Function to update the active filters display
+        function updateActiveFiltersDisplay() {
+          activeFilters.innerHTML = '';
+          let hasActiveFilters = false;
+          
+          // Check each filter and add tags for active ones
+          if (filterState.search) {
+            addFilterTag('Search: ' + filterState.search, () => {
+              containerSearch.value = '';
+              filterState.search = '';
+              applyContainerFilters();
+            });
+            hasActiveFilters = true;
+          }
+          
+          if (filterState.status !== 'all') {
+            addFilterTag('Status: ' + filterState.status, () => {
+              statusFilter.value = 'all';
+              filterState.status = 'all';
+              applyContainerFilters();
+            });
+            hasActiveFilters = true;
+          }
+          
+          if (filterState.image !== 'all') {
+            addFilterTag('Image: ' + filterState.image, () => {
+              imageFilter.value = 'all';
+              filterState.image = 'all';
+              applyContainerFilters();
+            });
+            hasActiveFilters = true;
+          }
+          
+          // Show/hide the active filters bar
+          if (hasActiveFilters) {
+            activeFiltersBar.classList.remove('hidden');
+          } else {
+            activeFiltersBar.classList.add('hidden');
+          }
+        }
+        
+        // Helper function to add a filter tag
+        function addFilterTag(text, removeCallback) {
+          const tag = document.createElement('div');
+          tag.className = 'bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded flex items-center gap-1';
+          tag.innerHTML = `
+            <span>${text}</span>
+            <button class="text-blue-700 hover:text-blue-900">
+              <i class="fas fa-times-circle"></i>
+            </button>
+          `;
+          tag.querySelector('button').addEventListener('click', removeCallback);
+          activeFilters.appendChild(tag);
+        }
+        
+        // Function to update container display with filtered containers
+        function updateContainersDisplay(filteredContainers) {
+          const tableBody = document.getElementById('containerTableBody');
+          const gridContainer = document.getElementById('containersGrid');
+          
+          // Clear existing containers
+          tableBody.innerHTML = '';
+          gridContainer.innerHTML = '';
+          
+          if (filteredContainers.length === 0) {
+            // Display no results message in table view
+            const noResultsRow = document.createElement('tr');
+            noResultsRow.innerHTML = `
+              <td colspan="6" class="px-4 py-8 text-center text-gray-500">
+                <div class="flex flex-col items-center justify-center">
+                  <i class="fas fa-search text-gray-400 text-4xl mb-3"></i>
+                  <p class="text-lg font-medium">No containers found</p>
+                  <p class="text-sm">Try adjusting your search or filter criteria</p>
+                  <button id="clearAllFiltersBtn" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none transition">
+                    Clear All Filters
+                  </button>
+                </div>
+              </td>
+            `;
+            tableBody.appendChild(noResultsRow);
+            
+            // Display no results in grid view
+            const noResultsGrid = document.createElement('div');
+            noResultsGrid.className = 'col-span-full flex flex-col items-center justify-center py-12';
+            noResultsGrid.innerHTML = `
+              <i class="fas fa-search text-gray-400 text-4xl mb-3"></i>
+              <p class="text-lg font-medium text-gray-700">No containers found</p>
+              <p class="text-sm text-gray-500">Try adjusting your search or filter criteria</p>
+              <button id="clearAllFiltersGridBtn" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none transition">
+                Clear All Filters
+              </button>
+            `;
+            gridContainer.appendChild(noResultsGrid);
+            
+            // Add event listeners to clear filter buttons
+            document.getElementById('clearAllFiltersBtn').addEventListener('click', () => {
+              clearFilters.click();
+            });
+            document.getElementById('clearAllFiltersGridBtn').addEventListener('click', () => {
+              clearFilters.click();
+            });
+            
+            return;
+          }
+          
+          // Render filtered containers to table and grid views
+          filteredContainers.forEach(container => {
+            renderContainerTableRow(container, tableBody);
+            renderContainerGridItem(container, gridContainer);
+          });
+          
+          // Reattach event handlers for the newly created elements
+          attachContainerEventHandlers();
+        }
+        
+        // Function to render a container table row
+        function renderContainerTableRow(container, tableBody) {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-gray-50 transition-colors';
+          
+          const statusClass = container.status.toLowerCase().includes('up') 
+            ? 'bg-green-100 text-green-800' 
+            : 'bg-red-100 text-red-800';
+          
+          const statusDot = container.status.toLowerCase().includes('up')
+            ? 'bg-green-500'
+            : 'bg-red-500';
+          
+          tr.innerHTML = `
+            <td class="px-4 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <i class="fas fa-cube text-blue-500 mr-2"></i>
+                <div>
+                  <div class="text-sm font-medium text-gray-900">${container.name}</div>
+                  <div class="text-xs text-gray-500">ID: ${container.id}</div>
+                </div>
+              </div>
+            </td>
+            <td class="px-4 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-900">${container.image}</div>
+            </td>
+            <td class="px-4 py-4 whitespace-nowrap">
+              <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
+                <div class="w-2 h-2 ${statusDot} rounded-full mr-1 self-center"></div>
+                ${container.status}
+              </span>
+            </td>
+            <td class="px-4 py-4 whitespace-nowrap">
+              <div class="text-sm text-gray-900">${formatDate(container.created)}</div>
+            </td>
+            <td class="px-4 py-4 whitespace-nowrap">
+              <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                ${container.ports}
+              </span>
+            </td>
+            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium" data-container-name="${container.name}" data-container-id="${container.id}">
+              <div class="flex justify-start items-center space-x-3">
+                <button class="tooltip p-1.5 rounded hover:bg-gray-100">
+                  <span class="tooltip-text">${container.status.toLowerCase().includes('up') ? "Stop Container" : "Start Container"}</span>
+                  <i class="fas ${container.status.toLowerCase().includes('up') ? "fa-stop text-red-600" : "fa-play text-green-600"}"></i>
+                </button>
+                <button class="tooltip p-1.5 rounded hover:bg-gray-100">
+                  <span class="tooltip-text">Restart Container</span>
+                  <i class="fas fa-redo-alt text-blue-600"></i>
+                </button>
+                <button class="tooltip p-1.5 rounded hover:bg-gray-100">
+                  <span class="tooltip-text">View Logs</span>
+                  <i class="fas fa-file-alt text-gray-600"></i>
+                </button>
+                <button class="tooltip p-1.5 rounded hover:bg-gray-100">
+                  <span class="tooltip-text">Terminal Access</span>
+                  <i class="fas fa-terminal text-gray-600"></i>
+                </button>
+                <button class="tooltip p-1.5 rounded hover:bg-gray-100">
+                  <span class="tooltip-text">Inspect Container</span>
+                  <i class="fas fa-info-circle text-gray-600"></i>
+                </button>
+                <button class="tooltip p-1.5 rounded hover:bg-gray-100">
+                  <span class="tooltip-text">Delete Container</span>
+                  <i class="fas fa-trash text-gray-600"></i>
+                </button>
+              </div>
+            </td>
+          `;
+          tableBody.appendChild(tr);
+        }
+        
+        // Function to render a container grid item
+        function renderContainerGridItem(container, gridContainer) {
+          const gridItem = document.createElement('div');
+          gridItem.className = 'bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 grid-view-item';
+          
+          const statusClass = container.status.toLowerCase().includes('up') 
+            ? 'bg-green-100 text-green-800' 
+            : 'bg-red-100 text-red-800';
+          
+          const statusDot = container.status.toLowerCase().includes('up')
+            ? 'bg-green-500'
+            : 'bg-red-500';
+            
+          gridItem.innerHTML = `
+            <div class="px-5 py-4 border-b border-gray-100">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <i class="fas fa-cube text-blue-500 mr-2"></i>
+                  <h3 class="font-medium text-gray-800">${container.name}</h3>
+                </div>
+                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
+                  <div class="w-2 h-2 ${statusDot} rounded-full mr-1 self-center"></div>
+                  ${container.status}
+                </span>
+              </div>
+            </div>
+            <div class="px-5 py-3 bg-gray-50">
+              <div class="text-xs font-medium text-gray-500 uppercase">Image</div>
+              <div class="text-sm text-gray-700">${container.image}</div>
+            </div>
+            <div class="grid grid-cols-2 divide-x divide-gray-100">
+              <div class="px-5 py-3">
+                <div class="text-xs font-medium text-gray-500 uppercase">Created</div>
+                <div class="text-sm text-gray-700">${formatDate(container.created)}</div>
+              </div>
+              <div class="px-5 py-3">
+                <div class="text-xs font-medium text-gray-500 uppercase">Ports</div>
+                <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                  ${container.ports}
+                </span>
+              </div>
+            </div>
+            <div class="px-5 py-3 bg-gray-50 border-t border-gray-100" data-container-name="${container.name}" data-container-id="${container.id}">
+              <div class="flex justify-between items-center">
+                <div class="text-xs text-gray-500">ID: ${container.id}</div>
+                <div class="grid-actions-container flex space-x-2">
+                  <button class="grid-tooltip tooltip p-1.5 rounded hover:bg-gray-100" data-action="toggle" data-status="${container.status.toLowerCase().includes('up') ? "stop" : "start"}">
+                    <span class="tooltip-text">${container.status.toLowerCase().includes('up') ? "Stop Container" : "Start Container"}</span>
+                    <i class="fas ${container.status.toLowerCase().includes('up') ? "fa-stop" : "fa-play"} text-${container.status.toLowerCase().includes('up') ? "red" : "green"}-600"></i>
+                  </button>
+                  <button class="grid-tooltip tooltip p-1.5 rounded hover:bg-gray-100" data-action="restart">
+                    <span class="tooltip-text">Restart Container</span>
+                    <i class="fas fa-redo-alt text-blue-600"></i>
+                  </button>
+                  <button class="grid-tooltip tooltip p-1.5 rounded hover:bg-gray-100" data-action="logs">
+                    <span class="tooltip-text">View Logs</span>
+                    <i class="fas fa-file-alt text-gray-600"></i>
+                  </button>
+                  <button class="grid-tooltip tooltip p-1.5 rounded hover:bg-gray-100" data-action="terminal">
+                    <span class="tooltip-text">Terminal Access</span>
+                    <i class="fas fa-terminal text-gray-600"></i>
+                  </button>
+                  <button class="grid-tooltip tooltip p-1.5 rounded hover:bg-gray-100" data-action="inspect">
+                    <span class="tooltip-text">Inspect Container</span>
+                    <i class="fas fa-info-circle text-gray-600"></i>
+                  </button>
+                  <button class="grid-tooltip tooltip p-1.5 rounded hover:bg-gray-100" data-action="delete">
+                    <span class="tooltip-text">Delete Container</span>
+                    <i class="fas fa-trash text-gray-600"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+          gridContainer.appendChild(gridItem);
+        }
+        
+        // Format date for display
+        function formatDate(dateString) {
+          const date = new Date(dateString);
+          return date.toLocaleString();
+        }
+        
+        // Update container count in pagination area
+        function updateContainerCount(filteredCount, totalCount) {
+          const countElement = document.querySelector('.text-sm.text-gray-700');
+          if (countElement) {
+            if (filteredCount === totalCount) {
+              countElement.innerHTML = `Showing <span class="font-medium">${filteredCount}</span> containers`;
+            } else {
+              countElement.innerHTML = `Showing <span class="font-medium">${filteredCount}</span> of <span class="font-medium">${totalCount}</span> containers`;
+            }
+          }
+        }
+        
+        // Attach event handlers for container actions
+        function attachContainerEventHandlers() {
+          // This function would be implemented to attach event handlers to container action buttons
+          // Since it's not directly related to the filtering functionality, I'm not modifying it
+        }
+        
+        // Process container data
+        function processContainerData(data) {
+          // Parse the container data and convert it to our format
+          allContainers = [];
+          uniqueImages = new Set();
+          
+          let lines = data.split(/\r?\n/).filter(line => line.trim() !== "");
+          if (lines[0]?.startsWith("Containers loaded:")) {
+            lines.shift();
+          }
+          if (lines.length > 0 && lines[0]?.includes("NAMES") && lines[0]?.includes("IMAGE")) {
+            lines.shift();
+          }
+          
+          lines.forEach(line => {
+            const cols = line.trim().split(/\s{2,}/);
+            if (cols.length < 4) return; // Skip invalid rows
+            
+            const containerName = cols[0];
+            const containerId = cols[1];
+            const image = cols[2];
+            const status = cols[3];
+            const created = cols[4];
+            const ports = cols.length >= 6 ? cols[5] : "-N/A-";
+            
+            // Add to allContainers array
+            allContainers.push({
+              name: containerName,
+              id: containerId,
+              image: image,
+              status: status,
+              created: created,
+              ports: ports,
+              // Additional properties for advanced filtering (would be populated from inspect data)
+              volumes: [], // Placeholder for volume data
+              networks: ['bridge'], // Placeholder for network data
+              labels: {} // Placeholder for label data
+            });
+            
+            // Collect unique images for the filter dropdown
+            uniqueImages.add(image);
+          });
+          
+          // Populate image filter dropdown
+          populateImageFilter();
+          
+          return allContainers;
+        }
+        
+        // Populate image filter dropdown
+        function populateImageFilter() {
+          const imageFilter = document.getElementById('imageFilter');
+          imageFilter.innerHTML = '<option value="all">All Images</option>';
+          
+          Array.from(uniqueImages).sort().forEach(image => {
+            const option = document.createElement('option');
+            option.value = image;
+            option.textContent = image;
+            imageFilter.appendChild(option);
+          });
+        }
+        
+        // Override the existing loadContainers function to use our filtering
+        const originalLoadContainers = loadContainers;
+        loadContainers = function() {
+          const refreshIcon = document.getElementById("refreshIcon");
+          refreshIcon.classList.add("fa-spin");
+          
+          fetch("/get-containers")
+            .then(response => {
+              if (!response.ok) {
+                throw new Error("Failed to fetch containers");
+              }
+              return response.text();
+            })
+            .then(data => {
+              console.log("Containers loaded:", data);
+              // Process the container data into our format
+              const containers = processContainerData(data);
+              
+              // Apply any active filters
+              applyContainerFilters();
+              
+              showNotification("Containers loaded successfully", "success");
+            })
+            .catch(error => {
+              console.error("Error loading containers:", error);
+              showNotification("Failed to load containers: " + error.message, "error");
+            })
+            .finally(() => {
+              refreshIcon.classList.remove("fa-spin");
+            });
+        };
+        
+        // Initialize containers on load
+        loadContainers();
+        
+        // Enter key in search triggers filter
+        containerSearch.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            applyContainerFilters();
           }
         });
       });
