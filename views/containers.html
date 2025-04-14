@@ -56,12 +56,12 @@
       }
       .tooltip .tooltip-text {
         visibility: hidden;
-        width: 180px;
+        width: 120px;
         background-color: rgba(17, 24, 39, 0.95);
         color: #fff;
         text-align: center;
         border-radius: 6px;
-        padding: 8px;
+        padding: 5px;
         position: absolute;
         z-index: 1000;
         bottom: 125%;
@@ -70,8 +70,35 @@
         opacity: 0;
         transition: opacity 0.3s, transform 0.3s;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        font-size: 0.8rem;
+        font-size: 0.75rem;
         pointer-events: none;
+      }
+      /* Improved styling for grid view tooltip placement */
+      .grid-tooltip .tooltip-text {
+        bottom: 130%;
+      }
+      /* Ensure tooltips don't overlap in grid view */
+      .grid-actions-container {
+        position: relative;
+        z-index: 10;
+      }
+      .grid-actions-container .tooltip:nth-child(1) .tooltip-text {
+        transform: translateX(-90%);
+      }
+      .grid-actions-container .tooltip:nth-child(2) .tooltip-text {
+        transform: translateX(-80%);
+      }
+      .grid-actions-container .tooltip:nth-child(3) .tooltip-text {
+        transform: translateX(-70%);
+      }
+      .grid-actions-container .tooltip:nth-child(4) .tooltip-text {
+        transform: translateX(-30%);
+      }
+      .grid-actions-container .tooltip:nth-child(5) .tooltip-text {
+        transform: translateX(-20%);
+      }
+      .grid-actions-container .tooltip:nth-child(6) .tooltip-text {
+        transform: translateX(-10%);
       }
       .tooltip .tooltip-text::after {
         content: "";
@@ -87,6 +114,29 @@
         visibility: visible;
         opacity: 1;
         transform: translateX(-50%) translateY(-5px);
+      }
+      /* Fix for grid view tooltips */
+      .grid-actions-container .tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+      }
+      .grid-actions-container .tooltip:nth-child(1):hover .tooltip-text {
+        transform: translateX(-90%) translateY(-5px);
+      }
+      .grid-actions-container .tooltip:nth-child(2):hover .tooltip-text {
+        transform: translateX(-80%) translateY(-5px);
+      }
+      .grid-actions-container .tooltip:nth-child(3):hover .tooltip-text {
+        transform: translateX(-70%) translateY(-5px);
+      }
+      .grid-actions-container .tooltip:nth-child(4):hover .tooltip-text {
+        transform: translateX(-30%) translateY(-5px);
+      }
+      .grid-actions-container .tooltip:nth-child(5):hover .tooltip-text {
+        transform: translateX(-20%) translateY(-5px);
+      }
+      .grid-actions-container .tooltip:nth-child(6):hover .tooltip-text {
+        transform: translateX(-10%) translateY(-5px);
       }
       .modal {
         transition: all 0.3s ease;
@@ -142,6 +192,95 @@
       }
       .tooltip button:active {
         transform: translateY(0);
+      }
+      /* Fix for grid view tooltips */
+      .grid-actions-container .tooltip {
+        position: relative;
+      }
+      
+      /* Ensure tooltips are properly aligned and not cut off */
+      .grid-actions-container {
+        position: relative;
+        overflow: visible;
+        z-index: 20; /* Higher z-index than default */
+      }
+      
+      /* Container needs to properly handle overflow */
+      .grid-view-item {
+        overflow: visible !important; /* Override the overflow:hidden */
+      }
+      
+      /* Make tooltip alignment more precise */
+      .grid-actions-container .tooltip .tooltip-text {
+        left: 50%;
+        bottom: 135%;
+        transform: translateX(-50%);
+        white-space: nowrap; /* Prevent line breaks */
+        min-width: 80px; /* Set minimum width */
+      }
+      
+      /* Fix for individual tooltip positions */
+      .grid-actions-container .tooltip:nth-child(1) .tooltip-text {
+        transform: translateX(-40%);
+      }
+      
+      .grid-actions-container .tooltip:nth-child(2) .tooltip-text {
+        transform: translateX(-40%);
+      }
+      
+      .grid-actions-container .tooltip:nth-child(3) .tooltip-text {
+        transform: translateX(-40%);
+      }
+      
+      .grid-actions-container .tooltip:nth-child(4) .tooltip-text {
+        transform: translateX(-40%);
+      }
+      
+      .grid-actions-container .tooltip:nth-child(5) .tooltip-text {
+        transform: translateX(-40%);
+      }
+      
+      .grid-actions-container .tooltip:nth-child(6) .tooltip-text {
+        transform: translateX(-60%); /* Move it more to the left to prevent cutoff */
+      }
+      
+      /* Hover state adjustments */
+      .grid-actions-container .tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+      }
+      
+      .grid-actions-container .tooltip:nth-child(1):hover .tooltip-text {
+        transform: translateX(-40%) translateY(-5px);
+      }
+      
+      .grid-actions-container .tooltip:nth-child(2):hover .tooltip-text {
+        transform: translateX(-40%) translateY(-5px);
+      }
+      
+      .grid-actions-container .tooltip:nth-child(3):hover .tooltip-text {
+        transform: translateX(-40%) translateY(-5px);
+      }
+      
+      .grid-actions-container .tooltip:nth-child(4):hover .tooltip-text {
+        transform: translateX(-40%) translateY(-5px);
+      }
+      
+      .grid-actions-container .tooltip:nth-child(5):hover .tooltip-text {
+        transform: translateX(-40%) translateY(-5px);
+      }
+      
+      .grid-actions-container .tooltip:nth-child(6):hover .tooltip-text {
+        transform: translateX(-60%) translateY(-5px);
+      }
+      
+      /* Fix tooltip arrow positioning */
+      .grid-actions-container .tooltip .tooltip-text::after {
+        left: 50%;
+      }
+      
+      .grid-actions-container .tooltip:nth-child(6) .tooltip-text::after {
+        left: 70%; /* Adjust arrow position for the last tooltip */
       }
     </style>
   </head>
@@ -1219,12 +1358,10 @@
             <div class="px-5 py-3 bg-gray-50 border-t border-gray-100" data-container-name="${containerName}" data-container-id="${containerId}">
               <div class="flex justify-between items-center">
                 <div class="text-xs text-gray-500">ID: ${containerId}</div>
-                <div class="flex space-x-2">
-                  <button class="tooltip action-btn text-${
-                    status.toLowerCase().includes("up") ? "red" : "green"
-                  }-600 hover:text-${
-            status.toLowerCase().includes("up") ? "red" : "green"
-          }-900">
+                <div class="grid-actions-container flex space-x-2">
+                  <button class="grid-tooltip tooltip p-1.5 rounded hover:bg-gray-100" data-action="toggle" data-status="${
+                    status.toLowerCase().includes("up") ? "stop" : "start"
+                  }">
                     <span class="tooltip-text">${
                       status.toLowerCase().includes("up")
                         ? "Stop Container"
@@ -1232,27 +1369,29 @@
                     }</span>
                     <i class="fas ${
                       status.toLowerCase().includes("up") ? "fa-stop" : "fa-play"
-                    }"></i>
+                    } text-${
+                      status.toLowerCase().includes("up") ? "red" : "green"
+                    }-600"></i>
                   </button>
-                  <button class="tooltip action-btn text-blue-600 hover:text-blue-900">
+                  <button class="grid-tooltip tooltip p-1.5 rounded hover:bg-gray-100" data-action="restart">
                     <span class="tooltip-text">Restart Container</span>
-                    <i class="fas fa-redo-alt"></i>
+                    <i class="fas fa-redo-alt text-blue-600"></i>
                   </button>
-                  <button class="tooltip action-btn text-gray-600 hover:text-gray-900">
+                  <button class="grid-tooltip tooltip p-1.5 rounded hover:bg-gray-100" data-action="logs">
                     <span class="tooltip-text">View Logs</span>
-                    <i class="fas fa-file-alt"></i>
+                    <i class="fas fa-file-alt text-gray-600"></i>
                   </button>
-                  <button class="tooltip action-btn text-gray-600 hover:text-gray-900">
+                  <button class="grid-tooltip tooltip p-1.5 rounded hover:bg-gray-100" data-action="terminal">
                     <span class="tooltip-text">Terminal Access</span>
-                    <i class="fas fa-terminal"></i>
+                    <i class="fas fa-terminal text-gray-600"></i>
                   </button>
-                  <button class="tooltip action-btn text-gray-600 hover:text-gray-900">
+                  <button class="grid-tooltip tooltip p-1.5 rounded hover:bg-gray-100" data-action="inspect">
                     <span class="tooltip-text">Inspect Container</span>
-                    <i class="fas fa-info-circle"></i>
+                    <i class="fas fa-info-circle text-gray-600"></i>
                   </button>
-                  <button class="tooltip action-btn text-gray-600 hover:text-gray-900">
+                  <button class="grid-tooltip tooltip p-1.5 rounded hover:bg-gray-100" data-action="delete">
                     <span class="tooltip-text">Delete Container</span>
-                    <i class="fas fa-trash"></i>
+                    <i class="fas fa-trash text-gray-600"></i>
                   </button>
                 </div>
               </div>
@@ -1702,6 +1841,62 @@
             deleteContainer(containerId, containerName);
           } else {
             showNotification("Container information not found", "error");
+          }
+        });
+      });
+
+      // Add event listener for grid view actions
+      document.addEventListener("DOMContentLoaded", function() {
+        // Existing event listeners...
+        
+        // New event delegation for grid view actions
+        document.addEventListener("click", function(e) {
+          const button = e.target.closest(".grid-actions-container button");
+          if (!button) return;
+          
+          e.preventDefault();
+          e.stopPropagation();
+          
+          const container = button.closest("[data-container-id]");
+          if (!container) return;
+          
+          const containerId = container.dataset.containerId;
+          const containerName = container.dataset.containerName;
+          const action = button.dataset.action;
+          const status = button.dataset.status;
+          
+          if (!containerId || !containerName) {
+            console.error("Container information missing");
+            return;
+          }
+          
+          switch(action) {
+            case "toggle":
+              if (status === "stop") {
+                stopContainer(containerId, containerName);
+              } else {
+                startContainer(containerId, containerName);
+              }
+              break;
+            case "restart":
+              restartContainer(containerId, containerName);
+              break;
+            case "logs":
+              getContainerLogs(containerId, containerName);
+              break;
+            case "terminal":
+              document.getElementById("terminalContainerName").textContent = containerName;
+              openModal("terminalModal");
+              break;
+            case "inspect":
+              inspectContainer(containerId, containerName);
+              break;
+            case "delete":
+              document.getElementById("deleteContainerName").textContent = containerName;
+              document.getElementById("confirmDeleteBtn").dataset.containerId = containerId;
+              document.getElementById("confirmDeleteBtn").dataset.containerName = containerName;
+              openModal("deleteModal");
+              break;
           }
         });
       });
