@@ -331,13 +331,9 @@ app.get("/get-images", (req, res) => {
   });
 });
 
-app.get("/pull-image", (req, res) => {
-  const { imageName } = req.query;
-  const scriptPath = path.join(
-    __dirname,
-    "scripts",
-    "images/pull-image.sh"
-  );
+app.get("/pull-image/:imageName", (req, res) => {
+  const { imageName } = req.params;
+  const scriptPath = path.join(__dirname, "scripts", "images/pull-image.sh");
   execFile(scriptPath, [imageName], (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing script: ${error}`);
