@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DockPilot | Images</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/global.css" />
+    <style>
+      .hover-lift {
+        transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      }
+      .hover-lift:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+      .status-badge {
+        transition: all 0.3s ease;
+      }
+      .glass-effect {
+        backdrop-filter: blur(10px);
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+      .console-line {
+        line-height: 1.5;
+        padding: 2px 0;
+      }
+      .container-card {
+        transition: all 0.2s ease-in-out;
+      }
+      .container-card:hover {
+        border-color: #3b82f6;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+      }
+      .sidebar-link.active {
+        background-color: #f3f4f6;
+        border-left: 4px solid #3b82f6;
+      }
+      .tooltip {
+        position: relative;
+        display: inline-block;
+      }
+      .tooltip .tooltip-text {
+        visibility: hidden;
+        width: 120px;
+        background-color: rgba(17, 24, 39, 0.95);
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        z-index: 1000;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s, transform 0.3s;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        font-size: 0.75rem;
+        pointer-events: none;
+      }
+      /* Improved styling for grid view tooltip placement */
+      .grid-tooltip .tooltip-text {
+        bottom: 130%;
+      }
+      /* Ensure tooltips don't overlap in grid view */
+      .grid-actions-container {
+        position: relative;
+        z-index: 10;
+      }
+      .grid-actions-container .tooltip:nth-child(1) .tooltip-text {
+        transform: translateX(-90%);
+      }
+      .grid-actions-container .tooltip:nth-child(2) .tooltip-text {
+        transform: translateX(-80%);
+      }
+      .grid-actions-container .tooltip:nth-child(3) .tooltip-text {
+        transform: translateX(-70%);
+      }
+      .grid-actions-container .tooltip:nth-child(4) .tooltip-text {
+        transform: translateX(-30%);
+      }
+      .grid-actions-container .tooltip:nth-child(5) .tooltip-text {
+        transform: translateX(-20%);
+      }
+      .grid-actions-container .tooltip:nth-child(6) .tooltip-text {
+        transform: translateX(-10%);
+      }
+      .tooltip .tooltip-text::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: rgba(17, 24, 39, 0.95) transparent transparent transparent;
+      }
+      .tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+        transform: translateX(-50%) translateY(-5px);
+      }
+      /* Fix for grid view tooltips */
+      .grid-actions-container .tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+      }
+      .grid-actions-container .tooltip:nth-child(1):hover .tooltip-text {
+        transform: translateX(-90%) translateY(-5px);
+      }
+      .grid-actions-container .tooltip:nth-child(2):hover .tooltip-text {
+        transform: translateX(-80%) translateY(-5px);
+      }
+      .grid-actions-container .tooltip:nth-child(3):hover .tooltip-text {
+        transform: translateX(-70%) translateY(-5px);
+      }
+      .grid-actions-container .tooltip:nth-child(4):hover .tooltip-text {
+        transform: translateX(-30%) translateY(-5px);
+      }
+      .grid-actions-container .tooltip:nth-child(5):hover .tooltip-text {
+        transform: translateX(-20%) translateY(-5px);
+      }
+      .grid-actions-container .tooltip:nth-child(6):hover .tooltip-text {
+        transform: translateX(-10%) translateY(-5px);
+      }
+      .modal {
+        transition: all 0.3s ease;
+      }
+      .modal-overlay {
+        transition: opacity 0.3s ease;
+      }
+      .table-container {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+      th {
+        position: sticky;
+        top: 0;
+        background-color: white;
+        z-index: 10;
+      }
+      th,
+      td {
+        padding: 0.75rem 1rem;
+        text-align: left;
+      }
+      tbody tr {
+        border-bottom: 1px solid #e5e7eb;
+        transition: background-color 0.2s;
+      }
+      tbody tr:hover {
+        background-color: #f9fafb;
+      }
+      .action-btn {
+        transition: all 0.2s;
+      }
+      .action-btn:hover {
+        transform: translateY(-2px);
+      }
+      .grid-view-item {
+        transition: all 0.2s ease;
+      }
+      .grid-view-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+      .tooltip button {
+        transition: all 0.2s ease;
+      }
+      .tooltip button:hover {
+        transform: translateY(-2px);
+      }
+      .tooltip button:active {
+        transform: translateY(0);
+      }
+      /* Fix for grid view tooltips */
+      .grid-actions-container .tooltip {
+        position: relative;
+      }
+
+      /* Ensure tooltips are properly aligned and not cut off */
+      .grid-actions-container {
+        position: relative;
+        overflow: visible;
+        z-index: 20; /* Higher z-index than default */
+      }
+
+      /* Container needs to properly handle overflow */
+      .grid-view-item {
+        overflow: visible !important; /* Override the overflow:hidden */
+      }
+
+      /* Make tooltip alignment more precise */
+      .grid-actions-container .tooltip .tooltip-text {
+        left: 50%;
+        bottom: 135%;
+        transform: translateX(-50%);
+        white-space: nowrap; /* Prevent line breaks */
+        min-width: 80px; /* Set minimum width */
+      }
+
+      /* Fix for individual tooltip positions */
+      .grid-actions-container .tooltip:nth-child(1) .tooltip-text {
+        transform: translateX(-40%);
+      }
+
+      .grid-actions-container .tooltip:nth-child(2) .tooltip-text {
+        transform: translateX(-40%);
+      }
+
+      .grid-actions-container .tooltip:nth-child(3) .tooltip-text {
+        transform: translateX(-40%);
+      }
+
+      .grid-actions-container .tooltip:nth-child(4) .tooltip-text {
+        transform: translateX(-40%);
+      }
+
+      .grid-actions-container .tooltip:nth-child(5) .tooltip-text {
+        transform: translateX(-40%);
+      }
+
+      .grid-actions-container .tooltip:nth-child(6) .tooltip-text {
+        transform: translateX(
+          -60%
+        ); /* Move it more to the left to prevent cutoff */
+      }
+
+      /* Hover state adjustments */
+      .grid-actions-container .tooltip:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      .grid-actions-container .tooltip:nth-child(1):hover .tooltip-text {
+        transform: translateX(-40%) translateY(-5px);
+      }
+
+      .grid-actions-container .tooltip:nth-child(2):hover .tooltip-text {
+        transform: translateX(-40%) translateY(-5px);
+      }
+
+      .grid-actions-container .tooltip:nth-child(3):hover .tooltip-text {
+        transform: translateX(-40%) translateY(-5px);
+      }
+
+      .grid-actions-container .tooltip:nth-child(4):hover .tooltip-text {
+        transform: translateX(-40%) translateY(-5px);
+      }
+
+      .grid-actions-container .tooltip:nth-child(5):hover .tooltip-text {
+        transform: translateX(-40%) translateY(-5px);
+      }
+
+      .grid-actions-container .tooltip:nth-child(6):hover .tooltip-text {
+        transform: translateX(-60%) translateY(-5px);
+      }
+
+      /* Fix tooltip arrow positioning */
+      .grid-actions-container .tooltip .tooltip-text::after {
+        left: 50%;
+      }
+
+      .grid-actions-container .tooltip:nth-child(6) .tooltip-text::after {
+        left: 70%; /* Adjust arrow position for the last tooltip */
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 font-sans">
+    <div class="flex min-h-screen">
+      <!-- Sidebar -->
+      <aside
+        class="fixed inset-y-0 left-0 w-64 bg-white shadow-lg z-30 transform md:translate-x-0 -translate-x-full transition-transform duration-300"
+        id="sidebar"
+      >
+        <div class="p-5 border-b border-gray-200">
+          <a href="/" class="flex items-center justify-center">
+            <img src="/dockpilot-logo.png" alt="Logo" class="h-15" />
+          </a>
+        </div>
+        <nav class="mt-6 px-3 space-y-1">
+          <a
+            href="/dashboard"
+            class="sidebar-link flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100"
+          >
+            <i class="fas fa-tachometer-alt mr-3 text-blue-500"></i
+            ><span>Dashboard</span>
+          </a>
+          <a
+            href="/containers"
+            class="sidebar-link flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100"
+          >
+            <i class="fas fa-th-large mr-3 text-blue-500"></i
+            ><span>Containers</span>
+          </a>
+          <a
+            href="/images"
+            class="sidebar-link active flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100"
+          >
+            <i class="fas fa-image mr-3 text-blue-500"></i><span>Images</span>
+          </a>
+          <a
+            href="/lab"
+            class="sidebar-link flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100"
+          >
+            <i class="fas fa-flask mr-3 text-blue-500"></i
+            ><span>Container Lab</span>
+          </a>
+        </nav>
+        <div
+          class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200 text-sm"
+        >
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <div
+                class="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-2"
+              ></div>
+              <span class="text-green-700">Docker Engine</span>
+            </div>
+            <span class="text-green-700">Online</span>
+          </div>
+          <div class="mt-2 text-xs text-gray-500" id="sidebarLastUpdated">
+            Last updated: Just now
+          </div>
+        </div>
+      </aside>
+
+      <!-- Mobile Overlay -->
+      <div
+        id="overlay"
+        class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden"
+      ></div>
+
+      <!-- Main content -->
+      <div class="flex-1 md:ml-64">
+        <!-- Top bar -->
+        <header class="bg-white shadow-sm sticky top-0 z-10">
+          <div class="flex items-center justify-between px-4 py-3">
+            <button id="mobile-menu-btn" class="md:hidden focus:outline-none">
+              <i class="fas fa-bars text-gray-700 text-xl"></i>
+            </button>
+            <div class="flex-1 mx-4">
+              <h1 class="text-xl font-semibold text-gray-800">Images</h1>
+              <p class="text-sm text-gray-500">
+                Manage and monitor your Docker images
+              </p>
+            </div>
+            <div class="flex items-center space-x-4">
+              <button
+                id="viewToggle"
+                class="tooltip flex items-center px-3 py-1 bg-gray-100 text-gray-600 rounded-full hover:bg-gray-200 transition"
+              >
+                <span class="tooltip-text">Toggle table/grid view</span>
+                <i id="viewIcon" class="fas fa-table mr-1"></i>
+                <span id="viewLabel" class="text-sm">Table View</span>
+              </button>
+              <button
+                id="refreshBtn"
+                onclick="refreshImages()"
+                class="flex items-center px-3 py-1 bg-blue-50 text-blue-600 rounded-full hover:bg-blue-100 transition"
+              >
+                <i id="refreshIcon" class="fas fa-sync-alt mr-1"></i>
+                <span class="text-sm">Refresh</span>
+              </button>
+              <button
+                id="pullImageBtn"
+                class="flex items-center px-4 py-1 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition"
+              >
+                <i class="fas fa-download mr-1"></i>
+                <span class="text-sm">Pull Image</span>
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <!-- Search Bar -->
+        <div class="bg-white border-b border-gray-200 px-6 py-4">
+          <div class="flex flex-col md:flex-row gap-4">
+            <div class="flex-1 relative">
+              <div
+                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+              >
+                <i class="fas fa-search text-gray-400"></i>
+              </div>
+              <input
+                id="imageSearch"
+                type="text"
+                placeholder="Search images..."
+                class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+              />
+            </div>
+            <button
+              id="applySearch"
+              class="flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+            >
+              <i class="fas fa-search mr-2"></i><span>Search</span>
+            </button>
+            <button
+              id="clearSearch"
+              class="flex items-center px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition"
+            >
+              <i class="fas fa-times mr-2"></i><span>Clear</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Main -->
+        <main class="p-6">
+          <!-- Table View -->
+          <div id="tableView" class="fade-in">
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+              <div class="table-container">
+                <table class="min-w-full">
+                  <thead>
+                    <tr class="border-b border-gray-200">
+                      <th
+                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                      >
+                        Repository
+                      </th>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                      >
+                        Tag
+                      </th>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                      >
+                        Image ID
+                      </th>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                      >
+                        Size
+                      </th>
+                      <th
+                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                      >
+                        Created
+                      </th>
+                      <th
+                        class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase"
+                      >
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="imageTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Grid View -->
+          <div id="gridView" class="fade-in hidden">
+            <div
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              id="imagesGrid"
+            ></div>
+          </div>
+
+          <!-- Pagination -->
+          <div class="mt-6 flex items-center justify-between">
+            <div class="text-sm text-gray-700">
+              Showing <span id="imageCount" class="font-medium">0</span> images
+            </div>
+            <div class="flex space-x-1">
+              <button
+                class="px-3 py-1 rounded-md text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 disabled:opacity-50"
+                disabled
+              >
+                Previous
+              </button>
+              <button
+                class="px-3 py-1 rounded-md text-sm bg-blue-500 text-white hover:bg-blue-600"
+              >
+                1
+              </button>
+              <button
+                class="px-3 py-1 rounded-md text-sm bg-gray-100 text-gray-700 hover:bg-gray-200 disabled:opacity-50"
+                disabled
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </main>
+
+        <!-- Footer -->
+        <footer
+          class="bg-white border-t border-gray-200 py-4 px-6 text-center text-sm text-gray-500"
+        >
+          DockPilot &copy; 2025 | Simple Docker Management
+        </footer>
+      </div>
+    </div>
+
+    <!-- Pull Image Modal -->
+    <div id="pullImageModal" class="fixed inset-0 z-50 hidden">
+      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+      <div
+        class="modal relative bg-white rounded-lg shadow-xl max-w-md mx-auto mt-24"
+      >
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="text-lg font-medium text-gray-900">Pull New Image</h3>
+        </div>
+        <div class="p-6">
+          <label
+            for="pullImageName"
+            class="block text-sm font-medium text-gray-700 mb-1"
+            >Image Name</label
+          >
+          <input
+            type="text"
+            id="pullImageName"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            placeholder="repository:tag (e.g. nginx:latest)"
+          />
+        </div>
+        <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-2">
+          <button
+            id="cancelPullBtn"
+            class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+          >
+            Cancel
+          </button>
+          <button
+            id="confirmPullBtn"
+            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Pull
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Remove Image Modal -->
+    <div id="removeImageModal" class="fixed inset-0 z-50 hidden">
+      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+      <div
+        class="modal relative bg-white rounded-lg shadow-xl max-w-md mx-auto mt-24"
+      >
+        <div class="px-6 py-4">
+          <div class="text-center">
+            <div
+              class="mx-auto mb-4 h-12 w-12 flex items-center justify-center rounded-full bg-red-100"
+            >
+              <i class="fas fa-exclamation-triangle text-red-600"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900">Remove Image</h3>
+            <p class="text-sm text-gray-500 mt-2">
+              Are you sure you want to remove image
+              <span id="removeImageName" class="font-semibold">?</span>?
+            </p>
+          </div>
+        </div>
+        <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-2">
+          <button
+            id="cancelRemoveBtn"
+            class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+          >
+            Cancel
+          </button>
+          <button
+            id="confirmRemoveBtn"
+            class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inspect Image Modal -->
+    <div
+      id="inspectImageModal"
+      class="fixed inset-0 z-50 hidden overflow-y-auto"
+    >
+      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+      <div class="flex items-center justify-center min-h-screen p-4">
+        <div
+          class="modal relative bg-white rounded-lg shadow-xl w-full max-w-4xl mx-auto max-h-[85vh] flex flex-col"
+        >
+          <div
+            class="flex justify-between items-center px-6 py-4 border-b border-gray-200 sticky top-0 bg-white z-10"
+          >
+            <h3 class="text-lg font-medium text-gray-900">
+              Inspect Image: <span id="inspectImageName">Image</span>
+            </h3>
+            <button
+              id="closeInspectImageModal"
+              class="text-gray-400 hover:text-gray-500"
+            >
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="flex-1 overflow-auto p-6">
+            <div
+              id="inspectLoader"
+              class="flex justify-center items-center h-full"
+            >
+              <div
+                class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"
+              ></div>
+              <span class="ml-2">Loading details...</span>
+            </div>
+
+            <!-- Formatted View -->
+            <div id="formattedView" class="hidden">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                  <h4 class="text-sm font-semibold text-gray-700 mb-2">
+                    Basic Information
+                  </h4>
+                  <div class="space-y-2">
+                    <div>
+                      <span class="text-xs text-gray-500">ID:</span>
+                      <p id="inspectId" class="text-sm font-mono"></p>
+                    </div>
+                    <div>
+                      <span class="text-xs text-gray-500">Created:</span>
+                      <p id="inspectCreated" class="text-sm"></p>
+                    </div>
+                    <div>
+                      <span class="text-xs text-gray-500">Size:</span>
+                      <p id="inspectSize" class="text-sm"></p>
+                    </div>
+                    <div>
+                      <span class="text-xs text-gray-500">Author:</span>
+                      <p id="inspectAuthor" class="text-sm"></p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-lg">
+                  <h4 class="text-sm font-semibold text-gray-700 mb-2">
+                    Tags & System
+                  </h4>
+                  <div class="space-y-2">
+                    <div>
+                      <span class="text-xs text-gray-500">Tags:</span>
+                      <div id="inspectTags" class="text-sm"></div>
+                    </div>
+                    <div>
+                      <span class="text-xs text-gray-500"
+                        >OS/Architecture:</span
+                      >
+                      <p id="inspectOsArch" class="text-sm"></p>
+                    </div>
+                    <div>
+                      <span class="text-xs text-gray-500">Docker Version:</span>
+                      <p id="inspectDockerVersion" class="text-sm"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 gap-4">
+                <div class="bg-gray-50 p-4 rounded-lg">
+                  <h4 class="text-sm font-semibold text-gray-700 mb-2">
+                    Configuration
+                  </h4>
+                  <div class="space-y-2">
+                    <div>
+                      <span class="text-xs text-gray-500">Command:</span>
+                      <p id="inspectCmd" class="text-sm font-mono"></p>
+                    </div>
+                    <div>
+                      <span class="text-xs text-gray-500">Entrypoint:</span>
+                      <p id="inspectEntrypoint" class="text-sm font-mono"></p>
+                    </div>
+                    <div>
+                      <span class="text-xs text-gray-500"
+                        >Working Directory:</span
+                      >
+                      <p id="inspectWorkdir" class="text-sm"></p>
+                    </div>
+                    <div>
+                      <span class="text-xs text-gray-500"
+                        >Environment Variables:</span
+                      >
+                      <div
+                        id="inspectEnv"
+                        class="text-sm font-mono bg-gray-100 p-2 rounded max-h-32 overflow-y-auto"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-lg">
+                  <h4 class="text-sm font-semibold text-gray-700 mb-2">
+                    Layers
+                  </h4>
+                  <div
+                    id="inspectLayers"
+                    class="text-sm font-mono bg-gray-100 p-2 rounded max-h-32 overflow-y-auto"
+                  ></div>
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-lg">
+                  <h4 class="text-sm font-semibold text-gray-700 mb-2">
+                    Labels
+                  </h4>
+                  <div
+                    id="inspectLabels"
+                    class="text-sm font-mono bg-gray-100 p-2 rounded max-h-32 overflow-y-auto"
+                  ></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- JSON View -->
+            <div id="jsonView" class="hidden">
+              <pre
+                id="inspectImageContent"
+                class="whitespace-pre-wrap bg-gray-50 p-4 rounded max-h-[60vh] overflow-auto text-sm font-mono"
+              ></pre>
+            </div>
+          </div>
+          <div
+            class="px-6 py-4 border-t border-gray-200 flex justify-between sticky bottom-0 bg-white"
+          >
+            <button
+              id="toggleViewBtn"
+              class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+            >
+              <i class="fas fa-code mr-1"></i> View JSON
+            </button>
+            <button
+              id="closeInspectImageBtn"
+              class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tag Image Modal -->
+    <div id="tagImageModal" class="fixed inset-0 z-50 hidden">
+      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+      <div
+        class="modal relative bg-white rounded-lg shadow-xl max-w-md mx-auto mt-24"
+      >
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="text-lg font-medium text-gray-900">Tag Image</h3>
+        </div>
+        <div class="p-6">
+          <p class="text-sm text-gray-500 mb-3">
+            Add a new tag to image
+            <span id="tagImageName" class="font-semibold"></span>
+          </p>
+          <label
+            for="newTag"
+            class="block text-sm font-medium text-gray-700 mb-1"
+          >
+            New Tag
+          </label>
+          <input
+            type="text"
+            id="newTag"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            placeholder="repository:tag (e.g. myapp:v1.2)"
+          />
+        </div>
+        <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-2">
+          <button
+            id="cancelTagBtn"
+            class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+          >
+            Cancel
+          </button>
+          <button
+            id="confirmTagBtn"
+            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Tag
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Mobile menu toggle
+      document
+        .getElementById("mobile-menu-btn")
+        .addEventListener("click", () => {
+          const sb = document.getElementById("sidebar"),
+            ov = document.getElementById("overlay");
+          sb.classList.toggle("-translate-x-full");
+          ov.classList.toggle("hidden");
+        });
+      document.getElementById("overlay").addEventListener("click", () => {
+        document.getElementById("sidebar").classList.add("-translate-x-full");
+        document.getElementById("overlay").classList.add("hidden");
+      });
+
+      // View toggle
+      document.getElementById("viewToggle").addEventListener("click", () => {
+        const tv = document.getElementById("tableView"),
+          gv = document.getElementById("gridView"),
+          ic = document.getElementById("viewIcon"),
+          lb = document.getElementById("viewLabel");
+        if (tv.classList.contains("hidden")) {
+          tv.classList.remove("hidden");
+          gv.classList.add("hidden");
+          ic.className = "fas fa-table mr-1";
+          lb.textContent = "Table View";
+        } else {
+          tv.classList.add("hidden");
+          gv.classList.remove("hidden");
+          ic.className = "fas fa-th-large mr-1";
+          lb.textContent = "Grid View";
+        }
+      });
+
+      // Open/close modal
+      function openModal(id) {
+        document.getElementById(id).classList.remove("hidden");
+      }
+      function closeModal(id) {
+        document.getElementById(id).classList.add("hidden");
+      }
+
+      // Pull Image modal
+      document
+        .getElementById("pullImageBtn")
+        .addEventListener("click", () => openModal("pullImageModal"));
+      document
+        .getElementById("cancelPullBtn")
+        .addEventListener("click", () => closeModal("pullImageModal"));
+      document
+        .getElementById("confirmPullBtn")
+        .addEventListener("click", () => {
+          const name = document.getElementById("pullImageName").value.trim();
+          if (!name) return showNotification("Image name is required", "error");
+          const btn = document.getElementById("confirmPullBtn");
+          btn.disabled = true;
+          btn.innerHTML =
+            '<i class="fas fa-spinner fa-spin mr-1"></i>Pulling...';
+          fetch(`/pull-image/${encodeURIComponent(name)}`)
+            .then((r) => (r.ok ? r.text() : Promise.reject(r.statusText)))
+            .then((msg) => {
+              showNotification(msg, "success");
+              closeModal("pullImageModal");
+              loadImages();
+              document.getElementById("pullImageName").value = "";
+            })
+            .catch((e) => showNotification("Error: " + e, "error"))
+            .finally(() => {
+              btn.disabled = false;
+              btn.textContent = "Pull";
+            });
+        });
+
+      // Remove Image modal
+      document
+        .getElementById("cancelRemoveBtn")
+        .addEventListener("click", () => closeModal("removeImageModal"));
+      document
+        .getElementById("confirmRemoveBtn")
+        .addEventListener("click", function () {
+          const id = this.dataset.imageId,
+            name = this.dataset.imageName;
+          if (!id) return showNotification("Missing image ID", "error");
+          fetch(`/remove-image/${id}`)
+            .then((r) => (r.ok ? r.text() : Promise.reject(r.statusText)))
+            .then((msg) => {
+              showNotification(msg, "success");
+              closeModal("removeImageModal");
+              loadImages();
+            })
+            .catch((e) => showNotification("Error: " + e, "error"));
+        });
+
+      // Inspect Image modal
+      document
+        .getElementById("closeInspectImageModal")
+        .addEventListener("click", () => closeModal("inspectImageModal"));
+      document
+        .getElementById("closeInspectImageBtn")
+        .addEventListener("click", () => closeModal("inspectImageModal"));
+
+      // Toggle between formatted and JSON view
+      document
+        .getElementById("toggleViewBtn")
+        .addEventListener("click", function () {
+          const formattedView = document.getElementById("formattedView");
+          const jsonView = document.getElementById("jsonView");
+          const btn = document.getElementById("toggleViewBtn");
+
+          if (formattedView.classList.contains("hidden")) {
+            // Switch to formatted view
+            formattedView.classList.remove("hidden");
+            jsonView.classList.add("hidden");
+            btn.innerHTML = '<i class="fas fa-code mr-1"></i> View JSON';
+          } else {
+            // Switch to JSON view
+            formattedView.classList.add("hidden");
+            jsonView.classList.remove("hidden");
+            btn.innerHTML = '<i class="fas fa-table mr-1"></i> View Formatted';
+          }
+        });
+
+      // Format the image data in the inspect modal
+      // Format the image data in the inspect modal
+      function formatInspectData(data) {
+        try {
+          // Parse data if it's a string
+          const imageData =
+            typeof data === "string" ? JSON.parse(data)[0] : data[0];
+
+          // Show JSON view
+          document.getElementById("inspectImageContent").textContent =
+            JSON.stringify(imageData, null, 2);
+
+          // Fill in formatted view
+          document.getElementById("inspectId").textContent =
+            imageData.Id || "N/A";
+          document.getElementById("inspectCreated").textContent =
+            formatDate(imageData.Created) || "N/A";
+          document.getElementById("inspectSize").textContent =
+            formatSize(imageData.Size) || "N/A";
+          document.getElementById("inspectAuthor").textContent =
+            imageData.Author || "N/A";
+
+          // Tags
+          const tagsElem = document.getElementById("inspectTags");
+          tagsElem.innerHTML = "";
+          if (imageData.RepoTags && imageData.RepoTags.length > 0) {
+            imageData.RepoTags.forEach((tag) => {
+              const tagSpan = document.createElement("span");
+              tagSpan.className =
+                "inline-block bg-blue-100 text-blue-700 px-2 py-1 rounded text-xs mr-1 mb-1";
+              tagSpan.textContent = tag;
+              tagsElem.appendChild(tagSpan);
+            });
+          } else {
+            tagsElem.textContent = "No tags";
+          }
+
+          // OS/Arch
+          document.getElementById("inspectOsArch").textContent = `${
+            imageData.Os || "N/A"
+          } / ${imageData.Architecture || "N/A"}`;
+
+          document.getElementById("inspectDockerVersion").textContent =
+            imageData.DockerVersion || "N/A";
+
+          // Command
+          const cmdElem = document.getElementById("inspectCmd");
+          if (imageData.Config && imageData.Config.Cmd) {
+            cmdElem.textContent = Array.isArray(imageData.Config.Cmd)
+              ? imageData.Config.Cmd.join(" ")
+              : imageData.Config.Cmd;
+          } else {
+            cmdElem.textContent = "None";
+          }
+
+          // Entrypoint
+          const entrypointElem = document.getElementById("inspectEntrypoint");
+          if (imageData.Config && imageData.Config.Entrypoint) {
+            entrypointElem.textContent = Array.isArray(
+              imageData.Config.Entrypoint
+            )
+              ? imageData.Config.Entrypoint.join(" ")
+              : imageData.Config.Entrypoint;
+          } else {
+            entrypointElem.textContent = "None";
+          }
+
+          // Working Dir
+          document.getElementById("inspectWorkdir").textContent =
+            imageData.Config && imageData.Config.WorkingDir
+              ? imageData.Config.WorkingDir
+              : "/";
+
+          // Environment Variables
+          const envElem = document.getElementById("inspectEnv");
+          envElem.innerHTML = "";
+          if (
+            imageData.Config &&
+            imageData.Config.Env &&
+            imageData.Config.Env.length > 0
+          ) {
+            imageData.Config.Env.forEach((env) => {
+              const envDiv = document.createElement("div");
+              envDiv.textContent = env;
+              envElem.appendChild(envDiv);
+            });
+          } else {
+            envElem.textContent = "No environment variables";
+          }
+
+          // Layers
+          const layersElem = document.getElementById("inspectLayers");
+          layersElem.innerHTML = "";
+          if (
+            imageData.RootFS &&
+            imageData.RootFS.Layers &&
+            imageData.RootFS.Layers.length > 0
+          ) {
+            imageData.RootFS.Layers.forEach((layer, index) => {
+              const layerDiv = document.createElement("div");
+              layerDiv.textContent = `Layer ${index + 1}: ${layer}`;
+              layersElem.appendChild(layerDiv);
+            });
+          } else {
+            layersElem.textContent = "No layers information";
+          }
+
+          // Labels
+          const labelsElem = document.getElementById("inspectLabels");
+          labelsElem.innerHTML = "";
+          if (imageData.Config && imageData.Config.Labels) {
+            const labels = imageData.Config.Labels;
+            Object.keys(labels).forEach((key) => {
+              const labelDiv = document.createElement("div");
+              labelDiv.textContent = `${key}: ${labels[key]}`;
+              labelsElem.appendChild(labelDiv);
+            });
+          } else {
+            labelsElem.textContent = "No labels";
+          }
+
+          // Show formatted view by default
+          document.getElementById("formattedView").classList.remove("hidden");
+          document.getElementById("jsonView").classList.add("hidden");
+          document.getElementById("toggleViewBtn").innerHTML =
+            '<i class="fas fa-code mr-1"></i> View JSON';
+        } catch (error) {
+          console.error("Error formatting inspect data:", error);
+          document.getElementById("inspectImageContent").textContent =
+            typeof data === "string" ? data : JSON.stringify(data, null, 2);
+
+          // If we can't parse the data, just show JSON view
+          document.getElementById("formattedView").classList.add("hidden");
+          document.getElementById("jsonView").classList.remove("hidden");
+          document.getElementById("toggleViewBtn").innerHTML =
+            '<i class="fas fa-table mr-1"></i> View Formatted';
+        }
+
+        // Hide loader
+        document.getElementById("inspectLoader").classList.add("hidden");
+      }
+      // Format timestamp
+      function formatDate(timestamp) {
+        if (!timestamp) return "N/A";
+        try {
+          const date = new Date(timestamp);
+          return date.toLocaleString();
+        } catch (e) {
+          return timestamp;
+        }
+      }
+
+      // Format size from bytes to human readable format
+      function formatSize(bytes) {
+        if (bytes === undefined || bytes === null) return "N/A";
+
+        const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+        if (bytes === 0) return "0 Bytes";
+        const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
+        if (i === 0) return `${bytes} ${sizes[i]}`;
+        return `${(bytes / 1024 ** i).toFixed(2)} ${sizes[i]}`;
+      }
+
+      // Update the existing inspect image function
+      function inspectImage(id, repo, tag) {
+        document.getElementById(
+          "inspectImageName"
+        ).textContent = `${repo}:${tag}`;
+        openModal("inspectImageModal");
+
+        // Reset and show loader
+        document.getElementById("inspectLoader").classList.remove("hidden");
+        document.getElementById("formattedView").classList.add("hidden");
+        document.getElementById("jsonView").classList.add("hidden");
+
+        // Fetch details
+        fetch(`/inspect-image/${id}`)
+          .then((r) => (r.ok ? r.text() : Promise.reject(r.statusText)))
+          .then((txt) => {
+            try {
+              const obj = JSON.parse(txt);
+              formatInspectData(obj);
+            } catch {
+              // If parsing fails, just show the raw text
+              document.getElementById("inspectImageContent").textContent = txt;
+              document.getElementById("formattedView").classList.add("hidden");
+              document.getElementById("jsonView").classList.remove("hidden");
+              document.getElementById("toggleViewBtn").innerHTML =
+                '<i class="fas fa-table mr-1"></i> View Formatted';
+              document.getElementById("inspectLoader").classList.add("hidden");
+            }
+          })
+          .catch((e) => {
+            document.getElementById(
+              "inspectImageContent"
+            ).innerHTML = `<div class="text-red-500 p-4">Error: ${e}</div>`;
+            document.getElementById("formattedView").classList.add("hidden");
+            document.getElementById("jsonView").classList.remove("hidden");
+            document.getElementById("toggleViewBtn").innerHTML =
+              '<i class="fas fa-table mr-1"></i> View Formatted';
+            document.getElementById("inspectLoader").classList.add("hidden");
+          });
+      }
+
+      // Tag Image modal
+      document
+        .getElementById("cancelTagBtn")
+        .addEventListener("click", () => closeModal("tagImageModal"));
+      document
+        .getElementById("confirmTagBtn")
+        .addEventListener("click", function () {
+          const newTag = document.getElementById("newTag").value.trim();
+          const id = this.dataset.imageId,
+            name = this.dataset.imageName;
+          if (!newTag) return showNotification("New tag required", "error");
+          fetch(`/tag-image/${id}/${encodeURIComponent(newTag)}`)
+            .then((r) => (r.ok ? r.text() : Promise.reject(r.statusText)))
+            .then((msg) => {
+              showNotification(msg, "success");
+              closeModal("tagImageModal");
+              loadImages();
+            })
+            .catch((e) => showNotification("Error: " + e, "error"));
+        });
+
+      // Notifications
+      function createNotificationContainer() {
+        const c = document.createElement("div");
+        c.id = "notification-container";
+        c.className = "fixed bottom-5 right-5 flex flex-col items-end z-50";
+        document.body.appendChild(c);
+        return c;
+      }
+
+      function showNotification(msg, type = "success") {
+        const container =
+          document.getElementById("notification-container") ||
+          createNotificationContainer();
+        const notification = document.createElement("div");
+        const bgColor =
+          type === "success"
+            ? "bg-green-100 border-green-400 text-green-700"
+            : type === "error"
+            ? "bg-red-100 border-red-400 text-red-700"
+            : "bg-blue-100 border-blue-400 text-blue-700";
+        const icon =
+          type === "success"
+            ? "fa-check-circle"
+            : type === "error"
+            ? "fa-exclamation-circle"
+            : "fa-info-circle";
+        notification.className = `${bgColor} border px-4 py-3 rounded shadow-md mb-2 flex items-center animate-fade-in`;
+        notification.style.transition = "all 0.3s ease-in-out";
+        notification.style.opacity = "0";
+        notification.innerHTML = `
+                    <div class="flex items-center">
+                        <i class="fas ${icon} mr-2"></i>
+                        <span>${msg}</span>
+                    </div>
+                `;
+        notification.dataset.time = Date.now();
+        container.appendChild(notification);
+
+        // Animate the notification appearance
+        setTimeout(() => {
+          notification.style.opacity = "1";
+        }, 10);
+
+        setTimeout(() => {
+          notification.style.opacity = "0";
+          setTimeout(() => {
+            notification.remove();
+            // If no more notifications, remove the container
+            if (container.children.length === 0) {
+              container.remove();
+            }
+          }, 300);
+        }, 3000);
+      }
+
+      // Function to add a fade-in animation
+      function addFadeInAnimation() {
+        const style = document.createElement("style");
+        style.textContent = `
+                    @keyframes fadeIn {
+                        from { opacity: 0; transform: translateY(10px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                    .animate-fade-in {
+                        animation: fadeIn 0.3s ease-in-out;
+                    }
+                `;
+        document.head.appendChild(style);
+      }
+      addFadeInAnimation();
+
+      // Load & display images
+      let allImages = [];
+      function loadImages() {
+        document.getElementById("refreshIcon").classList.add("fa-spin");
+        fetch("/get-images")
+          .then((r) => (r.ok ? r.text() : Promise.reject(r.statusText)))
+          .then((data) => {
+            allImages = processImageData(data);
+            applySearchFilter();
+            showNotification("Images loaded", "success");
+          })
+          .catch((e) => showNotification("Error loading: " + e, "error"))
+          .finally(() =>
+            document.getElementById("refreshIcon").classList.remove("fa-spin")
+          );
+      }
+      function processImageData(data) {
+        const lines = data
+          .split(/\r?\n/)
+          .filter((l) => l.trim() && !l.startsWith("Images loaded:"));
+        const arr = lines.map((line) => {
+          const cols = line.trim().split(/\s{2,}/);
+          return {
+            repository: cols[0] || "",
+            tag: cols[1] || "",
+            id: cols[2] || "",
+            size: cols[3] || "",
+            created: cols[4] || "",
+          };
+        });
+        return arr;
+      }
+      function applySearchFilter() {
+        const term = document
+          .getElementById("imageSearch")
+          .value.trim()
+          .toLowerCase();
+        const filtered = allImages.filter(
+          (img) =>
+            img.repository.toLowerCase().includes(term) ||
+            img.tag.toLowerCase().includes(term) ||
+            img.id.toLowerCase().includes(term)
+        );
+        updateDisplay(filtered);
+      }
+      document
+        .getElementById("applySearch")
+        .addEventListener("click", applySearchFilter);
+      document.getElementById("clearSearch").addEventListener("click", () => {
+        document.getElementById("imageSearch").value = "";
+        applySearchFilter();
+      });
+
+      function updateDisplay(images) {
+        const tb = document.getElementById("imageTableBody"),
+          gb = document.getElementById("imagesGrid"),
+          cnt = document.getElementById("imageCount");
+        tb.innerHTML = "";
+        gb.innerHTML = "";
+        cnt.textContent = images.length;
+        images.forEach((img) => {
+          // Table row
+          const tr = document.createElement("tr");
+          tr.className = "border-b hover:bg-gray-50";
+          tr.innerHTML = `
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">${img.repository}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">${img.tag}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-xs text-gray-500">${img.id}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">${img.size}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900">${img.created}</td>
+                        <td class="px-4 py-4 whitespace-nowrap text-right space-x-2">
+                            <button class="tooltip inline-block p-1 rounded hover:bg-gray-100" data-action="inspect">
+                                <span class="tooltip-text">Inspect</span><i class="fas fa-info-circle text-gray-600"></i>
+                            </button>
+                            <button class="tooltip inline-block p-1 rounded hover:bg-gray-100" data-action="tag">
+                                <span class="tooltip-text">Tag</span><i class="fas fa-tag text-blue-600"></i>
+                            </button>
+                            <button class="tooltip inline-block p-1 rounded hover:bg-gray-100" data-action="remove">
+                                <span class="tooltip-text">Remove</span><i class="fas fa-trash text-red-600"></i>
+                            </button>
+                        </td>`;
+          tr.dataset.id = img.id;
+          tr.dataset.repo = img.repository;
+          tr.dataset.tag = img.tag;
+          tb.appendChild(tr);
+
+          // Grid card
+          const div = document.createElement("div");
+          div.className =
+            "bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 grid-view-item";
+          div.innerHTML = `
+                        <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i class="fas fa-image text-blue-500 mr-2"></i>
+                                <h3 class="font-medium text-gray-800">${img.repository}:${img.tag}</h3>
+                            </div>
+                        </div>
+                        <div class="px-5 py-3 bg-gray-50 grid grid-cols-2 divide-x divide-gray-100">
+                            <div class="pl-2">
+                                <div class="text-xs font-medium text-gray-500 uppercase">ID</div>
+                                <div class="text-sm text-gray-700">${img.id}</div>
+                            </div>
+                            <div class="pl-2">
+                                <div class="text-xs font-medium text-gray-500 uppercase">Size</div>
+                                <div class="text-sm text-gray-700">${img.size}</div>
+                            </div>
+                        </div>
+                        <div class="px-5 py-3 bg-gray-50 flex justify-end space-x-2 grid-actions-container" data-id="${img.id}" data-repo="${img.repository}" data-tag="${img.tag}">
+                            <button class="tooltip grid-tooltip p-1 rounded hover:bg-gray-100" data-action="inspect"><span class="tooltip-text">Inspect</span><i class="fas fa-info-circle text-gray-600"></i></button>
+                            <button class="tooltip grid-tooltip p-1 rounded hover:bg-gray-100" data-action="tag"><span class="tooltip-text">Tag</span><i class="fas fa-tag text-blue-600"></i></button>
+                            <button class="tooltip grid-tooltip p-1 rounded hover:bg-gray-100" data-action="remove"><span class="tooltip-text">Remove</span><i class="fas fa-trash text-red-600"></i></button>
+                        </div>`;
+          gb.appendChild(div);
+        });
+      }
+
+      // Delegate actions
+      document.addEventListener("click", (e) => {
+        const btn =
+            e.target.closest("button[data-action]") ||
+            e.target.closest("div[data-action]"),
+          tr = e.target.closest("tr");
+        if (!btn && !tr) return;
+        const action = btn?.dataset.action;
+        const parent = btn?.closest("[data-id]") || tr;
+        const id = parent?.dataset.id,
+          repo = parent?.dataset.repo,
+          tag = parent?.dataset.tag;
+        if (!id) return;
+
+        if (action === "inspect") {
+          inspectImage(id, repo, tag);
+        } else if (action === "pull") {
+          document.getElementById("pullImageName").value = `${repo}:${tag}`;
+          openModal("pullImageModal");
+        } else if (action === "remove") {
+          document.getElementById(
+            "removeImageName"
+          ).textContent = `${repo}:${tag}`;
+          const btnR = document.getElementById("confirmRemoveBtn");
+          btnR.dataset.imageId = id;
+          btnR.dataset.imageName = `${repo}:${tag}`;
+          openModal("removeImageModal");
+        } else if (action === "tag") {
+          document.getElementById(
+            "tagImageName"
+          ).textContent = `${repo}:${tag}`;
+          const btnT = document.getElementById("confirmTagBtn");
+          btnT.dataset.imageId = id;
+          btnT.dataset.imageName = `${repo}:${tag}`;
+          openModal("tagImageModal");
+        }
+      });
+
+      // Refresh shorthand
+      function refreshImages() {
+        loadImages();
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        loadImages();
+      });
+    </script>
+  </body>
+</html>

@@ -314,6 +314,91 @@ app.post("/create-container", (req, res) => {
   });
 });
 
+// Images routes
+app.get("/get-images", (req, res) => {
+  const scriptPath = path.join(
+    __dirname,
+    "scripts",
+    "images/get-images.sh"
+  );
+  execFile(scriptPath, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing script: ${error}`);
+      return res.status(500).send(`Error executing script: ${error.message}`);
+    }
+    console.log(`Script output: ${stdout}`);
+    res.send(stdout.trim());
+  });
+});
+
+app.get("/pull-image", (req, res) => {
+  const { imageName } = req.query;
+  const scriptPath = path.join(
+    __dirname,
+    "scripts",
+    "images/pull-image.sh"
+  );
+  execFile(scriptPath, [imageName], (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing script: ${error}`);
+      return res.status(500).send(`Error executing script: ${error.message}`);
+    }
+    console.log(`Script output: ${stdout}`);
+    res.send(stdout.trim());
+  });
+});
+
+app.get("/remove-image/:imageId", (req, res) => {
+  const { imageId } = req.params;
+  const scriptPath = path.join(
+    __dirname,
+    "scripts",
+    "images/remove-image.sh"
+  );
+  execFile(scriptPath, [imageId], (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing script: ${error}`);
+      return res.status(500).send(`Error executing script: ${error.message}`);
+    }
+    console.log(`Script output: ${stdout}`);
+    res.send(stdout.trim());
+  });
+});
+
+app.get("/inspect-image/:imageId", (req, res) => {
+  const { imageId } = req.params;
+  const scriptPath = path.join(
+    __dirname,
+    "scripts",
+    "images/inspect-image.sh"
+  );
+  execFile(scriptPath, [imageId], (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing script: ${error}`);
+      return res.status(500).send(`Error executing script: ${error.message}`);
+    }
+    console.log(`Script output: ${stdout}`);
+    res.send(stdout.trim());
+  });
+});
+
+app.post("/tag-image", (req, res) => {
+  const { imageId, newTag } = req.body;
+  const scriptPath = path.join(
+    __dirname,
+    "scripts",
+    "images/tag-image.sh"
+  );
+  execFile(scriptPath, [imageId, newTag], (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error executing script: ${error}`);
+      return res.status(500).send(`Error executing script: ${error.message}`);
+    }
+    console.log(`Script output: ${stdout}`);
+    res.send(stdout.trim());
+  });
+});
+
 // Start the server
 const PORT = 3030;
 app.listen(PORT, () => {
