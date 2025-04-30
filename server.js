@@ -15,6 +15,8 @@ app.use(express.urlencoded({ extended: false }));
 // Static files
 app.use(express.static(path.join(__dirname, "public")));
 app.use("/scripts", express.static(path.join(__dirname, "scripts")));
+app.use("/views", express.static(path.join(__dirname, "views")));
+app.use("/utils", express.static(path.join(__dirname, "utils")));
 
 // Routes
 app.get("/", (req, res) => {

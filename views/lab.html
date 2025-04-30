@@ -105,6 +105,7 @@
         transform: translateX(-50%) translateY(-5px);
       }
     </style>
+    <script src="/utils/templates.js"></script>
   </head>
   <body class="bg-gray-50 font-sans">
     <!-- Overall layout: Sidebar + Content -->
@@ -203,7 +204,7 @@
               <button
                 id="customContainerBtn"
                 onclick="showCustomForm()"
-                class="flex items-center px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none transition"
+                class="flex items-center px-4 py-1 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition cursor-pointer"
               >
                 <i class="fas fa-plus mr-2"></i>
                 <span class="text-sm">Custom Container</span>
@@ -287,165 +288,7 @@
             </h2>
 
             <div id="templatesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <!-- Database Templates -->
-              <div class="template-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover-lift" data-category="database">
-                <div class="h-32 bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center relative">
-                  <img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" alt="MySQL" class="h-24 object-contain p-2 bg-white bg-opacity-90 rounded-lg">
-                  <span class="absolute top-2 right-2 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">Database</span>
-                </div>
-                <div class="p-5">
-                  <h3 class="text-lg font-semibold mb-2">MySQL</h3>
-                  <p class="text-sm text-gray-600 mb-4">MySQL is an open-source relational database management system.</p>
-                  
-                  <div class="flex flex-wrap gap-2 mb-4">
-                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Version: 8.0</span>
-                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Port: 3306</span>
-                    <span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">30k+ Pulls</span>
-                  </div>
-                  
-                  <div class="flex justify-between">
-                    <button class="use-template-btn text-blue-500 hover:text-blue-700" data-template="mysql">
-                      <i class="fas fa-arrow-right mr-1"></i> Use Template
-                    </button>
-                    <button class="view-config-btn text-gray-500 hover:text-gray-700" data-template="mysql">
-                      <i class="fas fa-code mr-1"></i> View Config
-                    </button>
-                  </div>
-                </div>
-              </div>
 
-              <div class="template-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover-lift" data-category="database">
-                <div class="h-32 bg-gradient-to-r from-emerald-500 to-teal-600 flex items-center justify-center relative">
-                  <img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" alt="PostgreSQL" class="h-24 object-contain p-2 bg-white bg-opacity-90 rounded-lg">
-                  <span class="absolute top-2 right-2 bg-emerald-100 text-emerald-800 text-xs px-2 py-1 rounded-full">Database</span>
-                </div>
-                <div class="p-5">
-                  <h3 class="text-lg font-semibold mb-2">PostgreSQL</h3>
-                  <p class="text-sm text-gray-600 mb-4">PostgreSQL is an advanced, enterprise-class, open-source RDBMS.</p>
-                  
-                  <div class="flex flex-wrap gap-2 mb-4">
-                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Version: 15</span>
-                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Port: 5432</span>
-                    <span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">25k+ Pulls</span>
-                  </div>
-                  
-                  <div class="flex justify-between">
-                    <button class="use-template-btn text-blue-500 hover:text-blue-700" data-template="postgres">
-                      <i class="fas fa-arrow-right mr-1"></i> Use Template
-                    </button>
-                    <button class="view-config-btn text-gray-500 hover:text-gray-700" data-template="postgres">
-                      <i class="fas fa-code mr-1"></i> View Config
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Web Server Templates -->
-              <div class="template-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover-lift" data-category="web">
-                <div class="h-32 bg-gradient-to-r from-green-500 to-lime-600 flex items-center justify-center relative">
-                  <img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" alt="Nginx" class="h-24 object-contain p-2 bg-white bg-opacity-90 rounded-lg">
-                  <span class="absolute top-2 right-2 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">Web Server</span>
-                </div>
-                <div class="p-5">
-                  <h3 class="text-lg font-semibold mb-2">Nginx</h3>
-                  <p class="text-sm text-gray-600 mb-4">Nginx is a web server that can also be used as a reverse proxy and load balancer.</p>
-                  
-                  <div class="flex flex-wrap gap-2 mb-4">
-                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Version: Latest</span>
-                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Port: 80</span>
-                    <span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">50k+ Pulls</span>
-                  </div>
-                  
-                  <div class="flex justify-between">
-                    <button class="use-template-btn text-blue-500 hover:text-blue-700" data-template="nginx">
-                      <i class="fas fa-arrow-right mr-1"></i> Use Template
-                    </button>
-                    <button class="view-config-btn text-gray-500 hover:text-gray-700" data-template="nginx">
-                      <i class="fas fa-code mr-1"></i> View Config
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- CMS Templates -->
-              <div class="template-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover-lift" data-category="cms">
-                <div class="h-32 bg-gradient-to-r from-blue-400 to-cyan-500 flex items-center justify-center relative">
-                  <img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" alt="WordPress" class="h-24 object-contain p-2 bg-white bg-opacity-90 rounded-lg">
-                  <span class="absolute top-2 right-2 bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">CMS</span>
-                </div>
-                <div class="p-5">
-                  <h3 class="text-lg font-semibold mb-2">WordPress</h3>
-                  <p class="text-sm text-gray-600 mb-4">WordPress is a free and open-source CMS written in PHP and paired with MySQL.</p>
-                  
-                  <div class="flex flex-wrap gap-2 mb-4">
-                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Version: Latest</span>
-                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Port: 80</span>
-                    <span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">40k+ Pulls</span>
-                  </div>
-                  
-                  <div class="flex justify-between">
-                    <button class="use-template-btn text-blue-500 hover:text-blue-700" data-template="wordpress">
-                      <i class="fas fa-arrow-right mr-1"></i> Use Template
-                    </button>
-                    <button class="view-config-btn text-gray-500 hover:text-gray-700" data-template="wordpress">
-                      <i class="fas fa-code mr-1"></i> View Config
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Development Tools -->
-              <div class="template-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover-lift" data-category="tools">
-                <div class="h-32 bg-gradient-to-r from-red-500 to-pink-500 flex items-center justify-center relative">
-                  <img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" alt="Redis" class="h-24 object-contain p-2 bg-white bg-opacity-90 rounded-lg">
-                  <span class="absolute top-2 right-2 bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">Dev Tools</span>
-                </div>
-                <div class="p-5">
-                  <h3 class="text-lg font-semibold mb-2">Redis</h3>
-                  <p class="text-sm text-gray-600 mb-4">Redis is an in-memory data structure store, used as a database, cache, and message broker.</p>
-                  
-                  <div class="flex flex-wrap gap-2 mb-4">
-                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Version: 7.0</span>
-                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Port: 6379</span>
-                    <span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">35k+ Pulls</span>
-                  </div>
-                  
-                  <div class="flex justify-between">
-                    <button class="use-template-btn text-blue-500 hover:text-blue-700" data-template="redis">
-                      <i class="fas fa-arrow-right mr-1"></i> Use Template
-                    </button>
-                    <button class="view-config-btn text-gray-500 hover:text-gray-700" data-template="redis">
-                      <i class="fas fa-code mr-1"></i> View Config
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="template-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover-lift" data-category="tools">
-                <div class="h-32 bg-gradient-to-r from-purple-500 to-violet-600 flex items-center justify-center relative">
-                  <img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" alt="MongoDB" class="h-24 object-contain p-2 bg-white bg-opacity-90 rounded-lg">
-                  <span class="absolute top-2 right-2 bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded-full">Dev Tools</span>
-                </div>
-                <div class="p-5">
-                  <h3 class="text-lg font-semibold mb-2">MongoDB</h3>
-                  <p class="text-sm text-gray-600 mb-4">MongoDB is a source-available cross-platform document-oriented database program.</p>
-                  
-                  <div class="flex flex-wrap gap-2 mb-4">
-                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Version: 6.0</span>
-                    <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Port: 27017</span>
-                    <span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">32k+ Pulls</span>
-                  </div>
-                  
-                  <div class="flex justify-between">
-                    <button class="use-template-btn text-blue-500 hover:text-blue-700" data-template="mongodb">
-                      <i class="fas fa-arrow-right mr-1"></i> Use Template
-                    </button>
-                    <button class="view-config-btn text-gray-500 hover:text-gray-700" data-template="mongodb">
-                      <i class="fas fa-code mr-1"></i> View Config
-                    </button>
-                  </div>
-                </div>
-              </div>
             </div>
           </section>
 
@@ -573,218 +416,145 @@ Loading configuration...
           }
         });
 
-      // Template data
-      const templates = {
-        mysql: {
-          name: "MySQL",
-          image: "mysql:8.0",
-          port: "3306:3306",
-          env: "MYSQL_ROOT_PASSWORD=rootpassword\nMYSQL_DATABASE=mydatabase\nMYSQL_USER=user\nMYSQL_PASSWORD=password",
-          volumes: "./mysql-data:/var/lib/mysql",
-          options: "--restart=unless-stopped",
-          config: `version: '3'
-services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql-db
-    ports:
-      - "3306:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=rootpassword
-      - MYSQL_DATABASE=mydatabase
-      - MYSQL_USER=user
-      - MYSQL_PASSWORD=password
-    volumes:
-      - ./mysql-data:/var/lib/mysql
-    restart: unless-stopped`
-        },
-        postgres: {
-          name: "PostgreSQL",
-          image: "postgres:15",
-          port: "5432:5432",
-          env: "POSTGRES_USER=postgres\nPOSTGRES_PASSWORD=password\nPOSTGRES_DB=postgres",
-          volumes: "./postgres-data:/var/lib/postgresql/data",
-          options: "--restart=unless-stopped",
-          config: `version: '3'
-services:
-  postgres:
-    image: postgres:15
-    container_name: postgres-db
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=postgres
-    volumes:
-      - ./postgres-data:/var/lib/postgresql/data
-    restart: unless-stopped`
-        },
-        nginx: {
-          name: "Nginx",
-          image: "nginx:latest",
-          port: "80:80",
-          env: "",
-          volumes: "./nginx/html:/usr/share/nginx/html\n./nginx/conf:/etc/nginx/conf.d",
-          options: "--restart=unless-stopped",
-          config: `version: '3'
-services:
-  nginx:
-    image: nginx:latest
-    container_name: nginx-web
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/html:/usr/share/nginx/html
-      - ./nginx/conf:/etc/nginx/conf.d
-    restart: unless-stopped`
-        },
-        wordpress: {
-          name: "WordPress",
-          image: "wordpress:latest",
-          port: "80:80",
-          env: "WORDPRESS_DB_HOST=db\nWORDPRESS_DB_USER=wordpress\nWORDPRESS_DB_PASSWORD=wordpress\nWORDPRESS_DB_NAME=wordpress",
-          volumes: "./wordpress:/var/www/html",
-          options: "--link mysql-db:db --restart=unless-stopped",
-          config: `version: '3'
-services:
-  db:
-    image: mysql:5.7
-    container_name: mysql-db
-    volumes:
-      - db_data:/var/lib/mysql
-    restart: unless-stopped
-    environment:
-      - MYSQL_ROOT_PASSWORD=somewordpress
-      - MYSQL_DATABASE=wordpress
-      - MYSQL_USER=wordpress
-      - MYSQL_PASSWORD=wordpress
+      // Load and render templates
+      document.addEventListener('DOMContentLoaded', function() {
+        // Get templates from window.containerTemplates (loaded from templates.js)
+        const templates = window.containerTemplates;
+        
+        // Render template cards
+        renderTemplateCards(templates);
+        
+        // Initialize form preview
+        updateCommandPreview();
+        
+        // Set up category filters
+        setupCategoryFilters();
+        
+        // Set up search functionality
+        setupSearchFunctionality();
+      });
       
-  wordpress:
-    depends_on:
-      - db
-    image: wordpress:latest
-    container_name: wordpress
-    ports:
-      - "80:80"
-    restart: unless-stopped
-    environment:
-      - WORDPRESS_DB_HOST=db:3306
-      - WORDPRESS_DB_USER=wordpress
-      - WORDPRESS_DB_PASSWORD=wordpress
-      - WORDPRESS_DB_NAME=wordpress
-    volumes:
-      - wordpress:/var/www/html
+      // Render template cards to the grid
+      function renderTemplateCards(templates) {
+        const templatesGrid = document.getElementById('templatesGrid');
+        templatesGrid.innerHTML = ''; // Clear existing content
+        
+        // Generate HTML for each template
+        Object.keys(templates).forEach(templateId => {
+          const template = templates[templateId];
+          const card = createTemplateCard(templateId, template);
+          templatesGrid.appendChild(card);
+        });
+        
+        // Add event listeners to the newly created buttons
+        attachTemplateCardEventListeners();
+      }
       
-volumes:
-  db_data: {}
-  wordpress: {}`
-        },
-        redis: {
-          name: "Redis",
-          image: "redis:7.0",
-          port: "6379:6379",
-          env: "",
-          volumes: "./redis-data:/data",
-          options: "--restart=unless-stopped",
-          config: `version: '3'
-services:
-  redis:
-    image: redis:7.0
-    container_name: redis
-    ports:
-      - "6379:6379"
-    volumes:
-      - ./redis-data:/data
-    command: redis-server --appendonly yes
-    restart: unless-stopped`
-        },
-        mongodb: {
-          name: "MongoDB",
-          image: "mongo:6.0",
-          port: "27017:27017",
-          env: "MONGO_INITDB_ROOT_USERNAME=admin\nMONGO_INITDB_ROOT_PASSWORD=password",
-          volumes: "./mongo-data:/data/db",
-          options: "--restart=unless-stopped",
-          config: `version: '3'
-services:
-  mongo:
-    image: mongo:6.0
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=password
-    volumes:
-      - ./mongo-data:/data/db
-    restart: unless-stopped`
-        }
-      };
-
-      // Category filter
-      document.querySelectorAll('.category-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          // Update active state
-          document.querySelectorAll('.category-btn').forEach(b => {
-            b.classList.remove('active', 'bg-blue-500', 'text-white');
-            b.classList.add('bg-gray-200', 'text-gray-700');
+      // Create a template card element
+      function createTemplateCard(templateId, template) {
+        const card = document.createElement('div');
+        card.className = 'template-card bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover-lift';
+        card.dataset.category = template.category;
+        
+        card.innerHTML = `
+          <div class="h-32 ${template.background} flex items-center justify-center relative">
+            <img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" alt="${template.name}" class="h-24 object-contain p-2 bg-white bg-opacity-90 rounded-lg">
+            <span class="absolute top-2 right-2 ${template.badge.bg} ${template.badge.text} text-xs px-2 py-1 rounded-full">${template.category.charAt(0).toUpperCase() + template.category.slice(1)}</span>
+          </div>
+          <div class="p-5">
+            <h3 class="text-lg font-semibold mb-2">${template.name}</h3>
+            <p class="text-sm text-gray-600 mb-4">${template.description}</p>
+            
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Version: ${template.version}</span>
+              <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Port: ${template.port.split(':')[0]}</span>
+              <span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded-full">${template.pulls} Pulls</span>
+            </div>
+            
+            <div class="flex justify-between">
+              <button class="use-template-btn text-blue-500 hover:text-blue-700" data-template="${templateId}">
+                <i class="fas fa-arrow-right mr-1"></i> Use Template
+              </button>
+              <button class="view-config-btn text-gray-500 hover:text-gray-700" data-template="${templateId}">
+                <i class="fas fa-code mr-1"></i> View Config
+              </button>
+            </div>
+          </div>
+        `;
+        
+        return card;
+      }
+      
+      // Attach event listeners to template card buttons
+      function attachTemplateCardEventListeners() {
+        // View config buttons
+        document.querySelectorAll('.view-config-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const templateId = btn.dataset.template;
+            const template = window.containerTemplates[templateId];
+            
+            if (template) {
+              document.getElementById('configModalTitle').textContent = template.name + ' Configuration';
+              document.getElementById('configModalContent').textContent = template.config;
+              document.getElementById('useTemplateModalBtn').dataset.template = templateId;
+              document.getElementById('configModal').classList.remove('hidden');
+            }
           });
-          btn.classList.add('active', 'bg-blue-500', 'text-white');
-          btn.classList.remove('bg-gray-200', 'text-gray-700');
-          
-          // Filter templates
-          const category = btn.dataset.category;
+        });
+
+        // Use template buttons
+        document.querySelectorAll('.use-template-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            showCreateForm(btn.dataset.template);
+          });
+        });
+      }
+      
+      // Set up category filter buttons
+      function setupCategoryFilters() {
+        document.querySelectorAll('.category-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            // Update active state
+            document.querySelectorAll('.category-btn').forEach(b => {
+              b.classList.remove('active', 'bg-blue-500', 'text-white');
+              b.classList.add('bg-gray-200', 'text-gray-700');
+            });
+            btn.classList.add('active', 'bg-blue-500', 'text-white');
+            btn.classList.remove('bg-gray-200', 'text-gray-700');
+            
+            // Filter templates
+            const category = btn.dataset.category;
+            const cards = document.querySelectorAll('.template-card');
+            
+            cards.forEach(card => {
+              if (category === 'all' || card.dataset.category === category) {
+                card.classList.remove('hidden');
+              } else {
+                card.classList.add('hidden');
+              }
+            });
+          });
+        });
+      }
+      
+      // Set up search functionality
+      function setupSearchFunctionality() {
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+          const searchTerm = e.target.value.toLowerCase();
           const cards = document.querySelectorAll('.template-card');
           
           cards.forEach(card => {
-            if (category === 'all' || card.dataset.category === category) {
+            const title = card.querySelector('h3').textContent.toLowerCase();
+            const description = card.querySelector('p').textContent.toLowerCase();
+            
+            if (title.includes(searchTerm) || description.includes(searchTerm)) {
               card.classList.remove('hidden');
             } else {
               card.classList.add('hidden');
             }
           });
         });
-      });
-
-      // Search functionality
-      document.getElementById('searchInput').addEventListener('input', function(e) {
-        const searchTerm = e.target.value.toLowerCase();
-        const cards = document.querySelectorAll('.template-card');
-        
-        cards.forEach(card => {
-          const title = card.querySelector('h3').textContent.toLowerCase();
-          const description = card.querySelector('p').textContent.toLowerCase();
-          
-          if (title.includes(searchTerm) || description.includes(searchTerm)) {
-            card.classList.remove('hidden');
-          } else {
-            card.classList.add('hidden');
-          }
-        });
-      });
-
-      // View config buttons
-      document.querySelectorAll('.view-config-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const templateId = btn.dataset.template;
-          const template = templates[templateId];
-          
-          if (template) {
-            document.getElementById('configModalTitle').textContent = template.name + ' Configuration';
-            document.getElementById('configModalContent').textContent = template.config;
-            document.getElementById('useTemplateModalBtn').dataset.template = templateId;
-            document.getElementById('configModal').classList.remove('hidden');
-          }
-        });
-      });
-
-      // Use template buttons
-      document.querySelectorAll('.use-template-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          showCreateForm(btn.dataset.template);
-        });
-      });
+      }
 
       // Close config modal
       document.getElementById('closeConfigModal').addEventListener('click', () => {
@@ -830,7 +600,7 @@ services:
 
       // Show create form with template data
       function showCreateForm(templateId) {
-        const template = templates[templateId];
+        const template = window.containerTemplates[templateId];
         
         if (!template) {
           showCustomForm();
@@ -949,33 +719,173 @@ services:
           return;
         }
         
-        // Here you would typically send the data to your backend
-        // For now, let's just close the modal and show a message
-        document.getElementById('createModal').classList.add('hidden');
-        alert('Container creation would be sent to server here');
+        // Format ports as array
+        const portsText = document.getElementById('containerPorts').value;
+        const ports = portsText ? portsText.split('\n').filter(port => port.trim()) : [];
         
-        // In a real implementation, you would call something like:
-        // fetch('/create-container', {
-        //   method: 'POST',
-        //   headers: { 'Content-Type': 'application/json' },
-        //   body: JSON.stringify({
-        //     name: document.getElementById('containerName').value,
-        //     image: document.getElementById('containerImage').value,
-        //     ports: document.getElementById('containerPorts').value,
-        //     env: document.getElementById('containerEnv').value,
-        //     volumes: document.getElementById('containerVolumes').value,
-        //     options: document.getElementById('containerOptions').value,
-        //     start: document.getElementById('startContainer').checked
-        //   })
-        // })
-        // .then(response => response.json())
-        // .then(data => {
-        //   // Handle success
-        // })
-        // .catch(error => {
-        //   // Handle error
-        // });
+        // Format environment variables as array
+        const envText = document.getElementById('containerEnv').value;
+        const envVars = envText ? envText.split('\n').filter(env => env.trim()) : [];
+        
+        // Format volumes as array
+        const volumesText = document.getElementById('containerVolumes').value;
+        const volumes = volumesText ? volumesText.split('\n').filter(vol => vol.trim()) : [];
+        
+        // Extract restart policy from options if present
+        const optionsText = document.getElementById('containerOptions').value || '';
+        let restartPolicy = 'no';
+        let networkMode = 'bridge';
+        
+        // Parse additional options for restart policy and network mode
+        optionsText.split('\n').forEach(option => {
+          option = option.trim();
+          if (option.startsWith('--restart=')) {
+            restartPolicy = option.replace('--restart=', '');
+          }
+          if (option.startsWith('--network=')) {
+            networkMode = option.replace('--network=', '');
+          }
+        });
+        
+        // Show loading state
+        const submitBtn = document.getElementById('submitCreateBtn');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Creating...';
+        submitBtn.disabled = true;
+        
+        // Send request to backend
+        fetch('/create-container', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            containerName: name,
+            containerImage: image,
+            ports: ports,
+            envVars: envVars,
+            volumes: volumes,
+            networkMode: networkMode,
+            restartPolicy: restartPolicy
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Reset button state
+          submitBtn.innerHTML = originalBtnText;
+          submitBtn.disabled = false;
+          
+          // Close modal
+          document.getElementById('createModal').classList.add('hidden');
+          
+          if (data.success) {
+            // Show success notification
+            showNotification('success', data.message);
+            
+            // Optionally redirect to containers page
+            // window.location.href = '/containers';
+          } else {
+            // Show error notification
+            showNotification('error', data.message);
+          }
+        })
+        .catch(error => {
+          // Reset button state
+          submitBtn.innerHTML = originalBtnText;
+          submitBtn.disabled = false;
+          
+          // Show error notification
+          showNotification('error', 'Failed to create container: ' + error.message);
+        });
       });
+
+      // Add a notification function
+      function showNotification(type, message) {
+        const notificationContainer = document.getElementById('notification-container') || createNotificationContainer();
+        
+        // Create notification element
+        const notification = document.createElement('div');
+        
+        // Determine styles based on type
+        let bgColor, icon;
+        switch(type) {
+          case "success":
+            bgColor = "bg-green-500";
+            icon = "check-circle";
+            break;
+          case "error":
+            bgColor = "bg-red-500";
+            icon = "exclamation-circle";
+            break;
+          case "info":
+            bgColor = "bg-blue-500";
+            icon = "info-circle";
+            break;
+          case "warning":
+            bgColor = "bg-yellow-500";
+            icon = "exclamation-triangle";
+            break;
+          default:
+            bgColor = "bg-blue-500";
+            icon = "info-circle";
+        }
+        
+        // Set up notification element
+        notification.className = `${bgColor} px-4 py-3 rounded-lg shadow-lg text-white mb-3 flex items-center animate-fade-in max-w-xs sm:max-w-sm`;
+        notification.style.transition = "all 0.3s ease-in-out";
+        notification.style.opacity = "0";
+        
+        // Handle long messages
+        const truncatedMessage = message.length > 100 ? message.substring(0, 100) + '...' : message;
+        
+        notification.innerHTML = `
+          <i class="fas fa-${icon} mr-2 flex-shrink-0"></i>
+          <span class="text-sm">${truncatedMessage}</span>
+        `;
+        
+        notificationContainer.appendChild(notification);
+        
+        // Animate notification appearance
+        setTimeout(() => {
+          notification.style.opacity = "1";
+        }, 10);
+        
+        // Remove notification after delay
+        setTimeout(() => {
+          notification.style.opacity = "0";
+          notification.style.transform = "translateX(20px)";
+          setTimeout(() => {
+            notification.remove();
+            // Remove container if empty
+            if (notificationContainer.children.length === 0) {
+              notificationContainer.remove();
+            }
+          }, 300);
+        }, 4000);
+      }
+
+      // Create notification container
+      function createNotificationContainer() {
+        const container = document.createElement('div');
+        container.id = 'notification-container';
+        container.className = 'fixed bottom-4 right-4 flex flex-col items-end z-50 space-y-2';
+        document.body.appendChild(container);
+        return container;
+      }
+
+      // Add fade-in animation style if not already present
+      if (!document.getElementById('notification-animations')) {
+        const style = document.createElement('style');
+        style.id = 'notification-animations';
+        style.textContent = `
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+          }
+          .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out forwards;
+          }
+        `;
+        document.head.appendChild(style);
+      }
 
       // Initialize
       document.addEventListener('DOMContentLoaded', function() {

@@ -1151,93 +1151,92 @@
       // Function to show notification
       function showNotification(message, type = "success") {
         const notificationContainer = document.getElementById('notification-container') || createNotificationContainer();
-        const notification = document.createElement("div");
-        const bgColor =
-          type === "success"
-            ? "bg-green-100 border-green-400 text-green-700"
-            : "bg-red-100 border-red-400 text-red-700"
-            "bg-blue-100 border-blue-400 text-blue-700";
-        const icon =
-          type === "success"
-            ? "fa-check-circle"
-            : type === "error"
-            ? "fa-exclamation-circle"
-            : "fa-info-circle";
-        notification.className = `${bgColor} border px-4 py-3 rounded shadow-md mb-2 flex items-center animate-fade-in`;
+        
+        // Create notification element
+        const notification = document.createElement('div');
+        
+        // Determine styles based on type
+        let bgColor, icon;
+        switch(type) {
+          case "success":
+            bgColor = "bg-green-500";
+            icon = "check-circle";
+            break;
+          case "error":
+            bgColor = "bg-red-500";
+            icon = "exclamation-circle";
+            break;
+          case "info":
+            bgColor = "bg-blue-500";
+            icon = "info-circle";
+            break;
+          case "warning":
+            bgColor = "bg-yellow-500";
+            icon = "exclamation-triangle";
+            break;
+          default:
+            bgColor = "bg-blue-500";
+            icon = "info-circle";
+        }
+        
+        // Set up notification element
+        notification.className = `${bgColor} px-4 py-3 rounded-lg shadow-lg text-white mb-3 flex items-center animate-fade-in max-w-xs sm:max-w-sm`;
         notification.style.transition = "all 0.3s ease-in-out";
         notification.style.opacity = "0";
+        
+        // Handle long messages
+        const truncatedMessage = message.length > 100 ? message.substring(0, 100) + '...' : message;
+        
         notification.innerHTML = `
-          <div class="flex items-center">
-            <i class="fas ${icon} mr-2"></i>
-            <span>${message}</span>
-          </div>
+          <i class="fas fa-${icon} mr-2 flex-shrink-0"></i>
+          <span class="text-sm">${truncatedMessage}</span>
         `;
-        notification.dataset.time = Date.now();
+        
         notificationContainer.appendChild(notification);
         
-        // Animate the notification appearance
+        // Animate notification appearance
         setTimeout(() => {
           notification.style.opacity = "1";
         }, 10);
         
+        // Remove notification after delay
         setTimeout(() => {
           notification.style.opacity = "0";
+          notification.style.transform = "translateX(20px)";
           setTimeout(() => {
             notification.remove();
-            // If no more notifications, remove the container
+            // Remove container if empty
             if (notificationContainer.children.length === 0) {
               notificationContainer.remove();
             }
           }, 300);
-        }, 3000);
-        
-        // Adjust positions of existing notifications
-        adjustNotificationPositions();
+        }, 4000);
       }
       
-      // Function to create the notification container
+      // Create notification container
       function createNotificationContainer() {
-        const container = document.createElement("div");
-        container.id = "notification-container";
-        container.className = "fixed bottom-5 right-5 flex flex-col items-end z-50";
+        const container = document.createElement('div');
+        container.id = 'notification-container';
+        container.className = 'fixed bottom-4 right-4 flex flex-col items-end z-50 space-y-2';
         document.body.appendChild(container);
         return container;
       }
       
-      // Function to add a fade-in animation
-      function addFadeInAnimation() {
+      // Add fade-in animation style if not already present
+      if (!document.getElementById('notification-animations')) {
         const style = document.createElement('style');
+        style.id = 'notification-animations';
         style.textContent = `
           @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
           }
           .animate-fade-in {
-            animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out forwards;
           }
         `;
         document.head.appendChild(style);
       }
-      
-      // Function to adjust notification positions
-      function adjustNotificationPositions() {
-        const container = document.getElementById('notification-container');
-        if (!container) return;
-        
-        // Sort notifications by time (newest at the bottom)
-        const notifications = Array.from(container.children);
-        notifications.sort((a, b) => {
-          return parseInt(a.dataset.time) - parseInt(b.dataset.time);
-        });
-        
-        // Reorder in the DOM
-        notifications.forEach(notification => {
-          container.appendChild(notification);
-        });
-      }
-      
-      // Initialize animation
-      addFadeInAnimation();
 
       // NEW: Function to parse console output and populate the UI dynamically
       function populateContainers(data) {
@@ -1443,7 +1442,7 @@
           .then(data => {
             console.log("Containers loaded:", data);
             populateContainers(data);
-            showNotification("Containers loaded successfully", "success");
+            // showNotification("Containers loaded successfully", "success");
           })
           .catch(error => {
             console.error("Error loading containers:", error);
