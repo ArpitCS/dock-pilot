@@ -286,11 +286,17 @@ app.post("/create-container", (req, res) => {
     networkMode,
     restartPolicy,
   } = req.body;
+  
+  console.log("Received port mappings:", ports);
+  
+  // Ensure ports are properly formatted
+  const portsArray = Array.isArray(ports) ? ports : [];
+  console.log("Formatted port mappings:", portsArray);
 
   const args = [
     containerName,
     containerImage,
-    JSON.stringify(ports || []),
+    JSON.stringify(portsArray),
     JSON.stringify(envVars || []),
     JSON.stringify(volumes || []),
     networkMode || "bridge",

@@ -791,8 +791,7 @@
                     placeholder="nginx:latest"
                   />
                 </div>
-              </div>
-              <div>
+              </div>              <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1"
                   >Port Mapping</label
                 >
@@ -814,12 +813,16 @@
                     />
                   </div>
                 </div>
-                <button
-                  type="button"
-                  class="mt-2 text-sm text-blue-600 hover:text-blue-800"
-                >
-                  <i class="fas fa-plus-circle mr-1"></i> Add Port Mapping
-                </button>
+                <div class="flex justify-between items-center">
+                  <button
+                    type="button"
+                    class="mt-2 text-sm text-blue-600 hover:text-blue-800"
+                  >
+                    <i class="fas fa-plus-circle mr-1"></i> Add Port Mapping
+                  </button>
+                  
+                  <div id="portMappingsList" class="mt-2 flex flex-wrap gap-2"></div>
+                </div>
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1"
@@ -2438,7 +2441,35 @@
     // Handle opening the modal with the "New Container" button
     openModalBtn.addEventListener("click", function() {
       openModal("createContainerModal");
-    });
+    });    // Function to update the port mappings visual list
+    function updatePortMappingsList() {
+      const portMappingsList = document.getElementById('portMappingsList');
+      portMappingsList.innerHTML = '';
+      
+      if (portMappings.length === 0) {
+        return;
+      }
+      
+      portMappings.forEach((mapping, index) => {
+        const mappingEl = document.createElement('div');
+        mappingEl.className = 'bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded flex items-center';
+        mappingEl.innerHTML = `
+          ${mapping.hostPort}:${mapping.containerPort}
+          <button class="ml-1 text-blue-600 hover:text-blue-800" data-index="${index}">
+            <i class="fas fa-times-circle"></i>
+          </button>
+        `;
+        
+        // Add remove functionality
+        mappingEl.querySelector('button').addEventListener('click', function() {
+          const idx = parseInt(this.getAttribute('data-index'));
+          portMappings.splice(idx, 1);
+          updatePortMappingsList();
+        });
+        
+        portMappingsList.appendChild(mappingEl);
+      });
+    }
     
     // Add port mapping
     document.querySelector("button.text-blue-600").addEventListener("click", function() {
@@ -2446,16 +2477,26 @@
       const containerPortField = document.querySelector("input[name='containerPort']");
       
       if (hostPortField.value && containerPortField.value) {
+        // Make sure values are strings
+        const hostPort = hostPortField.value.toString();
+        const containerPort = containerPortField.value.toString();
+        
         portMappings.push({
-          hostPort: hostPortField.value,
-          containerPort: containerPortField.value
+          hostPort: hostPort,
+          containerPort: containerPort
         });
+        
+        console.log("Added port mapping:", portMappings[portMappings.length-1]);
+        console.log("Current port mappings:", portMappings);
         
         // Clear fields
         hostPortField.value = "";
         containerPortField.value = "";
         
-        showNotification("Port mapping added", "success");
+        // Update visual list
+        updatePortMappingsList();
+        
+        showNotification(`Port mapping added: ${hostPort}:${containerPort}`, "success");
       } else {
         showNotification("Please enter both host and container ports", "error");
       }
@@ -2553,12 +2594,16 @@
         if (data.success) {
           showNotification(data.message, "success");
           closeModal("createContainerModal");
-          
-          // Reset form
+            // Reset form
           document.getElementById("createContainerForm").reset();
           portMappings = [];
           envVars = [];
           volumeMappings = [];
+          
+          // Clear visual lists
+          if (typeof updatePortMappingsList === 'function') {
+            updatePortMappingsList();
+          }
           
           // Refresh container list
           refreshContainers();
