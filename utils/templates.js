@@ -6,16 +6,17 @@ const containerTemplates = {
     image: "mysql:8.0",
     port: "3306:3306",
     env: "MYSQL_ROOT_PASSWORD=rootpassword\nMYSQL_DATABASE=mydatabase\nMYSQL_USER=user\nMYSQL_PASSWORD=password",
-    volumes: "./mysql-data:/var/lib/mysql",
+    volumes: "./mysql-data:/var/lib/mysql", // THIS IS THE CAUSE
     options: "--restart=unless-stopped",
     category: "database",
-    description: "MySQL is an open-source relational database management system.",
+    description:
+      "MySQL is an open-source relational database management system.",
     version: "8.0",
     pulls: "30k+",
     background: "bg-gradient-to-r from-blue-500 to-indigo-600",
     badge: {
-      bg: "bg-blue-100", 
-      text: "text-blue-800"
+      bg: "bg-blue-100",
+      text: "text-blue-800",
     },
     config: `version: '3'
 services:
@@ -30,8 +31,8 @@ services:
       - MYSQL_USER=user
       - MYSQL_PASSWORD=password
     volumes:
-      - ./mysql-data:/var/lib/mysql
-    restart: unless-stopped`
+      - ./mysql-data:/var/lib/mysql  // AND HERE AGAIN
+    restart: unless-stopped`,
   },
   postgres: {
     name: "PostgreSQL",
@@ -41,13 +42,14 @@ services:
     volumes: "./postgres-data:/var/lib/postgresql/data",
     options: "--restart=unless-stopped",
     category: "database",
-    description: "PostgreSQL is an advanced, enterprise-class, open-source RDBMS.",
+    description:
+      "PostgreSQL is an advanced, enterprise-class, open-source RDBMS.",
     version: "15",
     pulls: "25k+",
     background: "bg-gradient-to-r from-emerald-500 to-teal-600",
     badge: {
-      bg: "bg-emerald-100", 
-      text: "text-emerald-800"
+      bg: "bg-emerald-100",
+      text: "text-emerald-800",
     },
     config: `version: '3'
 services:
@@ -62,35 +64,54 @@ services:
       - POSTGRES_DB=postgres
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
-    restart: unless-stopped`
+    restart: unless-stopped`,
   },
   nginx: {
     name: "Nginx",
-    image: "nginx:latest",
+    image: "nginx:1.25",
     port: "80:80",
     env: "",
-    volumes: "./nginx/html:/usr/share/nginx/html\n./nginx/conf:/etc/nginx/conf.d",
-    options: "--restart=unless-stopped",
+    volumes:
+      "./nginx/html:/usr/share/nginx/html\n./nginx/conf.d:/etc/nginx/conf.d\n./nginx/logs:/var/log/nginx",
+    options: "--restart=unless-stopped --name nginx-web",
     category: "web",
-    description: "Nginx is a web server that can also be used as a reverse proxy and load balancer.",
-    version: "Latest",
+    description:
+      "Nginx is a high-performance web server, reverse proxy, and load balancer.",
+    version: "1.25",
     pulls: "50k+",
     background: "bg-gradient-to-r from-green-500 to-lime-600",
     badge: {
-      bg: "bg-green-100", 
-      text: "text-green-800"
+      bg: "bg-green-100",
+      text: "text-green-800",
     },
     config: `version: '3'
 services:
   nginx:
-    image: nginx:latest
+    image: nginx:1.25
     container_name: nginx-web
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/html:/usr/share/nginx/html
-      - ./nginx/conf:/etc/nginx/conf.d
-    restart: unless-stopped`
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/logs:/var/log/nginx
+      - ./nginx/certs:/etc/nginx/certs
+    environment:
+      - NGINX_HOST=localhost
+      - NGINX_PORT=80
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - web-network
+
+networks:
+  web-network:
+    driver: bridge`,
   },
   wordpress: {
     name: "WordPress",
@@ -100,13 +121,14 @@ services:
     volumes: "./wordpress:/var/www/html",
     options: "--link mysql-db:db --restart=unless-stopped",
     category: "cms",
-    description: "WordPress is a free and open-source CMS written in PHP and paired with MySQL.",
+    description:
+      "WordPress is a free and open-source CMS written in PHP and paired with MySQL.",
     version: "Latest",
     pulls: "40k+",
     background: "bg-gradient-to-r from-blue-400 to-cyan-500",
     badge: {
-      bg: "bg-blue-100", 
-      text: "text-blue-800"
+      bg: "bg-blue-100",
+      text: "text-blue-800",
     },
     config: `version: '3'
 services:
@@ -140,7 +162,7 @@ services:
       
 volumes:
   db_data: {}
-  wordpress: {}`
+  wordpress: {}`,
   },
   redis: {
     name: "Redis",
@@ -150,13 +172,14 @@ volumes:
     volumes: "./redis-data:/data",
     options: "--restart=unless-stopped",
     category: "tools",
-    description: "Redis is an in-memory data structure store, used as a database, cache, and message broker.",
+    description:
+      "Redis is an in-memory data structure store, used as a database, cache, and message broker.",
     version: "7.0",
     pulls: "35k+",
     background: "bg-gradient-to-r from-red-500 to-pink-500",
     badge: {
-      bg: "bg-red-100", 
-      text: "text-red-800"
+      bg: "bg-red-100",
+      text: "text-red-800",
     },
     config: `version: '3'
 services:
@@ -168,7 +191,7 @@ services:
     volumes:
       - ./redis-data:/data
     command: redis-server --appendonly yes
-    restart: unless-stopped`
+    restart: unless-stopped`,
   },
   mongodb: {
     name: "MongoDB",
@@ -178,13 +201,14 @@ services:
     volumes: "./mongo-data:/data/db",
     options: "--restart=unless-stopped",
     category: "tools",
-    description: "MongoDB is a source-available cross-platform document-oriented database program.",
+    description:
+      "MongoDB is a source-available cross-platform document-oriented database program.",
     version: "6.0",
     pulls: "32k+",
     background: "bg-gradient-to-r from-purple-500 to-violet-600",
     badge: {
-      bg: "bg-purple-100", 
-      text: "text-purple-800"
+      bg: "bg-purple-100",
+      text: "text-purple-800",
     },
     config: `version: '3'
 services:
@@ -198,12 +222,12 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=password
     volumes:
       - ./mongo-data:/data/db
-    restart: unless-stopped`
-  }
+    restart: unless-stopped`,
+  },
 };
 
 // Export the templates for use in the frontend
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== "undefined" && module.exports) {
   module.exports = { containerTemplates };
 } else {
   // For browser environment
