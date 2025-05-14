@@ -2446,6 +2446,16 @@
           attachContainerEventHandlers();
         }
 
+        // Format Ports
+        function formattedPorts(ports) {
+          if (!ports || ports.length === 0) return "None";
+          return ports
+            .split(", ")
+            .map((port) => port.split("->").map((p) => p.split(":").pop()).join("->"))
+            .filter((port, index, self) => self.indexOf(port) === index) // Remove duplicates
+            .join(", ");
+        }
+
         // Function to render a container table row
         function renderContainerTableRow(container, tableBody) {
           const tr = document.createElement("tr");
@@ -2487,7 +2497,7 @@
             </td>
             <td class="px-4 py-4 whitespace-nowrap">
               <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                ${container.ports}
+                ${formattedPorts(container.ports)}
               </span>
             </td>
             <td class="px-4 py-4 whitespace-nowrap text-sm font-medium" data-container-name="${
