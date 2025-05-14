@@ -12,10 +12,24 @@ const http = require("http");
 const { spawn } = require("child_process");
 
 const app = express();
+
+// Create HTTP server from Express app
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-// Handle WSS Connection
+// Middleware
+app.use(cors());
+app.use(morgan("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+// Static files
+app.use(express.static(path.join(__dirname, "public")));
+app.use("/scripts", express.static(path.join(__dirname, "scripts")));
+app.use("/views", express.static(path.join(__dirname, "views")));
+app.use("/utils", express.static(path.join(__dirname, "utils")));
+
+// Setup WebSocket handler
 wss.on("connection", function connection(ws, req) {
   const url = new URL(req.url, "http://localhost");
   const containerId = url.pathname.split("/")[2]; // Extract container ID from URL
@@ -34,11 +48,10 @@ wss.on("connection", function connection(ws, req) {
       terminal = spawn("docker", [
         "exec",
         "-i",
-        "-t",
         containerId,
-        "/bin/sh",
-        "-c",
-        "TERM=xterm /bin/bash || /bin/sh",
+        "/bin/sh", 
+        "-c", 
+        "TERM=xterm /bin/bash || /bin/sh"
       ]);
 
       terminal.stdout.on("data", (data) => {
@@ -57,6 +70,16 @@ wss.on("connection", function connection(ws, req) {
           })
         );
       });
+      
+      terminal.on("error", (err) => {
+        console.error("Terminal process error:", err);
+        ws.send(
+          JSON.stringify({
+            type: "error",
+            data: `Error: ${err.message}`,
+          })
+        );
+      });
     } else if (terminal) {
       // Send command to the container
       terminal.stdin.write(data + "\n");
@@ -70,19 +93,11 @@ wss.on("connection", function connection(ws, req) {
       terminal.kill();
     }
   });
+  
+  ws.on("error", function(error) {
+    console.error("WebSocket error:", error);
+  });
 });
-
-// Middleware
-app.use(cors());
-app.use(morgan("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-// Static files
-app.use(express.static(path.join(__dirname, "public")));
-app.use("/scripts", express.static(path.join(__dirname, "scripts")));
-app.use("/views", express.static(path.join(__dirname, "views")));
-app.use("/utils", express.static(path.join(__dirname, "utils")));
 
 // Routes
 app.get("/", (req, res) => {
@@ -507,7 +522,7 @@ app.post("/tag-image", (req, res) => {
 
 // Start the server
 const PORT = 3030;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   const url = `http://localhost:${PORT}`;
   const now = new Date().toLocaleString();
 
