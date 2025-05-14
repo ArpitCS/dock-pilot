@@ -1,16 +1,23 @@
-// Container template definitions for the Container Lab page
+/* Container template definitions for the Container Lab page */
 
 const containerTemplates = {
   mysql: {
     name: "MySQL",
+    thumbnail: "https://cdn.simpleicons.org/mysql/ffffff",
     image: "mysql:8.0",
     port: "3306:3306",
-    env: "MYSQL_ROOT_PASSWORD=rootpassword\nMYSQL_DATABASE=mydatabase\nMYSQL_USER=user\nMYSQL_PASSWORD=password",
-    volumes: "./mysql-data:/var/lib/mysql", // THIS IS THE CAUSE
+    env: [
+      "MYSQL_ROOT_PASSWORD=rootpassword",
+      "MYSQL_DATABASE=mydatabase",
+      "MYSQL_USER=user",
+      "MYSQL_PASSWORD=password"
+    ].join("\n"),
+    volumes: [
+      "./mysql-data:/var/lib/mysql"
+    ].join("\n"),
     options: "--restart=unless-stopped",
     category: "database",
-    description:
-      "MySQL is an open-source relational database management system.",
+    description: "MySQL is an open-source relational database management system.",
     version: "8.0",
     pulls: "30k+",
     background: "bg-gradient-to-r from-blue-500 to-indigo-600",
@@ -31,19 +38,26 @@ services:
       - MYSQL_USER=user
       - MYSQL_PASSWORD=password
     volumes:
-      - ./mysql-data:/var/lib/mysql  // AND HERE AGAIN
-    restart: unless-stopped`,
+      - ./mysql-data:/var/lib/mysql
+    restart: unless-stopped`
   },
+
   postgres: {
     name: "PostgreSQL",
+    thumbnail: "https://cdn.simpleicons.org/postgresql/ffffff",
     image: "postgres:15",
     port: "5432:5432",
-    env: "POSTGRES_USER=postgres\nPOSTGRES_PASSWORD=password\nPOSTGRES_DB=postgres",
-    volumes: "./postgres-data:/var/lib/postgresql/data",
+    env: [
+      "POSTGRES_USER=postgres",
+      "POSTGRES_PASSWORD=password",
+      "POSTGRES_DB=postgres"
+    ].join("\n"),
+    volumes: [
+      "./postgres-data:/var/lib/postgresql/data"
+    ].join("\n"),
     options: "--restart=unless-stopped",
     category: "database",
-    description:
-      "PostgreSQL is an advanced, enterprise-class, open-source RDBMS.",
+    description: "PostgreSQL is an advanced, enterprise-class, open-source RDBMS.",
     version: "15",
     pulls: "25k+",
     background: "bg-gradient-to-r from-emerald-500 to-teal-600",
@@ -64,19 +78,20 @@ services:
       - POSTGRES_DB=postgres
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
-    restart: unless-stopped`,
+    restart: unless-stopped`
   },
+
   nginx: {
     name: "Nginx",
-    image: "nginx:1.25",
+    thumbnail: "https://cdn.simpleicons.org/nginx/ffffff",
     port: "80:80",
     env: "",
-    volumes:
-      "./nginx/html:/usr/share/nginx/html\n./nginx/conf.d:/etc/nginx/conf.d\n./nginx/logs:/var/log/nginx",
+    volumes: [
+      "./nginx/html:/usr/share/nginx/html"
+    ].join("\n"),
     options: "--restart=unless-stopped",
     category: "web",
-    description:
-      "Nginx is a high-performance web server, reverse proxy, and load balancer.",
+    description: "Nginx is a high-performance web server, reverse proxy, and load balancer.",
     version: "1.25",
     pulls: "50k+",
     background: "bg-gradient-to-r from-green-500 to-lime-600",
@@ -94,36 +109,30 @@ services:
       - "443:443"
     volumes:
       - ./nginx/html:/usr/share/nginx/html
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/logs:/var/log/nginx
-      - ./nginx/certs:/etc/nginx/certs
-    environment:
-      - NGINX_HOST=localhost
-      - NGINX_PORT=80
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     restart: unless-stopped
-    networks:
-      - web-network
-
 networks:
-  web-network:
-    driver: bridge`,
+  default:
+    driver: bridge`
   },
+
   wordpress: {
     name: "WordPress",
+    thumbnail: "https://cdn.simpleicons.org/wordpress/ffffff",
     image: "wordpress:latest",
     port: "80:80",
-    env: "WORDPRESS_DB_HOST=db\nWORDPRESS_DB_USER=wordpress\nWORDPRESS_DB_PASSWORD=wordpress\nWORDPRESS_DB_NAME=wordpress",
-    volumes: "./wordpress:/var/www/html",
+    env: [
+      "WORDPRESS_DB_HOST=db:3306",
+      "WORDPRESS_DB_USER=wordpress",
+      "WORDPRESS_DB_PASSWORD=wordpress",
+      "WORDPRESS_DB_NAME=wordpress"
+    ].join("\n"),
+    volumes: [
+      "./wordpress:/var/www/html"
+    ].join("\n"),
     options: "--link mysql-db:db --restart=unless-stopped",
     category: "cms",
-    description:
-      "WordPress is a free and open-source CMS written in PHP and paired with MySQL.",
-    version: "Latest",
+    description: "WordPress is a free and open-source CMS written in PHP and paired with MySQL.",
+    version: "latest",
     pulls: "40k+",
     background: "bg-gradient-to-r from-blue-400 to-cyan-500",
     badge: {
@@ -135,15 +144,15 @@ services:
   db:
     image: mysql:5.7
     container_name: mysql-db
-    volumes:
-      - db_data:/var/lib/mysql
-    restart: unless-stopped
     environment:
       - MYSQL_ROOT_PASSWORD=somewordpress
       - MYSQL_DATABASE=wordpress
       - MYSQL_USER=wordpress
       - MYSQL_PASSWORD=wordpress
-      
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: unless-stopped
+
   wordpress:
     depends_on:
       - db
@@ -151,7 +160,6 @@ services:
     container_name: wordpress
     ports:
       - "80:80"
-    restart: unless-stopped
     environment:
       - WORDPRESS_DB_HOST=db:3306
       - WORDPRESS_DB_USER=wordpress
@@ -159,21 +167,24 @@ services:
       - WORDPRESS_DB_NAME=wordpress
     volumes:
       - wordpress:/var/www/html
-      
+    restart: unless-stopped
 volumes:
   db_data: {}
-  wordpress: {}`,
+  wordpress: {}`
   },
+
   redis: {
     name: "Redis",
+    thumbnail: "https://cdn.simpleicons.org/redis/ffffff",
     image: "redis:7.0",
     port: "6379:6379",
     env: "",
-    volumes: "./redis-data:/data",
+    volumes: [
+      "./redis-data:/data"
+    ].join("\n"),
     options: "--restart=unless-stopped",
     category: "tools",
-    description:
-      "Redis is an in-memory data structure store, used as a database, cache, and message broker.",
+    description: "Redis is an in-memory data structure store, used as a database, cache, and message broker.",
     version: "7.0",
     pulls: "35k+",
     background: "bg-gradient-to-r from-red-500 to-pink-500",
@@ -190,19 +201,25 @@ services:
       - "6379:6379"
     volumes:
       - ./redis-data:/data
-    command: redis-server --appendonly yes
-    restart: unless-stopped`,
+    command: ["redis-server", "--appendonly", "yes"]
+    restart: unless-stopped`
   },
+
   mongodb: {
     name: "MongoDB",
+    thumbnail: "https://cdn.simpleicons.org/mongodb/ffffff",
     image: "mongo:6.0",
     port: "27017:27017",
-    env: "MONGO_INITDB_ROOT_USERNAME=admin\nMONGO_INITDB_ROOT_PASSWORD=password",
-    volumes: "./mongo-data:/data/db",
+    env: [
+      "MONGO_INITDB_ROOT_USERNAME=admin",
+      "MONGO_INITDB_ROOT_PASSWORD=password"
+    ].join("\n"),
+    volumes: [
+      "./mongo-data:/data/db"
+    ].join("\n"),
     options: "--restart=unless-stopped",
     category: "tools",
-    description:
-      "MongoDB is a source-available cross-platform document-oriented database program.",
+    description: "MongoDB is a source-available cross-platform document-oriented database program.",
     version: "6.0",
     pulls: "32k+",
     background: "bg-gradient-to-r from-purple-500 to-violet-600",
@@ -222,14 +239,13 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=password
     volumes:
       - ./mongo-data:/data/db
-    restart: unless-stopped`,
-  },
+    restart: unless-stopped`
+  }
 };
 
-// Export the templates for use in the frontend
+// Export for Node or browser
 if (typeof module !== "undefined" && module.exports) {
   module.exports = { containerTemplates };
 } else {
-  // For browser environment
   window.containerTemplates = containerTemplates;
 }

@@ -471,7 +471,7 @@ Loading configuration...
         
         card.innerHTML = `
           <div class="h-32 ${template.background} flex items-center justify-center relative">
-            <img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" alt="${template.name}" class="h-24 object-contain p-2 bg-white bg-opacity-90 rounded-lg">
+            <img src="${template.thumbnail}" alt="${template.name}" class="h-24 object-contain p-2 bg-opacity-90 rounded-lg">
             <span class="absolute top-2 right-2 ${template.badge.bg} ${template.badge.text} text-xs px-2 py-1 rounded-full">${template.category.charAt(0).toUpperCase() + template.category.slice(1)}</span>
           </div>
           <div class="p-5">

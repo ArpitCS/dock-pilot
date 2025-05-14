@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>DockPilot Nginx Container</title>
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        />
+        <style>
+            .hover-lift {
+                transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            }
+            .hover-lift:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+                    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            }
+        </style>
+    </head>
+    <body class="bg-gray-50 font-sans">
+        <div class="min-h-screen flex flex-col">
+
+            <!-- Main Content -->
+            <main class="flex-grow container mx-auto px-6 py-10">
+                <div class="max-w-4xl mx-auto">
+                    <!-- Status Card -->
+                    <div class="bg-white rounded-xl shadow-sm p-6 mb-8 border-l-4 border-blue-500">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="rounded-full bg-blue-100 p-3 w-12 h-12 flex items-center justify-center">
+                                    <i class="fas fa-server text-blue-600"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h2 class="text-lg font-semibold text-gray-800">Nginx Web Server</h2>
+                                    <p class="text-gray-500">Version: 1.25</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-3xl font-bold text-gray-800">80</div>
+                                <div class="text-sm text-gray-500">PORT</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Welcome Section -->
+                    <div class="bg-white rounded-xl shadow-sm p-8 mb-8">
+                        <div class="text-center mb-8">
+                            <div class="mx-auto w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                                <i class="fas fa-check text-blue-600 text-3xl"></i>
+                            </div>
+                            <h2 class="text-2xl font-bold text-gray-800 mb-2">Congratulations!</h2>
+                            <p class="text-gray-600 max-w-lg mx-auto">
+                                Your Nginx container is running successfully. This page confirms that your web server is properly configured and ready to serve content.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </body>
+</html>
