@@ -98,11 +98,26 @@
         border-width: 5px;
         border-style: solid;
         border-color: rgba(17, 24, 39, 0.95) transparent transparent transparent;
-      }
-      .tooltip:hover .tooltip-text {
+      }      .tooltip:hover .tooltip-text {
         visibility: visible;
         opacity: 1;
         transform: translateX(-50%) translateY(-5px);
+      }
+      
+      /* Modal styles */
+      .modal-overlay {
+        cursor: pointer;
+        backdrop-filter: blur(2px);
+        transition: all 0.3s ease;
+      }
+      
+      .modal-content {
+        transform: scale(0.95);
+        transition: transform 0.2s ease;
+      }
+      
+      .modal-visible .modal-content {
+        transform: scale(1);
       }
     </style>
     <script src="/utils/templates.js"></script>
@@ -290,11 +305,10 @@
             <div id="templatesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
             </div>
-          </section>
-
-          <!-- Template Configuration Modal -->
-          <div id="configModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-            <div class="bg-white rounded-xl shadow-lg max-w-3xl w-full mx-4 max-h-[90vh] flex flex-col">
+          </section>          <!-- Template Configuration Modal -->
+          <div id="configModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+            <div class="modal-overlay absolute inset-0"></div>
+            <div class="modal-content bg-white rounded-xl shadow-lg max-w-3xl w-full mx-4 max-h-[90vh] flex flex-col relative">
               <div class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h3 class="text-xl font-semibold" id="configModalTitle">Template Configuration</h3>
                 <button id="closeConfigModal" class="text-gray-500 hover:text-gray-700">
@@ -315,11 +329,10 @@ Loading configuration...
                 </button>
               </div>
             </div>
-          </div>
-
-          <!-- Container Create Modal -->
-          <div id="createModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-            <div class="bg-white rounded-xl shadow-lg max-w-3xl w-full mx-4 max-h-[90vh] flex flex-col">
+          </div>          <!-- Container Create Modal -->
+          <div id="createModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+            <div class="modal-overlay absolute inset-0"></div>
+            <div class="modal-content bg-white rounded-xl shadow-lg max-w-3xl w-full mx-4 max-h-[90vh] flex flex-col relative">
               <div class="p-4 border-b border-gray-200 flex justify-between items-center">
                 <h3 class="text-xl font-semibold" id="createModalTitle">Create Container</h3>
                 <button id="closeCreateModal" class="text-gray-500 hover:text-gray-700">
@@ -492,12 +505,17 @@ Loading configuration...
           btn.addEventListener('click', () => {
             const templateId = btn.dataset.template;
             const template = window.containerTemplates[templateId];
-            
-            if (template) {
+              if (template) {
               document.getElementById('configModalTitle').textContent = template.name + ' Configuration';
               document.getElementById('configModalContent').textContent = template.config;
               document.getElementById('useTemplateModalBtn').dataset.template = templateId;
-              document.getElementById('configModal').classList.remove('hidden');
+              
+              // Show modal with animation
+              const modal = document.getElementById('configModal');
+              modal.classList.remove('hidden');
+              setTimeout(() => {
+                modal.classList.add('modal-visible');
+              }, 10);
             }
           });
         });
@@ -558,13 +576,18 @@ Loading configuration...
 
       // Close config modal
       document.getElementById('closeConfigModal').addEventListener('click', () => {
-        document.getElementById('configModal').classList.add('hidden');
+        closeModal('configModal');
       });
-
-      // Use template from modal
+      
+      // Close config modal when clicking outside
+      document.getElementById('configModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('configModal') || e.target.classList.contains('modal-overlay')) {
+          closeModal('configModal');
+        }
+      });      // Use template from modal
       document.getElementById('useTemplateModalBtn').addEventListener('click', () => {
         const templateId = document.getElementById('useTemplateModalBtn').dataset.template;
-        document.getElementById('configModal').classList.add('hidden');
+        closeModal('configModal');
         showCreateForm(templateId);
       });
 
@@ -579,9 +602,7 @@ Loading configuration...
         setTimeout(() => {
           btn.innerHTML = originalText;
         }, 2000);
-      });
-
-      // Show custom container form
+      });      // Show custom container form
       function showCustomForm() {
         document.getElementById('createModalTitle').textContent = 'Create Custom Container';
         
@@ -595,7 +616,13 @@ Loading configuration...
         document.getElementById('containerOptions').value = '';
         
         updateCommandPreview();
-        document.getElementById('createModal').classList.remove('hidden');
+        
+        // Show modal with animation
+        const modal = document.getElementById('createModal');
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+          modal.classList.add('modal-visible');
+        }, 10);
       }
 
       // Show create form with template data
@@ -618,17 +645,37 @@ Loading configuration...
         document.getElementById('containerOptions').value = template.options;
         
         updateCommandPreview();
-        document.getElementById('createModal').classList.remove('hidden');
-      }
-
-      // Close create modal
+        
+        // Show modal with animation
+        const modal = document.getElementById('createModal');
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+          modal.classList.add('modal-visible');
+        }, 10);
+      }      // Close create modal
       document.getElementById('closeCreateModal').addEventListener('click', () => {
-        document.getElementById('createModal').classList.add('hidden');
+        closeModal('createModal');
       });
 
       document.getElementById('cancelCreateBtn').addEventListener('click', () => {
-        document.getElementById('createModal').classList.add('hidden');
+        closeModal('createModal');
       });
+      
+      // Close create modal when clicking outside
+      document.getElementById('createModal').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('createModal') || e.target.classList.contains('modal-overlay')) {
+          closeModal('createModal');
+        }
+      });
+      
+      // Function to close modal with animation
+      function closeModal(modalId) {
+        const modal = document.getElementById(modalId);
+        modal.classList.remove('modal-visible');
+        setTimeout(() => {
+          modal.classList.add('hidden');
+        }, 200);
+      }
 
       // Update command preview on input
       const formInputs = [
@@ -786,9 +833,8 @@ Loading configuration...
           // Reset button state
           submitBtn.innerHTML = originalBtnText;
           submitBtn.disabled = false;
-          
-          // Close modal
-          document.getElementById('createModal').classList.add('hidden');
+            // Close modal
+          closeModal('createModal');
           
           if (data.success) {
             // Show success notification

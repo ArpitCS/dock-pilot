@@ -9,7 +9,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     />
-    <link rel="stylesheet" href="/global.css">
+    <link rel="stylesheet" href="/global.css" />
     <style>
       .hover-lift {
         transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -51,55 +51,43 @@
         background-color: #f3f4f6;
         border-left: 4px solid #3b82f6;
       }
+      .console-output {
+        border-radius: 0.5rem;
+        background-color: #1e293b;
+        color: #e2e8f0;
+        font-family: "Courier New", monospace;
+      }
+      .template-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border-left: 4px solid transparent;
+      }
+      .template-card:hover {
+        border-left-color: #3b82f6;
+        background-color: #f9fafb;
+      }
       .tooltip {
         position: relative;
         display: inline-block;
       }
       .tooltip .tooltip-text {
         visibility: hidden;
-        width: 120px;
+        width: 180px;
         background-color: rgba(17, 24, 39, 0.95);
         color: #fff;
         text-align: center;
         border-radius: 6px;
-        padding: 5px;
+        padding: 8px;
         position: absolute;
-        z-index: 1000;
+        z-index: 100;
         bottom: 125%;
         left: 50%;
         transform: translateX(-50%);
         opacity: 0;
         transition: opacity 0.3s, transform 0.3s;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        font-size: 0.75rem;
+        font-size: 0.8rem;
         pointer-events: none;
-      }
-      /* Improved styling for grid view tooltip placement */
-      .grid-tooltip .tooltip-text {
-        bottom: 130%;
-      }
-      /* Ensure tooltips don't overlap in grid view */
-      .grid-actions-container {
-        position: relative;
-        z-index: 10;
-      }
-      .grid-actions-container .tooltip:nth-child(1) .tooltip-text {
-        transform: translateX(-90%);
-      }
-      .grid-actions-container .tooltip:nth-child(2) .tooltip-text {
-        transform: translateX(-80%);
-      }
-      .grid-actions-container .tooltip:nth-child(3) .tooltip-text {
-        transform: translateX(-70%);
-      }
-      .grid-actions-container .tooltip:nth-child(4) .tooltip-text {
-        transform: translateX(-30%);
-      }
-      .grid-actions-container .tooltip:nth-child(5) .tooltip-text {
-        transform: translateX(-20%);
-      }
-      .grid-actions-container .tooltip:nth-child(6) .tooltip-text {
-        transform: translateX(-10%);
       }
       .tooltip .tooltip-text::after {
         content: "";
@@ -116,172 +104,44 @@
         opacity: 1;
         transform: translateX(-50%) translateY(-5px);
       }
-      /* Fix for grid view tooltips */
-      .grid-actions-container .tooltip:hover .tooltip-text {
-        visibility: visible;
-        opacity: 1;
-      }
-      .grid-actions-container .tooltip:nth-child(1):hover .tooltip-text {
-        transform: translateX(-90%) translateY(-5px);
-      }
-      .grid-actions-container .tooltip:nth-child(2):hover .tooltip-text {
-        transform: translateX(-80%) translateY(-5px);
-      }
-      .grid-actions-container .tooltip:nth-child(3):hover .tooltip-text {
-        transform: translateX(-70%) translateY(-5px);
-      }
-      .grid-actions-container .tooltip:nth-child(4):hover .tooltip-text {
-        transform: translateX(-30%) translateY(-5px);
-      }
-      .grid-actions-container .tooltip:nth-child(5):hover .tooltip-text {
-        transform: translateX(-20%) translateY(-5px);
-      }
-      .grid-actions-container .tooltip:nth-child(6):hover .tooltip-text {
-        transform: translateX(-10%) translateY(-5px);
-      }
-      .modal {
+
+      /* Modal styles */
+      .modal-overlay {
+        cursor: pointer;
+        backdrop-filter: blur(2px);
         transition: all 0.3s ease;
       }
-      .modal-overlay {
-        transition: opacity 0.3s ease;
+
+      .modal-content {
+        transform: scale(0.95);
+        transition: transform 0.2s ease;
       }
-      .table-container {
-        overflow-x: auto;
+
+      .modal-visible .modal-content {
+        transform: scale(1);
       }
-      table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
+      .modal-content {
+        transform: scale(0.95);
+        transition: transform 0.2s ease;
+        max-width: 90%;
+        margin: 10px auto;
+        border-radius: 0.5rem;
       }
-      th {
-        position: sticky;
-        top: 0;
-        background-color: white;
-        z-index: 10;
+
+      .modal-visible .modal-content {
+        transform: scale(1);
       }
-      th,
-      td {
-        padding: 0.75rem 1rem;
-        text-align: left;
+
+      .modal-header {
+        @apply flex justify-between items-center px-6 py-4 border-b border-gray-200;
       }
-      tbody tr {
-        border-bottom: 1px solid #e5e7eb;
-        transition: background-color 0.2s;
+
+      .modal-body {
+        @apply flex-1 overflow-auto p-6;
       }
-      tbody tr:hover {
-        background-color: #f9fafb;
-      }
-      .action-btn {
-        transition: all 0.2s;
-      }
-      .action-btn:hover {
-        transform: translateY(-2px);
-      }
-      .grid-view-item {
-        transition: all 0.2s ease;
-      }
-      .grid-view-item:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
-          0 4px 6px -2px rgba(0, 0, 0, 0.05);
-      }
-      .tooltip button {
-        transition: all 0.2s ease;
-      }
-      .tooltip button:hover {
-        transform: translateY(-2px);
-      }
-      .tooltip button:active {
-        transform: translateY(0);
-      }
-      /* Fix for grid view tooltips */
-      .grid-actions-container .tooltip {
-        position: relative;
-      }
-      
-      /* Ensure tooltips are properly aligned and not cut off */
-      .grid-actions-container {
-        position: relative;
-        overflow: visible;
-        z-index: 20; /* Higher z-index than default */
-      }
-      
-      /* Container needs to properly handle overflow */
-      .grid-view-item {
-        overflow: visible !important; /* Override the overflow:hidden */
-      }
-      
-      /* Make tooltip alignment more precise */
-      .grid-actions-container .tooltip .tooltip-text {
-        left: 50%;
-        bottom: 135%;
-        transform: translateX(-50%);
-        white-space: nowrap; /* Prevent line breaks */
-        min-width: 80px; /* Set minimum width */
-      }
-      
-      /* Fix for individual tooltip positions */
-      .grid-actions-container .tooltip:nth-child(1) .tooltip-text {
-        transform: translateX(-40%);
-      }
-      
-      .grid-actions-container .tooltip:nth-child(2) .tooltip-text {
-        transform: translateX(-40%);
-      }
-      
-      .grid-actions-container .tooltip:nth-child(3) .tooltip-text {
-        transform: translateX(-40%);
-      }
-      
-      .grid-actions-container .tooltip:nth-child(4) .tooltip-text {
-        transform: translateX(-40%);
-      }
-      
-      .grid-actions-container .tooltip:nth-child(5) .tooltip-text {
-        transform: translateX(-40%);
-      }
-      
-      .grid-actions-container .tooltip:nth-child(6) .tooltip-text {
-        transform: translateX(-60%); /* Move it more to the left to prevent cutoff */
-      }
-      
-      /* Hover state adjustments */
-      .grid-actions-container .tooltip:hover .tooltip-text {
-        visibility: visible;
-        opacity: 1;
-      }
-      
-      .grid-actions-container .tooltip:nth-child(1):hover .tooltip-text {
-        transform: translateX(-40%) translateY(-5px);
-      }
-      
-      .grid-actions-container .tooltip:nth-child(2):hover .tooltip-text {
-        transform: translateX(-40%) translateY(-5px);
-      }
-      
-      .grid-actions-container .tooltip:nth-child(3):hover .tooltip-text {
-        transform: translateX(-40%) translateY(-5px);
-      }
-      
-      .grid-actions-container .tooltip:nth-child(4):hover .tooltip-text {
-        transform: translateX(-40%) translateY(-5px);
-      }
-      
-      .grid-actions-container .tooltip:nth-child(5):hover .tooltip-text {
-        transform: translateX(-40%) translateY(-5px);
-      }
-      
-      .grid-actions-container .tooltip:nth-child(6):hover .tooltip-text {
-        transform: translateX(-60%) translateY(-5px);
-      }
-      
-      /* Fix tooltip arrow positioning */
-      .grid-actions-container .tooltip .tooltip-text::after {
-        left: 50%;
-      }
-      
-      .grid-actions-container .tooltip:nth-child(6) .tooltip-text::after {
-        left: 70%; /* Adjust arrow position for the last tooltip */
+
+      .modal-footer {
+        @apply px-6 py-4 border-t border-gray-200 flex justify-between;
       }
     </style>
   </head>
@@ -353,7 +213,7 @@
 
       <!-- Mobile Overlay -->
       <div
-        class="fixed inset-0 bg-black bg-opacity-50 z-20 hidden"
+        class="fixed inset-0 blur-sm bg-opacity-50 z-20 hidden"
         id="overlay"
       ></div>
 
@@ -437,7 +297,7 @@
                 <option value="exited">Exited</option>
                 <option value="restarting">Restarting</option>
               </select>
-              
+
               <select
                 id="imageFilter"
                 class="border border-gray-300 rounded-md text-sm py-2 px-3 bg-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
@@ -445,7 +305,7 @@
                 <option value="all">All Images</option>
                 <!-- Will be populated dynamically -->
               </select>
-              
+
               <button
                 id="applyFilters"
                 class="flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none transition"
@@ -453,7 +313,7 @@
                 <i class="fas fa-filter mr-2"></i>
                 <span>Apply</span>
               </button>
-              
+
               <button
                 id="clearFilters"
                 class="flex items-center px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none transition"
@@ -463,10 +323,12 @@
               </button>
             </div>
           </div>
-          
+
           <!-- Active Filters Display -->
           <div id="activeFiltersBar" class="mt-3 flex-wrap gap-2 hidden flex">
-            <div class="text-sm text-gray-500 self-center mr-2">Active filters:</div>
+            <div class="text-sm text-gray-500 self-center mr-2">
+              Active filters:
+            </div>
             <div id="activeFilters" class="flex flex-wrap gap-2">
               <!-- Active filter tags will be added here dynamically -->
             </div>
@@ -514,7 +376,9 @@
                           <i class="fas fa-sort ml-1 text-gray-400"></i>
                         </div>
                       </th>
-                      <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th
+                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                      >
                         Ports
                       </th>
                       <th
@@ -580,8 +444,11 @@
     <!-- Modals (Logs, Terminal, Delete, Inspect, Create) -->
 
     <!-- Container Logs Modal -->
-    <div id="logsModal" class="fixed inset-0 z-50 hidden">
-      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+    <div
+      id="logsModal"
+      class="fixed inset-0 flex items-center justify-center z-50 hidden"
+    >
+      <div class="modal-overlay absolute inset-0 opacity-50"></div>
       <div
         class="modal relative bg-white rounded-lg shadow-xl max-w-4xl mx-auto mt-10 max-h-screen flex flex-col"
       >
@@ -628,8 +495,11 @@
     </div>
 
     <!-- Terminal Modal -->
-    <div id="terminalModal" class="fixed inset-0 z-50 hidden">
-      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+    <div
+      id="terminalModal"
+      class="fixed inset-0 flex items-center justify-center z-50 hidden"
+    >
+      <div class="modal-overlay absolute inset-0 opacity-50"></div>
       <div
         class="modal relative bg-white rounded-lg shadow-xl max-w-4xl mx-auto mt-10 max-h-screen flex flex-col"
       >
@@ -650,7 +520,9 @@
           <div
             class="bg-gray-900 p-4 h-96 overflow-y-auto font-mono text-sm text-gray-300"
           >
-            <div class="mb-2">Connected to container. Type 'exit' to close.</div>
+            <div class="mb-2">
+              Connected to container. Type 'exit' to close.
+            </div>
             <div class="mb-1">root@container:/# ls -la</div>
           </div>
         </div>
@@ -668,10 +540,13 @@
     </div>
 
     <!-- Delete Confirmation Modal -->
-    <div id="deleteModal" class="fixed inset-0 z-50 hidden">
-      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+    <div
+      id="deleteModal"
+      class="fixed inset-0 flex items-center justify-center z-50 hidden"
+    >
+      <div class="modal-overlay absolute inset-0 opacity-50"></div>
       <div
-        class="modal relative bg-white rounded-lg shadow-xl max-w-md mx-auto mt-24"
+        class="modal relative bg-white rounded-lg shadow-xl max-w-4xl mx-auto mt-10 max-h-screen flex flex-col"
       >
         <div class="px-6 py-4">
           <div class="text-center">
@@ -685,21 +560,22 @@
             </h3>
             <p class="text-sm text-gray-500">
               Are you sure you want to delete container
-              <span id="deleteContainerName" class="font-semibold">Container</span>?
-              This action cannot be undone.
+              <span id="deleteContainerName" class="font-semibold"
+                >Container</span
+              >? This action cannot be undone.
             </p>
           </div>
         </div>
         <div class="px-6 py-4 bg-gray-50 flex justify-end rounded-b-lg">
           <button
             id="cancelDeleteBtn"
-            class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded mr-2 focus:outline-none"
+            class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded mr-2 focus:outline-none focus:ring-2 focus:ring-gray-400"
           >
             Cancel
           </button>
           <button
             id="confirmDeleteBtn"
-            class="px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded"
+            class="px-4 py-2 bg-red-600 text-white hover:bg-red-700 rounded focus:outline-none focus:ring-2 focus:ring-red-600"
           >
             Delete
           </button>
@@ -708,31 +584,52 @@
     </div>
 
     <!-- Inspect Container Modal -->
-    <div id="inspectModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+    <div
+      id="inspectModal"
+      class="fixed inset-0 flex  items-center justify-center z-50 hidden overflow-y-auto"
+    >
+      <div class="modal-overlay absolute inset-0 opacity-50"></div>
       <div class="flex items-center justify-center min-h-screen p-4">
-        <div class="modal relative bg-white rounded-lg shadow-xl w-full max-w-4xl mx-auto max-h-[85vh] flex flex-col">
-          <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200 sticky top-0 bg-white z-10">
+        <div
+          class="modal relative bg-white rounded-lg shadow-xl max-w-4xl mx-auto mt-10 max-h-screen flex flex-col"
+        >
+          <div
+            class="flex justify-between items-center px-6 py-4 border-b border-gray-200 sticky top-0 bg-white z-10"
+          >
             <h3 class="text-lg font-medium text-gray-900">
-              Inspect Container: <span id="inspectContainerName">Container</span>
+              Inspect Container:
+              <span id="inspectContainerName">Container</span>
             </h3>
-            <button id="closeInspectModal" class="text-gray-400 hover:text-gray-500">
+            <button
+              id="closeInspectModal"
+              class="text-gray-400 hover:text-gray-500"
+            >
               <i class="fas fa-times"></i>
             </button>
           </div>
           <div class="flex-1 overflow-auto p-6" id="inspectContentContainer">
             <div class="flex justify-center items-center h-full">
-              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+              <div
+                class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"
+              ></div>
               <span class="ml-2">Loading container details...</span>
             </div>
           </div>
-          <div class="px-6 py-4 border-t border-gray-200 flex justify-between sticky bottom-0 bg-white">
+          <div
+            class="px-6 py-4 border-t border-gray-200 flex justify-between sticky bottom-0 bg-white"
+          >
             <div class="flex space-x-2">
-              <button id="toggleJsonView" class="px-3 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded focus:outline-none">
+              <button
+                id="toggleJsonView"
+                class="px-3 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+              >
                 <i class="fas fa-code mr-2"></i>View JSON
               </button>
             </div>
-            <button id="closeInspectBtn" class="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded focus:outline-none">
+            <button
+              id="closeInspectBtn"
+              class="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
+            >
               Close
             </button>
           </div>
@@ -741,10 +638,13 @@
     </div>
 
     <!-- Create Container Modal -->
-    <div id="createContainerModal" class="fixed inset-0 z-50 hidden">
-      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+    <div
+      id="createContainerModal"
+      class="fixed inset-0 flex items-center justify-center z-50 hidden"
+    >
+      <div class="modal-overlay absolute inset-0 opacity-50"></div>
       <div
-        class="modal relative bg-white rounded-lg shadow-xl max-w-3xl mx-auto mt-10 max-h-screen flex flex-col"
+        class="modal relative bg-white rounded-lg shadow-xl max-w-4xl mx-auto mt-10 max-h-screen flex flex-col"
       >
         <div
           class="flex justify-between items-center px-6 py-4 border-b border-gray-200"
@@ -791,7 +691,8 @@
                     placeholder="nginx:latest"
                   />
                 </div>
-              </div>              <div>
+              </div>
+              <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1"
                   >Port Mapping</label
                 >
@@ -820,8 +721,11 @@
                   >
                     <i class="fas fa-plus-circle mr-1"></i> Add Port Mapping
                   </button>
-                  
-                  <div id="portMappingsList" class="mt-2 flex flex-wrap gap-2"></div>
+
+                  <div
+                    id="portMappingsList"
+                    class="mt-2 flex flex-wrap gap-2"
+                  ></div>
                 </div>
               </div>
               <div>
@@ -931,13 +835,13 @@
         <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
           <button
             id="cancelCreateBtn"
-            class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded mr-3 focus:outline-none"
+            class="px-4 py-2 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded mr-3 focus:outline-none focus:ring-2 focus:ring-gray-400"
           >
             Cancel
           </button>
           <button
             id="createContainerBtn"
-            class="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded focus:outline-none"
+            class="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded focus:outline-none focus:ring-2 focus:ring-blue-600"
           >
             Create Container
           </button>
@@ -984,21 +888,27 @@
 
       // Modal open/close functions
       function openModal(modalId) {
-        document.getElementById(modalId).classList.remove("hidden");
+        const modal = document.getElementById(modalId);
+        modal.classList.remove("hidden");
+        setTimeout(() => {
+          modal.classList.add("modal-visible");
+        }, 10);
       }
       function closeModal(modalId) {
-        document.getElementById(modalId).classList.add("hidden");
+        const modal = document.getElementById(modalId);
+        modal.classList.remove("modal-visible");
+        setTimeout(() => {
+          modal.classList.add("hidden");
+        }, 200);
       }
 
       // Event listeners for Create Container modal
-      document
-        .querySelectorAll("#createContainerBtn")
-        .forEach((btn) => {
-          btn.addEventListener("click", function (e) {
-            e.stopPropagation();
-            openModal("createContainerModal");
-          });
+      document.querySelectorAll("#createContainerBtn").forEach((btn) => {
+        btn.addEventListener("click", function (e) {
+          e.stopPropagation();
+          openModal("createContainerModal");
         });
+      });
       document
         .getElementById("closeCreateModal")
         .addEventListener("click", function () {
@@ -1015,9 +925,12 @@
         icon.addEventListener("click", function (e) {
           e.stopPropagation();
           const containerName =
-            e.target.closest("tr")?.querySelector(".text-sm.font-medium.text-gray-900")
+            e.target
+              .closest("tr")
+              ?.querySelector(".text-sm.font-medium.text-gray-900")
               ?.innerText || "Container";
-          document.getElementById("logContainerName").textContent = containerName;
+          document.getElementById("logContainerName").textContent =
+            containerName;
           openModal("logsModal");
         });
       });
@@ -1035,9 +948,12 @@
         icon.addEventListener("click", function (e) {
           e.stopPropagation();
           const containerName =
-            e.target.closest("tr")?.querySelector(".text-sm.font-medium.text-gray-900")
+            e.target
+              .closest("tr")
+              ?.querySelector(".text-sm.font-medium.text-gray-900")
               ?.innerText || "Container";
-          document.getElementById("terminalContainerName").textContent = containerName;
+          document.getElementById("terminalContainerName").textContent =
+            containerName;
           openModal("terminalModal");
         });
       });
@@ -1050,9 +966,12 @@
         icon.addEventListener("click", function (e) {
           e.stopPropagation();
           const containerName =
-            e.target.closest("tr")?.querySelector(".text-sm.font-medium.text-gray-900")
+            e.target
+              .closest("tr")
+              ?.querySelector(".text-sm.font-medium.text-gray-900")
               ?.innerText || "Container";
-          document.getElementById("deleteContainerName").textContent = containerName;
+          document.getElementById("deleteContainerName").textContent =
+            containerName;
           openModal("deleteModal");
         });
       });
@@ -1071,9 +990,12 @@
         icon.addEventListener("click", function (e) {
           e.stopPropagation();
           const containerName =
-            e.target.closest("tr")?.querySelector(".text-sm.font-medium.text-gray-900")
+            e.target
+              .closest("tr")
+              ?.querySelector(".text-sm.font-medium.text-gray-900")
               ?.innerText || "Container";
-          document.getElementById("inspectContainerName").textContent = containerName;
+          document.getElementById("inspectContainerName").textContent =
+            containerName;
           openModal("inspectModal");
         });
       });
@@ -1127,40 +1049,49 @@
       });
       // Fix event listeners for grid view buttons
       document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".grid-view-item .action-btn").forEach((btn) => {
-          btn.addEventListener("click", function (e) {
-            e.stopPropagation();
-            const action = e.currentTarget.querySelector(".tooltip-text").textContent;
-            const containerName = e.currentTarget
-              .closest(".grid-view-item")
-              .querySelector("h3").textContent;
-            if (action.includes("Logs")) {
-              document.getElementById("logContainerName").textContent = containerName;
-              openModal("logsModal");
-            } else if (action.includes("Terminal")) {
-              document.getElementById("terminalContainerName").textContent = containerName;
-              openModal("terminalModal");
-            } else if (action.includes("Delete")) {
-              document.getElementById("deleteContainerName").textContent = containerName;
-              openModal("deleteModal");
-            } else if (action.includes("Inspect")) {
-              document.getElementById("inspectContainerName").textContent = containerName;
-              openModal("inspectModal");
-            }
+        document
+          .querySelectorAll(".grid-view-item .action-btn")
+          .forEach((btn) => {
+            btn.addEventListener("click", function (e) {
+              e.stopPropagation();
+              const action =
+                e.currentTarget.querySelector(".tooltip-text").textContent;
+              const containerName = e.currentTarget
+                .closest(".grid-view-item")
+                .querySelector("h3").textContent;
+              if (action.includes("Logs")) {
+                document.getElementById("logContainerName").textContent =
+                  containerName;
+                openModal("logsModal");
+              } else if (action.includes("Terminal")) {
+                document.getElementById("terminalContainerName").textContent =
+                  containerName;
+                openModal("terminalModal");
+              } else if (action.includes("Delete")) {
+                document.getElementById("deleteContainerName").textContent =
+                  containerName;
+                openModal("deleteModal");
+              } else if (action.includes("Inspect")) {
+                document.getElementById("inspectContainerName").textContent =
+                  containerName;
+                openModal("inspectModal");
+              }
+            });
           });
-        });
       });
 
       // Function to show notification
       function showNotification(message, type = "success") {
-        const notificationContainer = document.getElementById('notification-container') || createNotificationContainer();
-        
+        const notificationContainer =
+          document.getElementById("notification-container") ||
+          createNotificationContainer();
+
         // Create notification element
-        const notification = document.createElement('div');
-        
+        const notification = document.createElement("div");
+
         // Determine styles based on type
         let bgColor, icon;
-        switch(type) {
+        switch (type) {
           case "success":
             bgColor = "bg-green-500";
             icon = "check-circle";
@@ -1181,27 +1112,28 @@
             bgColor = "bg-blue-500";
             icon = "info-circle";
         }
-        
+
         // Set up notification element
         notification.className = `${bgColor} px-4 py-3 rounded-lg shadow-lg text-white mb-3 flex items-center animate-fade-in max-w-xs sm:max-w-sm`;
         notification.style.transition = "all 0.3s ease-in-out";
         notification.style.opacity = "0";
-        
+
         // Handle long messages
-        const truncatedMessage = message.length > 100 ? message.substring(0, 100) + '...' : message;
-        
+        const truncatedMessage =
+          message.length > 100 ? message.substring(0, 100) + "..." : message;
+
         notification.innerHTML = `
           <i class="fas fa-${icon} mr-2 flex-shrink-0"></i>
           <span class="text-sm">${truncatedMessage}</span>
         `;
-        
+
         notificationContainer.appendChild(notification);
-        
+
         // Animate notification appearance
         setTimeout(() => {
           notification.style.opacity = "1";
         }, 10);
-        
+
         // Remove notification after delay
         setTimeout(() => {
           notification.style.opacity = "0";
@@ -1215,20 +1147,21 @@
           }, 300);
         }, 4000);
       }
-      
+
       // Create notification container
       function createNotificationContainer() {
-        const container = document.createElement('div');
-        container.id = 'notification-container';
-        container.className = 'fixed bottom-4 right-4 flex flex-col items-end z-50 space-y-2';
+        const container = document.createElement("div");
+        container.id = "notification-container";
+        container.className =
+          "fixed bottom-4 right-4 flex flex-col items-end z-50 space-y-2";
         document.body.appendChild(container);
         return container;
       }
-      
+
       // Add fade-in animation style if not already present
-      if (!document.getElementById('notification-animations')) {
-        const style = document.createElement('style');
-        style.id = 'notification-animations';
+      if (!document.getElementById("notification-animations")) {
+        const style = document.createElement("style");
+        style.id = "notification-animations";
         style.textContent = `
           @keyframes fadeIn {
             from { opacity: 0; transform: translateX(20px); }
@@ -1247,7 +1180,7 @@
         tableBody.innerHTML = "";
         const gridContainer = document.getElementById("containersGrid");
         gridContainer.innerHTML = "";
-        let lines = data.split(/\r?\n/).filter(line => line.trim() !== "");
+        let lines = data.split(/\r?\n/).filter((line) => line.trim() !== "");
         if (lines[0].startsWith("Containers loaded:")) {
           lines.shift();
         }
@@ -1258,7 +1191,7 @@
         ) {
           lines.shift();
         }
-        lines.forEach(line => {
+        lines.forEach((line) => {
           const cols = line.trim().split(/\s{2,}/);
           const containerName = cols[0];
           const containerId = cols[1];
@@ -1267,7 +1200,7 @@
           const created = cols[4];
           const ports = cols.length >= 6 ? cols[5] : "-N/A-";
 
-            const createdAt = new Date(created.split(' ')[0]).toLocaleString();
+          const createdAt = new Date(created.split(" ")[0]).toLocaleString();
 
           // Create table row
           const tr = document.createElement("tr");
@@ -1347,7 +1280,8 @@
 
           // Create grid view item
           const gridItem = document.createElement("div");
-          gridItem.className = "bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 grid-view-item";
+          gridItem.className =
+            "bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 grid-view-item";
           gridItem.innerHTML = `
             <div class="px-5 py-4 border-b border-gray-100">
               <div class="flex items-center justify-between">
@@ -1398,10 +1332,12 @@
                         : "Start Container"
                     }</span>
                     <i class="fas ${
-                      status.toLowerCase().includes("up") ? "fa-stop" : "fa-play"
+                      status.toLowerCase().includes("up")
+                        ? "fa-stop"
+                        : "fa-play"
                     } text-${
-                      status.toLowerCase().includes("up") ? "red" : "green"
-                    }-600"></i>
+            status.toLowerCase().includes("up") ? "red" : "green"
+          }-600"></i>
                   </button>
                   <button class="grid-tooltip tooltip p-1.5 rounded hover:bg-gray-100" data-action="restart">
                     <span class="tooltip-text">Restart Container</span>
@@ -1436,20 +1372,23 @@
         const refreshIcon = document.getElementById("refreshIcon");
         refreshIcon.classList.add("fa-spin");
         fetch("/get-containers")
-          .then(response => {
+          .then((response) => {
             if (!response.ok) {
               throw new Error("Failed to fetch containers");
             }
             return response.text();
           })
-          .then(data => {
+          .then((data) => {
             console.log("Containers loaded:", data);
             populateContainers(data);
             // showNotification("Containers loaded successfully", "success");
           })
-          .catch(error => {
+          .catch((error) => {
             console.error("Error loading containers:", error);
-            showNotification("Failed to load containers: " + error.message, "error");
+            showNotification(
+              "Failed to load containers: " + error.message,
+              "error"
+            );
           })
           .finally(() => {
             refreshIcon.classList.remove("fa-spin");
@@ -1460,122 +1399,146 @@
       function startContainer(containerId, containerName) {
         showNotification(`Starting container ${containerName}...`, "info");
         fetch(`/start-container/${containerId}`)
-          .then(response => {
+          .then((response) => {
             if (!response.ok) {
               throw new Error("Failed to start container");
             }
             return response.text();
           })
-          .then(data => {
+          .then((data) => {
             console.log("Container started:", data);
             showNotification(data, "success");
             refreshContainers();
           })
-          .catch(error => {
+          .catch((error) => {
             console.error("Error starting container:", error);
-            showNotification("Failed to start container: " + error.message, "error");
+            showNotification(
+              "Failed to start container: " + error.message,
+              "error"
+            );
           });
       }
       function stopContainer(containerId, containerName) {
         showNotification(`Stopping container ${containerName}...`, "info");
         fetch(`/stop-container/${containerId}`)
-          .then(response => {
+          .then((response) => {
             if (!response.ok) {
               throw new Error("Failed to stop container");
             }
             return response.text();
           })
-          .then(data => {
+          .then((data) => {
             console.log("Container stopped:", data);
             showNotification(data, "success");
             refreshContainers();
           })
-          .catch(error => {
+          .catch((error) => {
             console.error("Error stopping container:", error);
-            showNotification("Failed to stop container: " + error.message, "error");
+            showNotification(
+              "Failed to stop container: " + error.message,
+              "error"
+            );
           });
       }
       function restartContainer(containerId, containerName) {
         showNotification(`Restarting container ${containerName}...`, "info");
         fetch(`/restart-container/${containerId}`)
-          .then(response => {
+          .then((response) => {
             if (!response.ok) {
               throw new Error("Failed to restart container");
             }
             return response.text();
           })
-          .then(data => {
+          .then((data) => {
             console.log("Container restarted:", data);
             showNotification(data, "success");
             refreshContainers();
           })
-          .catch(error => {
+          .catch((error) => {
             console.error("Error restarting container:", error);
-            showNotification("Failed to restart container: " + error.message, "error");
+            showNotification(
+              "Failed to restart container: " + error.message,
+              "error"
+            );
           });
       }
       function deleteContainer(containerId, containerName) {
         showNotification(`Deleting container ${containerName}...`, "info");
         fetch(`/delete-container/${containerId}`)
-          .then(response => {
+          .then((response) => {
             if (!response.ok) {
               throw new Error("Failed to delete container");
             }
             return response.text();
           })
-          .then(data => {
+          .then((data) => {
             console.log("Container deleted:", data);
             showNotification(data, "success");
             refreshContainers();
             closeModal("deleteModal");
           })
-          .catch(error => {
+          .catch((error) => {
             console.error("Error deleting container:", error);
-            showNotification("Failed to delete container: " + error.message, "error");
+            showNotification(
+              "Failed to delete container: " + error.message,
+              "error"
+            );
           });
       }
       function getContainerLogs(containerId, containerName) {
         document.getElementById("logContainerName").textContent = containerName;
-        const logsContainer = document.querySelector("#logsModal .console-output");
-        logsContainer.innerHTML = '<div class="flex justify-center items-center h-full"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div><span class="ml-2">Loading logs...</span></div>';
+        const logsContainer = document.querySelector(
+          "#logsModal .console-output"
+        );
+        logsContainer.innerHTML =
+          '<div class="flex justify-center items-center h-full"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div><span class="ml-2">Loading logs...</span></div>';
         openModal("logsModal");
         fetch(`/get-logs/${containerId}`)
-          .then(response => {
+          .then((response) => {
             if (!response.ok) {
               throw new Error("Failed to fetch logs");
             }
             return response.text();
           })
-          .then(data => {
-            const formattedLogs = data.split('\n').map((line, index) => {
-              const timestamp = new Date();
-              timestamp.setSeconds(timestamp.getSeconds() - (data.split('\n').length - index));
-              const timeStr = timestamp.toTimeString().split(' ')[0];
-              return `<div class="console-line">
+          .then((data) => {
+            const formattedLogs = data
+              .split("\n")
+              .map((line, index) => {
+                const timestamp = new Date();
+                timestamp.setSeconds(
+                  timestamp.getSeconds() - (data.split("\n").length - index)
+                );
+                const timeStr = timestamp.toTimeString().split(" ")[0];
+                return `<div class="console-line">
                 <span class="console-timestamp">[${timeStr}]</span>
                 <span class="console-output-text">${line}</span>
               </div>`;
-            }).join('');
-            logsContainer.innerHTML = formattedLogs || '<div class="p-4 text-gray-500">No logs available for this container.</div>';
+              })
+              .join("");
+            logsContainer.innerHTML =
+              formattedLogs ||
+              '<div class="p-4 text-gray-500">No logs available for this container.</div>';
           })
-          .catch(error => {
+          .catch((error) => {
             console.error("Error fetching logs:", error);
             logsContainer.innerHTML = `<div class="p-4 text-red-500">Error fetching logs: ${error.message}</div>`;
           });
       }
       function inspectContainer(containerId, containerName) {
-        document.getElementById("inspectContainerName").textContent = containerName;
+        document.getElementById("inspectContainerName").textContent =
+          containerName;
         const inspectContent = document.querySelector("#inspectModal .flex-1");
-        inspectContent.innerHTML = '<div class="flex justify-center items-center h-full"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div><span class="ml-2">Loading container details...</span></div>';
+        inspectContent.innerHTML =
+          '<div class="flex justify-center items-center h-full"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div><span class="ml-2">Loading container details...</span></div>';
         openModal("inspectModal");
         fetch(`/inspect-container/${containerId}`)
-          .then(response => {
+          .then((response) => {
             if (!response.ok) {
               throw new Error("Failed to inspect container");
             }
             return response.text();
           })
-          .then(data => {
+          .then((data) => {
             try {
               const containerData = JSON.parse(data);
               updateInspectModalContent(containerData, containerName);
@@ -1583,33 +1546,38 @@
               inspectContent.innerHTML = `<div class="p-6"><pre class="whitespace-pre-wrap bg-gray-50 p-4 rounded overflow-auto max-h-96 text-sm">${data}</pre></div>`;
             }
           })
-          .catch(error => {
+          .catch((error) => {
             console.error("Error inspecting container:", error);
             inspectContent.innerHTML = `<div class="p-6 text-red-500">Error inspecting container: ${error.message}</div>`;
           });
       }
       // Replace the existing updateInspectModalContent function with this improved version
       function updateInspectModalContent(containerData, containerName) {
-        const inspectContent = document.querySelector("#inspectContentContainer");
+        const inspectContent = document.querySelector(
+          "#inspectContentContainer"
+        );
         const container = containerData[0] || {};
-        
+
         // Extract important information
-        const id = container.Id || 'Unknown';
+        const id = container.Id || "Unknown";
         const shortId = id.substring(0, 12);
-        const created = container.Created || 'Unknown';
+        const created = container.Created || "Unknown";
         const createdDate = new Date(created).toLocaleString();
-        const image = container.Config?.Image || 'Unknown';
-        const status = container.State?.Status || 'Unknown';
+        const image = container.Config?.Image || "Unknown";
+        const status = container.State?.Status || "Unknown";
         const running = container.State?.Running || false;
-        const statusClass = running ? 'bg-green-500' : 'bg-red-500';
-        const ports = Object.entries(container.NetworkSettings?.Ports || {})
-          .map(([key, val]) => `${key} → ${val ? val[0].HostPort : 'N/A'}`)
-          .join(', ') || 'None';
-        const cmd = container.Config?.Cmd ? container.Config.Cmd.join(' ') : 'N/A';
+        const statusClass = running ? "bg-green-500" : "bg-red-500";
+        const ports =
+          Object.entries(container.NetworkSettings?.Ports || {})
+            .map(([key, val]) => `${key} → ${val ? val[0].HostPort : "N/A"}`)
+            .join(", ") || "None";
+        const cmd = container.Config?.Cmd
+          ? container.Config.Cmd.join(" ")
+          : "N/A";
         const env = container.Config?.Env || [];
         const volumes = container.Mounts || [];
         const networks = container.NetworkSettings?.Networks || {};
-        
+
         // Prepare HTML for detailed info sections
         const htmlContent = `
           <div id="basicInfo" class="space-y-6">
@@ -1638,7 +1606,7 @@
                   <div class="text-gray-900 flex items-center">
                     <div class="w-2 h-2 ${statusClass} rounded-full mr-2"></div>
                     ${status.charAt(0).toUpperCase() + status.slice(1)}
-                    ${running ? '(Running)' : '(Stopped)'}
+                    ${running ? "(Running)" : "(Stopped)"}
                   </div>
                 </div>
               </div>
@@ -1653,7 +1621,9 @@
               <div class="bg-gray-50 rounded-lg p-5">
                 <div class="mb-3">
                   <div class="text-sm font-medium text-gray-500">Network Mode</div>
-                  <div class="text-gray-900">${container.HostConfig?.NetworkMode || 'bridge'}</div>
+                  <div class="text-gray-900">${
+                    container.HostConfig?.NetworkMode || "bridge"
+                  }</div>
                 </div>
                 <div class="mb-3">
                   <div class="text-sm font-medium text-gray-500">Port Mappings</div>
@@ -1662,13 +1632,19 @@
                 <div>
                   <div class="text-sm font-medium text-gray-500">Networks</div>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
-                    ${Object.entries(networks).map(([name, net]) => `
+                    ${Object.entries(networks)
+                      .map(
+                        ([name, net]) => `
                       <div class="bg-white p-3 rounded border border-gray-200">
                         <div class="font-medium">${name}</div>
-                        <div class="text-sm">IP: ${net.IPAddress || 'N/A'}</div>
-                        <div class="text-sm">Gateway: ${net.Gateway || 'N/A'}</div>
+                        <div class="text-sm">IP: ${net.IPAddress || "N/A"}</div>
+                        <div class="text-sm">Gateway: ${
+                          net.Gateway || "N/A"
+                        }</div>
                       </div>
-                    `).join('')}
+                    `
+                      )
+                      .join("")}
                   </div>
                 </div>
               </div>
@@ -1687,21 +1663,29 @@
                 </div>
                 <div class="mb-3">
                   <div class="text-sm font-medium text-gray-500">Restart Policy</div>
-                  <div class="text-gray-900">${container.HostConfig?.RestartPolicy?.Name || 'none'}</div>
+                  <div class="text-gray-900">${
+                    container.HostConfig?.RestartPolicy?.Name || "none"
+                  }</div>
                 </div>
                 <div>
                   <div class="text-sm font-medium text-gray-500">Environment Variables</div>
-                  ${env.length > 0 ? 
-                    `<div class="bg-gray-100 p-2 rounded mt-1 max-h-32 overflow-y-auto">
-                      ${env.map(e => `<div class="font-mono text-sm">${e}</div>`).join('')}
-                     </div>` : 
-                    '<div class="text-gray-900">None defined</div>'}
+                  ${
+                    env.length > 0
+                      ? `<div class="bg-gray-100 p-2 rounded mt-1 max-h-32 overflow-y-auto">
+                      ${env
+                        .map((e) => `<div class="font-mono text-sm">${e}</div>`)
+                        .join("")}
+                     </div>`
+                      : '<div class="text-gray-900">None defined</div>'
+                  }
                 </div>
               </div>
             </div>
             
             <!-- Volumes & Mounts -->
-            ${volumes.length > 0 ? `
+            ${
+              volumes.length > 0
+                ? `
             <div class="mb-4">
               <h4 class="text-md font-semibold text-gray-800 mb-3 flex items-center">
                 <i class="fas fa-hdd mr-2 text-blue-500"></i>
@@ -1719,20 +1703,34 @@
                       </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                      ${volumes.map(v => `
+                      ${volumes
+                        .map(
+                          (v) => `
                         <tr>
-                          <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-900">${v.Type || 'volume'}</td>
-                          <td class="px-3 py-2 whitespace-nowrap text-sm font-mono">${v.Source || v.Name || 'N/A'}</td>
-                          <td class="px-3 py-2 whitespace-nowrap text-sm font-mono">${v.Destination || 'N/A'}</td>
-                          <td class="px-3 py-2 whitespace-nowrap text-sm">${v.Mode || 'rw'}</td>
+                          <td class="px-3 py-2 whitespace-nowrap text-sm text-gray-900">${
+                            v.Type || "volume"
+                          }</td>
+                          <td class="px-3 py-2 whitespace-nowrap text-sm font-mono">${
+                            v.Source || v.Name || "N/A"
+                          }</td>
+                          <td class="px-3 py-2 whitespace-nowrap text-sm font-mono">${
+                            v.Destination || "N/A"
+                          }</td>
+                          <td class="px-3 py-2 whitespace-nowrap text-sm">${
+                            v.Mode || "rw"
+                          }</td>
                         </tr>
-                      `).join('')}
+                      `
+                        )
+                        .join("")}
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
-            ` : ''}
+            `
+                : ""
+            }
             
             <!-- Resource Limits -->
             <div class="mb-4">
@@ -1744,22 +1742,38 @@
                 <div>
                   <div class="text-sm font-medium text-gray-500">Memory Limit</div>
                   <div class="text-gray-900">
-                    ${container.HostConfig?.Memory ? (container.HostConfig.Memory / (1024*1024)).toFixed(0) + ' MB' : 'No limit'}
+                    ${
+                      container.HostConfig?.Memory
+                        ? (container.HostConfig.Memory / (1024 * 1024)).toFixed(
+                            0
+                          ) + " MB"
+                        : "No limit"
+                    }
                   </div>
                 </div>
                 <div>
                   <div class="text-sm font-medium text-gray-500">CPU Limit</div>
                   <div class="text-gray-900">
-                    ${container.HostConfig?.NanoCpus ? (container.HostConfig.NanoCpus / 1000000000).toFixed(1) : 'No limit'}
+                    ${
+                      container.HostConfig?.NanoCpus
+                        ? (container.HostConfig.NanoCpus / 1000000000).toFixed(
+                            1
+                          )
+                        : "No limit"
+                    }
                   </div>
                 </div>
                 <div>
                   <div class="text-sm font-medium text-gray-500">Privileged Mode</div>
-                  <div class="text-gray-900">${container.HostConfig?.Privileged ? 'Yes' : 'No'}</div>
+                  <div class="text-gray-900">${
+                    container.HostConfig?.Privileged ? "Yes" : "No"
+                  }</div>
                 </div>
                 <div>
                   <div class="text-sm font-medium text-gray-500">OOM Kill Disabled</div>
-                  <div class="text-gray-900">${container.HostConfig?.OomKillDisable ? 'Yes' : 'No'}</div>
+                  <div class="text-gray-900">${
+                    container.HostConfig?.OomKillDisable ? "Yes" : "No"
+                  }</div>
                 </div>
               </div>
             </div>
@@ -1772,29 +1786,35 @@
               Complete JSON Data
             </h4>
             <div class="bg-gray-50 rounded-lg p-4 overflow-x-auto">
-              <pre class="text-xs font-mono whitespace-pre-wrap">${JSON.stringify(containerData, null, 2)}</pre>
+              <pre class="text-xs font-mono whitespace-pre-wrap">${JSON.stringify(
+                containerData,
+                null,
+                2
+              )}</pre>
             </div>
           </div>
         `;
-        
+
         inspectContent.innerHTML = htmlContent;
-        
+
         // Setup toggle JSON view
-        document.getElementById('toggleJsonView').addEventListener('click', function() {
-          const jsonData = document.getElementById('jsonData');
-          const basicInfo = document.getElementById('basicInfo');
-          const button = this;
-          
-          if (jsonData.classList.contains('hidden')) {
-            jsonData.classList.remove('hidden');
-            basicInfo.classList.add('hidden');
-            button.innerHTML = '<i class="fas fa-list mr-2"></i>View Details';
-          } else {
-            jsonData.classList.add('hidden');
-            basicInfo.classList.remove('hidden');
-            button.innerHTML = '<i class="fas fa-code mr-2"></i>View JSON';
-          }
-        });
+        document
+          .getElementById("toggleJsonView")
+          .addEventListener("click", function () {
+            const jsonData = document.getElementById("jsonData");
+            const basicInfo = document.getElementById("basicInfo");
+            const button = this;
+
+            if (jsonData.classList.contains("hidden")) {
+              jsonData.classList.remove("hidden");
+              basicInfo.classList.add("hidden");
+              button.innerHTML = '<i class="fas fa-list mr-2"></i>View Details';
+            } else {
+              jsonData.classList.add("hidden");
+              basicInfo.classList.remove("hidden");
+              button.innerHTML = '<i class="fas fa-code mr-2"></i>View JSON';
+            }
+          });
       }
 
       // Unified refresh containers function
@@ -1809,98 +1829,121 @@
           if (e.target.closest(".fa-play")) {
             const row = e.target.closest("tr");
             if (!row) return;
-            const containerName = row.querySelector(".text-sm.font-medium.text-gray-900")?.innerText;
+            const containerName = row.querySelector(
+              ".text-sm.font-medium.text-gray-900"
+            )?.innerText;
             const containerId =
-              row.querySelector(".text-xs.text-gray-500")?.innerText.replace("ID: ", "") ||
-              containerName;
+              row
+                .querySelector(".text-xs.text-gray-500")
+                ?.innerText.replace("ID: ", "") || containerName;
             startContainer(containerId, containerName);
           } else if (e.target.closest(".fa-stop")) {
             const row = e.target.closest("tr");
             if (!row) return;
-            const containerName = row.querySelector(".text-sm.font-medium.text-gray-900")?.innerText;
+            const containerName = row.querySelector(
+              ".text-sm.font-medium.text-gray-900"
+            )?.innerText;
             const containerId =
-              row.querySelector(".text-xs.text-gray-500")?.innerText.replace("ID: ", "") ||
-              containerName;
+              row
+                .querySelector(".text-xs.text-gray-500")
+                ?.innerText.replace("ID: ", "") || containerName;
             stopContainer(containerId, containerName);
           } else if (e.target.closest(".fa-redo-alt")) {
             const row = e.target.closest("tr");
             if (!row) return;
-            const containerName = row.querySelector(".text-sm.font-medium.text-gray-900")?.innerText;
+            const containerName = row.querySelector(
+              ".text-sm.font-medium.text-gray-900"
+            )?.innerText;
             const containerId =
-              row.querySelector(".text-xs.text-gray-500")?.innerText.replace("ID: ", "") ||
-              containerName;
+              row
+                .querySelector(".text-xs.text-gray-500")
+                ?.innerText.replace("ID: ", "") || containerName;
             restartContainer(containerId, containerName);
           } else if (e.target.closest(".fa-file-alt")) {
             const row = e.target.closest("tr");
             if (!row) return;
-            const containerName = row.querySelector(".text-sm.font-medium.text-gray-900")?.innerText;
+            const containerName = row.querySelector(
+              ".text-sm.font-medium.text-gray-900"
+            )?.innerText;
             const containerId =
-              row.querySelector(".text-xs.text-gray-500")?.innerText.replace("ID: ", "") ||
-              containerName;
+              row
+                .querySelector(".text-xs.text-gray-500")
+                ?.innerText.replace("ID: ", "") || containerName;
             getContainerLogs(containerId, containerName);
           } else if (e.target.closest(".fa-info-circle")) {
             const row = e.target.closest("tr");
             if (!row) return;
-            const containerName = row.querySelector(".text-sm.font-medium.text-gray-900")?.innerText;
+            const containerName = row.querySelector(
+              ".text-sm.font-medium.text-gray-900"
+            )?.innerText;
             const containerId =
-              row.querySelector(".text-xs.text-gray-500")?.innerText.replace("ID: ", "") ||
-              containerName;
+              row
+                .querySelector(".text-xs.text-gray-500")
+                ?.innerText.replace("ID: ", "") || containerName;
             inspectContainer(containerId, containerName);
           } else if (e.target.closest(".fa-trash")) {
             const row = e.target.closest("tr");
             if (!row) return;
-            const containerName = row.querySelector(".text-sm.font-medium.text-gray-900")?.innerText;
+            const containerName = row.querySelector(
+              ".text-sm.font-medium.text-gray-900"
+            )?.innerText;
             const containerId =
-              row.querySelector(".text-xs.text-gray-500")?.innerText.replace("ID: ", "") ||
+              row
+                .querySelector(".text-xs.text-gray-500")
+                ?.innerText.replace("ID: ", "") || containerName;
+            document.getElementById("deleteContainerName").textContent =
               containerName;
-            document.getElementById("deleteContainerName").textContent = containerName;
-            
+
             // Store container ID in the modal for later use
-            document.getElementById("confirmDeleteBtn").dataset.containerId = containerId;
-            document.getElementById("confirmDeleteBtn").dataset.containerName = containerName;
-            
+            document.getElementById("confirmDeleteBtn").dataset.containerId =
+              containerId;
+            document.getElementById("confirmDeleteBtn").dataset.containerName =
+              containerName;
+
             openModal("deleteModal");
           }
         });
-        
+
         // Add proper event handler for delete confirmation button
-        document.getElementById("confirmDeleteBtn").addEventListener("click", function() {
-          const containerId = this.dataset.containerId;
-          const containerName = this.dataset.containerName;
-          if (containerId && containerName) {
-            deleteContainer(containerId, containerName);
-          } else {
-            showNotification("Container information not found", "error");
-          }
-        });
+        document
+          .getElementById("confirmDeleteBtn")
+          .addEventListener("click", function () {
+            const containerId = this.dataset.containerId;
+            const containerName = this.dataset.containerName;
+            if (containerId && containerName) {
+              deleteContainer(containerId, containerName);
+            } else {
+              showNotification("Container information not found", "error");
+            }
+          });
       });
 
       // Add event listener for grid view actions
-      document.addEventListener("DOMContentLoaded", function() {
+      document.addEventListener("DOMContentLoaded", function () {
         // Existing event listeners...
-        
+
         // New event delegation for grid view actions
-        document.addEventListener("click", function(e) {
+        document.addEventListener("click", function (e) {
           const button = e.target.closest(".grid-actions-container button");
           if (!button) return;
-          
+
           e.preventDefault();
           e.stopPropagation();
-          
+
           const container = button.closest("[data-container-id]");
           if (!container) return;
-          
+
           const containerId = container.dataset.containerId;
           const containerName = container.dataset.containerName;
           const action = button.dataset.action;
           const status = button.dataset.status;
-          
+
           if (!containerId || !containerName) {
             console.error("Container information missing");
             return;
           }
-          
-          switch(action) {
+
+          switch (action) {
             case "toggle":
               if (status === "stop") {
                 stopContainer(containerId, containerName);
@@ -1915,192 +1958,221 @@
               getContainerLogs(containerId, containerName);
               break;
             case "terminal":
-              document.getElementById("terminalContainerName").textContent = containerName;
+              document.getElementById("terminalContainerName").textContent =
+                containerName;
               openModal("terminalModal");
               break;
             case "inspect":
               inspectContainer(containerId, containerName);
               break;
             case "delete":
-              document.getElementById("deleteContainerName").textContent = containerName;
-              document.getElementById("confirmDeleteBtn").dataset.containerId = containerId;
-              document.getElementById("confirmDeleteBtn").dataset.containerName = containerName;
+              document.getElementById("deleteContainerName").textContent =
+                containerName;
+              document.getElementById("confirmDeleteBtn").dataset.containerId =
+                containerId;
+              document.getElementById(
+                "confirmDeleteBtn"
+              ).dataset.containerName = containerName;
               openModal("deleteModal");
               break;
           }
         });
       });
-      
+
       // Container search and filter functionality
-      document.addEventListener("DOMContentLoaded", function() {
+      document.addEventListener("DOMContentLoaded", function () {
         // Store all containers data
         let allContainers = [];
         let uniqueImages = new Set();
-        
+
         // Initialize filter state
         const filterState = {
-          search: '',
-          status: 'all',
-          image: 'all'
+          search: "",
+          status: "all",
+          image: "all",
         };
-        
+
         // Get filter UI elements
-        const containerSearch = document.getElementById('containerSearch');
-        const statusFilter = document.getElementById('statusFilter');
-        const imageFilter = document.getElementById('imageFilter');
-        
+        const containerSearch = document.getElementById("containerSearch");
+        const statusFilter = document.getElementById("statusFilter");
+        const imageFilter = document.getElementById("imageFilter");
+
         // Get filter action buttons
-        const applyFilters = document.getElementById('applyFilters');
-        const clearFilters = document.getElementById('clearFilters');
-        const activeFiltersBar = document.getElementById('activeFiltersBar');
-        const activeFilters = document.getElementById('activeFilters');
-        
+        const applyFilters = document.getElementById("applyFilters");
+        const clearFilters = document.getElementById("clearFilters");
+        const activeFiltersBar = document.getElementById("activeFiltersBar");
+        const activeFilters = document.getElementById("activeFilters");
+
         // Apply filters button
-        applyFilters.addEventListener('click', function() {
+        applyFilters.addEventListener("click", function () {
           filterState.search = containerSearch.value.toLowerCase();
           filterState.status = statusFilter.value;
           filterState.image = imageFilter.value;
           applyContainerFilters();
-          showNotification('Filters applied', 'info');
+          showNotification("Filters applied", "info");
         });
-        
+
         // Clear all filters
-        clearFilters.addEventListener('click', function() {
+        clearFilters.addEventListener("click", function () {
           // Reset all form fields
-          containerSearch.value = '';
-          statusFilter.value = 'all';
-          imageFilter.value = 'all';
-          
+          containerSearch.value = "";
+          statusFilter.value = "all";
+          imageFilter.value = "all";
+
           // Reset filter state
-          filterState.search = '';
-          filterState.status = 'all';
-          filterState.image = 'all';
-          
+          filterState.search = "";
+          filterState.status = "all";
+          filterState.image = "all";
+
           // Apply the cleared filters (show all containers)
           applyContainerFilters();
-          
+
           // Hide active filters bar since no filters are active
-          activeFiltersBar.classList.add('hidden');
-          
+          activeFiltersBar.classList.add("hidden");
+
           // Show a notification
-          showNotification('All filters cleared', 'info');
+          showNotification("All filters cleared", "info");
         });
-        
+
         // Function to apply all active filters to containers
         function applyContainerFilters() {
           // Update UI to show active filters
           updateActiveFiltersDisplay();
-          
+
           // Filter containers based on current filter state
-          const filteredContainers = allContainers.filter(container => {
+          const filteredContainers = allContainers.filter((container) => {
             // Basic search filter (name, id, image)
-            if (filterState.search && 
-                !container.name.toLowerCase().includes(filterState.search) && 
-                !container.id.toLowerCase().includes(filterState.search) && 
-                !container.image.toLowerCase().includes(filterState.search)) {
+            if (
+              filterState.search &&
+              !container.name.toLowerCase().includes(filterState.search) &&
+              !container.id.toLowerCase().includes(filterState.search) &&
+              !container.image.toLowerCase().includes(filterState.search)
+            ) {
               return false;
             }
-            
+
             // Status filter
-            if (filterState.status !== 'all') {
+            if (filterState.status !== "all") {
               const containerStatus = container.status.toLowerCase();
-              if (filterState.status === 'running' && !containerStatus.includes('up')) {
+              if (
+                filterState.status === "running" &&
+                !containerStatus.includes("up")
+              ) {
                 return false;
-              } else if (filterState.status === 'stopped' && !containerStatus.includes('exited')) {
+              } else if (
+                filterState.status === "stopped" &&
+                !containerStatus.includes("exited")
+              ) {
                 return false;
-              } else if (filterState.status === 'created' && !containerStatus.includes('created')) {
+              } else if (
+                filterState.status === "created" &&
+                !containerStatus.includes("created")
+              ) {
                 return false;
-              } else if (filterState.status === 'paused' && !containerStatus.includes('paused')) {
+              } else if (
+                filterState.status === "paused" &&
+                !containerStatus.includes("paused")
+              ) {
                 return false;
-              } else if (filterState.status === 'exited' && !containerStatus.includes('exited')) {
+              } else if (
+                filterState.status === "exited" &&
+                !containerStatus.includes("exited")
+              ) {
                 return false;
-              } else if (filterState.status === 'restarting' && !containerStatus.includes('restarting')) {
+              } else if (
+                filterState.status === "restarting" &&
+                !containerStatus.includes("restarting")
+              ) {
                 return false;
               }
             }
-            
+
             // Image filter
-            if (filterState.image !== 'all' && container.image !== filterState.image) {
+            if (
+              filterState.image !== "all" &&
+              container.image !== filterState.image
+            ) {
               return false;
             }
-            
+
             return true;
           });
-          
+
           // Update UI with filtered containers
           updateContainersDisplay(filteredContainers);
-          
+
           // Update container count
           updateContainerCount(filteredContainers.length, allContainers.length);
         }
-        
+
         // Function to update the active filters display
         function updateActiveFiltersDisplay() {
-          activeFilters.innerHTML = '';
+          activeFilters.innerHTML = "";
           let hasActiveFilters = false;
-          
+
           // Check each filter and add tags for active ones
           if (filterState.search) {
-            addFilterTag('Search: ' + filterState.search, () => {
-              containerSearch.value = '';
-              filterState.search = '';
+            addFilterTag("Search: " + filterState.search, () => {
+              containerSearch.value = "";
+              filterState.search = "";
               applyContainerFilters();
             });
             hasActiveFilters = true;
           }
-          
-          if (filterState.status !== 'all') {
-            addFilterTag('Status: ' + filterState.status, () => {
-              statusFilter.value = 'all';
-              filterState.status = 'all';
+
+          if (filterState.status !== "all") {
+            addFilterTag("Status: " + filterState.status, () => {
+              statusFilter.value = "all";
+              filterState.status = "all";
               applyContainerFilters();
             });
             hasActiveFilters = true;
           }
-          
-          if (filterState.image !== 'all') {
-            addFilterTag('Image: ' + filterState.image, () => {
-              imageFilter.value = 'all';
-              filterState.image = 'all';
+
+          if (filterState.image !== "all") {
+            addFilterTag("Image: " + filterState.image, () => {
+              imageFilter.value = "all";
+              filterState.image = "all";
               applyContainerFilters();
             });
             hasActiveFilters = true;
           }
-          
+
           // Show/hide the active filters bar
           if (hasActiveFilters) {
-            activeFiltersBar.classList.remove('hidden');
+            activeFiltersBar.classList.remove("hidden");
           } else {
-            activeFiltersBar.classList.add('hidden');
+            activeFiltersBar.classList.add("hidden");
           }
         }
-        
+
         // Helper function to add a filter tag
         function addFilterTag(text, removeCallback) {
-          const tag = document.createElement('div');
-          tag.className = 'bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded flex items-center gap-1';
+          const tag = document.createElement("div");
+          tag.className =
+            "bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded flex items-center gap-1";
           tag.innerHTML = `
             <span>${text}</span>
             <button class="text-blue-700 hover:text-blue-900">
               <i class="fas fa-times-circle"></i>
             </button>
           `;
-          tag.querySelector('button').addEventListener('click', removeCallback);
+          tag.querySelector("button").addEventListener("click", removeCallback);
           activeFilters.appendChild(tag);
         }
-        
+
         // Function to update container display with filtered containers
         function updateContainersDisplay(filteredContainers) {
-          const tableBody = document.getElementById('containerTableBody');
-          const gridContainer = document.getElementById('containersGrid');
-          
+          const tableBody = document.getElementById("containerTableBody");
+          const gridContainer = document.getElementById("containersGrid");
+
           // Clear existing containers
-          tableBody.innerHTML = '';
-          gridContainer.innerHTML = '';
-          
+          tableBody.innerHTML = "";
+          gridContainer.innerHTML = "";
+
           if (filteredContainers.length === 0) {
             // Display no results message in table view
-            const noResultsRow = document.createElement('tr');
+            const noResultsRow = document.createElement("tr");
             noResultsRow.innerHTML = `
               <td colspan="6" class="px-4 py-8 text-center text-gray-500">
                 <div class="flex flex-col items-center justify-center">
@@ -2114,10 +2186,11 @@
               </td>
             `;
             tableBody.appendChild(noResultsRow);
-            
+
             // Display no results in grid view
-            const noResultsGrid = document.createElement('div');
-            noResultsGrid.className = 'col-span-full flex flex-col items-center justify-center py-12';
+            const noResultsGrid = document.createElement("div");
+            noResultsGrid.className =
+              "col-span-full flex flex-col items-center justify-center py-12";
             noResultsGrid.innerHTML = `
               <i class="fas fa-search text-gray-400 text-4xl mb-3"></i>
               <p class="text-lg font-medium text-gray-700">No containers found</p>
@@ -2127,47 +2200,53 @@
               </button>
             `;
             gridContainer.appendChild(noResultsGrid);
-            
+
             // Add event listeners to clear filter buttons
-            document.getElementById('clearAllFiltersBtn').addEventListener('click', () => {
-              clearFilters.click();
-            });
-            document.getElementById('clearAllFiltersGridBtn').addEventListener('click', () => {
-              clearFilters.click();
-            });
-            
+            document
+              .getElementById("clearAllFiltersBtn")
+              .addEventListener("click", () => {
+                clearFilters.click();
+              });
+            document
+              .getElementById("clearAllFiltersGridBtn")
+              .addEventListener("click", () => {
+                clearFilters.click();
+              });
+
             return;
           }
-          
+
           // Render filtered containers to table and grid views
-          filteredContainers.forEach(container => {
+          filteredContainers.forEach((container) => {
             renderContainerTableRow(container, tableBody);
             renderContainerGridItem(container, gridContainer);
           });
-          
+
           // Reattach event handlers for the newly created elements
           attachContainerEventHandlers();
         }
-        
+
         // Function to render a container table row
         function renderContainerTableRow(container, tableBody) {
-          const tr = document.createElement('tr');
-          tr.className = 'hover:bg-gray-50 transition-colors';
-          
-          const statusClass = container.status.toLowerCase().includes('up') 
-            ? 'bg-green-100 text-green-800' 
-            : 'bg-red-100 text-red-800';
-          
-          const statusDot = container.status.toLowerCase().includes('up')
-            ? 'bg-green-500'
-            : 'bg-red-500';
-          
+          const tr = document.createElement("tr");
+          tr.className = "hover:bg-gray-50 transition-colors";
+
+          const statusClass = container.status.toLowerCase().includes("up")
+            ? "bg-green-100 text-green-800"
+            : "bg-red-100 text-red-800";
+
+          const statusDot = container.status.toLowerCase().includes("up")
+            ? "bg-green-500"
+            : "bg-red-500";
+
           tr.innerHTML = `
             <td class="px-4 py-4 whitespace-nowrap">
               <div class="flex items-center">
                 <i class="fas fa-cube text-blue-500 mr-2"></i>
                 <div>
-                  <div class="text-sm font-medium text-gray-900">${container.name}</div>
+                  <div class="text-sm font-medium text-gray-900">${
+                    container.name
+                  }</div>
                   <div class="text-xs text-gray-500">ID: ${container.id}</div>
                 </div>
               </div>
@@ -2182,18 +2261,30 @@
               </span>
             </td>
             <td class="px-4 py-4 whitespace-nowrap">
-              <div class="text-sm text-gray-900">${formatDate(container.created)}</div>
+              <div class="text-sm text-gray-900">${formatDate(
+                container.created
+              )}</div>
             </td>
             <td class="px-4 py-4 whitespace-nowrap">
               <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
                 ${container.ports}
               </span>
             </td>
-            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium" data-container-name="${container.name}" data-container-id="${container.id}">
+            <td class="px-4 py-4 whitespace-nowrap text-sm font-medium" data-container-name="${
+              container.name
+            }" data-container-id="${container.id}">
               <div class="flex justify-start items-center space-x-3">
                 <button class="tooltip p-1.5 rounded hover:bg-gray-100">
-                  <span class="tooltip-text">${container.status.toLowerCase().includes('up') ? "Stop Container" : "Start Container"}</span>
-                  <i class="fas ${container.status.toLowerCase().includes('up') ? "fa-stop text-red-600" : "fa-play text-green-600"}"></i>
+                  <span class="tooltip-text">${
+                    container.status.toLowerCase().includes("up")
+                      ? "Stop Container"
+                      : "Start Container"
+                  }</span>
+                  <i class="fas ${
+                    container.status.toLowerCase().includes("up")
+                      ? "fa-stop text-red-600"
+                      : "fa-play text-green-600"
+                  }"></i>
                 </button>
                 <button class="tooltip p-1.5 rounded hover:bg-gray-100">
                   <span class="tooltip-text">Restart Container</span>
@@ -2220,20 +2311,21 @@
           `;
           tableBody.appendChild(tr);
         }
-        
+
         // Function to render a container grid item
         function renderContainerGridItem(container, gridContainer) {
-          const gridItem = document.createElement('div');
-          gridItem.className = 'bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 grid-view-item';
-          
-          const statusClass = container.status.toLowerCase().includes('up') 
-            ? 'bg-green-100 text-green-800' 
-            : 'bg-red-100 text-red-800';
-          
-          const statusDot = container.status.toLowerCase().includes('up')
-            ? 'bg-green-500'
-            : 'bg-red-500';
-            
+          const gridItem = document.createElement("div");
+          gridItem.className =
+            "bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 grid-view-item";
+
+          const statusClass = container.status.toLowerCase().includes("up")
+            ? "bg-green-100 text-green-800"
+            : "bg-red-100 text-red-800";
+
+          const statusDot = container.status.toLowerCase().includes("up")
+            ? "bg-green-500"
+            : "bg-red-500";
+
           gridItem.innerHTML = `
             <div class="px-5 py-4 border-b border-gray-100">
               <div class="flex items-center justify-between">
@@ -2254,7 +2346,9 @@
             <div class="grid grid-cols-2 divide-x divide-gray-100">
               <div class="px-5 py-3">
                 <div class="text-xs font-medium text-gray-500 uppercase">Created</div>
-                <div class="text-sm text-gray-700">${formatDate(container.created)}</div>
+                <div class="text-sm text-gray-700">${formatDate(
+                  container.created
+                )}</div>
               </div>
               <div class="px-5 py-3">
                 <div class="text-xs font-medium text-gray-500 uppercase">Ports</div>
@@ -2263,13 +2357,29 @@
                 </span>
               </div>
             </div>
-            <div class="px-5 py-3 bg-gray-50 border-t border-gray-100" data-container-name="${container.name}" data-container-id="${container.id}">
+            <div class="px-5 py-3 bg-gray-50 border-t border-gray-100" data-container-name="${
+              container.name
+            }" data-container-id="${container.id}">
               <div class="flex justify-between items-center">
                 <div class="text-xs text-gray-500">ID: ${container.id}</div>
                 <div class="grid-actions-container flex space-x-2">
-                  <button class="grid-tooltip tooltip p-1.5 rounded hover:bg-gray-100" data-action="toggle" data-status="${container.status.toLowerCase().includes('up') ? "stop" : "start"}">
-                    <span class="tooltip-text">${container.status.toLowerCase().includes('up') ? "Stop Container" : "Start Container"}</span>
-                    <i class="fas ${container.status.toLowerCase().includes('up') ? "fa-stop" : "fa-play"} text-${container.status.toLowerCase().includes('up') ? "red" : "green"}-600"></i>
+                  <button class="grid-tooltip tooltip p-1.5 rounded hover:bg-gray-100" data-action="toggle" data-status="${
+                    container.status.toLowerCase().includes("up")
+                      ? "stop"
+                      : "start"
+                  }">
+                    <span class="tooltip-text">${
+                      container.status.toLowerCase().includes("up")
+                        ? "Stop Container"
+                        : "Start Container"
+                    }</span>
+                    <i class="fas ${
+                      container.status.toLowerCase().includes("up")
+                        ? "fa-stop"
+                        : "fa-play"
+                    } text-${
+            container.status.toLowerCase().includes("up") ? "red" : "green"
+          }-600"></i>
                   </button>
                   <button class="grid-tooltip tooltip p-1.5 rounded hover:bg-gray-100" data-action="restart">
                     <span class="tooltip-text">Restart Container</span>
@@ -2297,16 +2407,16 @@
           `;
           gridContainer.appendChild(gridItem);
         }
-        
+
         // Format date for display
         function formatDate(dateString) {
           const date = new Date(dateString);
           return date.toLocaleString();
         }
-        
+
         // Update container count in pagination area
         function updateContainerCount(filteredCount, totalCount) {
-          const countElement = document.querySelector('.text-sm.text-gray-700');
+          const countElement = document.querySelector(".text-sm.text-gray-700");
           if (countElement) {
             if (filteredCount === totalCount) {
               countElement.innerHTML = `Showing <span class="font-medium">${filteredCount}</span> containers`;
@@ -2315,38 +2425,42 @@
             }
           }
         }
-        
+
         // Attach event handlers for container actions
         function attachContainerEventHandlers() {
           // This function would be implemented to attach event handlers to container action buttons
           // Since it's not directly related to the filtering functionality, I'm not modifying it
         }
-        
+
         // Process container data
         function processContainerData(data) {
           // Parse the container data and convert it to our format
           allContainers = [];
           uniqueImages = new Set();
-          
-          let lines = data.split(/\r?\n/).filter(line => line.trim() !== "");
+
+          let lines = data.split(/\r?\n/).filter((line) => line.trim() !== "");
           if (lines[0]?.startsWith("Containers loaded:")) {
             lines.shift();
           }
-          if (lines.length > 0 && lines[0]?.includes("NAMES") && lines[0]?.includes("IMAGE")) {
+          if (
+            lines.length > 0 &&
+            lines[0]?.includes("NAMES") &&
+            lines[0]?.includes("IMAGE")
+          ) {
             lines.shift();
           }
-          
-          lines.forEach(line => {
+
+          lines.forEach((line) => {
             const cols = line.trim().split(/\s{2,}/);
             if (cols.length < 4) return; // Skip invalid rows
-            
+
             const containerName = cols[0];
             const containerId = cols[1];
             const image = cols[2];
             const status = cols[3];
             const created = cols[4];
             const ports = cols.length >= 6 ? cols[5] : "-N/A-";
-            
+
             // Add to allContainers array
             allContainers.push({
               name: containerName,
@@ -2357,271 +2471,363 @@
               ports: ports,
               // Additional properties for advanced filtering (would be populated from inspect data)
               volumes: [], // Placeholder for volume data
-              networks: ['bridge'], // Placeholder for network data
-              labels: {} // Placeholder for label data
+              networks: ["bridge"], // Placeholder for network data
+              labels: {}, // Placeholder for label data
             });
-            
+
             // Collect unique images for the filter dropdown
             uniqueImages.add(image);
           });
-          
+
           // Populate image filter dropdown
           populateImageFilter();
-          
+
           return allContainers;
         }
-        
+
         // Populate image filter dropdown
         function populateImageFilter() {
-          const imageFilter = document.getElementById('imageFilter');
+          const imageFilter = document.getElementById("imageFilter");
           imageFilter.innerHTML = '<option value="all">All Images</option>';
-          
-          Array.from(uniqueImages).sort().forEach(image => {
-            const option = document.createElement('option');
-            option.value = image;
-            option.textContent = image;
-            imageFilter.appendChild(option);
-          });
+
+          Array.from(uniqueImages)
+            .sort()
+            .forEach((image) => {
+              const option = document.createElement("option");
+              option.value = image;
+              option.textContent = image;
+              imageFilter.appendChild(option);
+            });
         }
-        
+
         // Override the existing loadContainers function to use our filtering
         const originalLoadContainers = loadContainers;
-        loadContainers = function() {
+        loadContainers = function () {
           const refreshIcon = document.getElementById("refreshIcon");
           refreshIcon.classList.add("fa-spin");
-          
+
           fetch("/get-containers")
-            .then(response => {
+            .then((response) => {
               if (!response.ok) {
                 throw new Error("Failed to fetch containers");
               }
               return response.text();
             })
-            .then(data => {
+            .then((data) => {
               console.log("Containers loaded:", data);
               // Process the container data into our format
               const containers = processContainerData(data);
-              
+
               // Apply any active filters
               applyContainerFilters();
-              
+
               showNotification("Containers loaded successfully", "success");
             })
-            .catch(error => {
+            .catch((error) => {
               console.error("Error loading containers:", error);
-              showNotification("Failed to load containers: " + error.message, "error");
+              showNotification(
+                "Failed to load containers: " + error.message,
+                "error"
+              );
             })
             .finally(() => {
               refreshIcon.classList.remove("fa-spin");
             });
         };
-        
+
         // Initialize containers on load
         loadContainers();
-        
+
         // Enter key in search triggers filter
-        containerSearch.addEventListener('keypress', function(e) {
-          if (e.key === 'Enter') {
+        containerSearch.addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
             applyContainerFilters();
           }
         });
       });
     </script>
     <script>
-  document.addEventListener("DOMContentLoaded", function() {
-    // Get the correct buttons with more specific selectors
-    const openModalBtn = document.querySelector("header #createContainerBtn");
-    const submitFormBtn = document.querySelector("#createContainerModal #createContainerBtn");
-    
-    // Track dynamic form elements
-    let portMappings = [];
-    let envVars = [];
-    let volumeMappings = [];
-    
-    // Handle opening the modal with the "New Container" button
-    openModalBtn.addEventListener("click", function() {
-      openModal("createContainerModal");
-    });    // Function to update the port mappings visual list
-    function updatePortMappingsList() {
-      const portMappingsList = document.getElementById('portMappingsList');
-      portMappingsList.innerHTML = '';
-      
-      if (portMappings.length === 0) {
-        return;
-      }
-      
-      portMappings.forEach((mapping, index) => {
-        const mappingEl = document.createElement('div');
-        mappingEl.className = 'bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded flex items-center';
-        mappingEl.innerHTML = `
+      document.addEventListener("DOMContentLoaded", function () {
+        // Apply consistent styling to all modals
+        const modalConfig = {
+          logsModal: { title: "Container Logs", color: "white" },
+          terminalModal: { title: "Terminal", color: "gray-800" },
+          deleteModal: { title: "Delete Container", color: "white" },
+          inspectModal: { title: "Inspect Container", color: "white" },
+          createContainerModal: {
+            title: "Create New Container",
+            color: "white",
+          },
+        };
+
+        // Apply consistent modal animations
+        function standardizeModals() {
+          Object.keys(modalConfig).forEach((modalId) => {
+            const modal = document.getElementById(modalId);
+            if (!modal) return;
+
+            // Ensure modal content has consistent classes
+            const modalContent = modal.querySelector(".modal-content, .modal");
+            if (modalContent) {
+              if (!modalContent.classList.contains("modal-content")) {
+                modalContent.classList.add("modal-content");
+              }
+
+              if (!modalContent.classList.contains("bg-white")) {
+                modalContent.classList.add(
+                  "bg-white",
+                  "rounded-lg",
+                  "shadow-xl"
+                );
+              }
+            }
+          });
+        }
+
+        // Call function to standardize modals
+        standardizeModals();
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get the correct buttons with more specific selectors
+        const openModalBtn = document.querySelector(
+          "header #createContainerBtn"
+        );
+        const submitFormBtn = document.querySelector(
+          "#createContainerModal #createContainerBtn"
+        );
+
+        // Track dynamic form elements
+        let portMappings = [];
+        let envVars = [];
+        let volumeMappings = [];
+
+        // Handle opening the modal with the "New Container" button
+        openModalBtn.addEventListener("click", function () {
+          openModal("createContainerModal");
+        }); // Function to update the port mappings visual list
+        function updatePortMappingsList() {
+          const portMappingsList = document.getElementById("portMappingsList");
+          portMappingsList.innerHTML = "";
+
+          if (portMappings.length === 0) {
+            return;
+          }
+
+          portMappings.forEach((mapping, index) => {
+            const mappingEl = document.createElement("div");
+            mappingEl.className =
+              "bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded flex items-center";
+            mappingEl.innerHTML = `
           ${mapping.hostPort}:${mapping.containerPort}
           <button class="ml-1 text-blue-600 hover:text-blue-800" data-index="${index}">
             <i class="fas fa-times-circle"></i>
           </button>
         `;
-        
-        // Add remove functionality
-        mappingEl.querySelector('button').addEventListener('click', function() {
-          const idx = parseInt(this.getAttribute('data-index'));
-          portMappings.splice(idx, 1);
-          updatePortMappingsList();
-        });
-        
-        portMappingsList.appendChild(mappingEl);
-      });
-    }
-    
-    // Add port mapping
-    document.querySelector("button.text-blue-600").addEventListener("click", function() {
-      const hostPortField = document.querySelector("input[name='hostPort']");
-      const containerPortField = document.querySelector("input[name='containerPort']");
-      
-      if (hostPortField.value && containerPortField.value) {
-        // Make sure values are strings
-        const hostPort = hostPortField.value.toString();
-        const containerPort = containerPortField.value.toString();
-        
-        portMappings.push({
-          hostPort: hostPort,
-          containerPort: containerPort
-        });
-        
-        console.log("Added port mapping:", portMappings[portMappings.length-1]);
-        console.log("Current port mappings:", portMappings);
-        
-        // Clear fields
-        hostPortField.value = "";
-        containerPortField.value = "";
-        
-        // Update visual list
-        updatePortMappingsList();
-        
-        showNotification(`Port mapping added: ${hostPort}:${containerPort}`, "success");
-      } else {
-        showNotification("Please enter both host and container ports", "error");
-      }
-    });
-    
-    // Add environment variable
-    document.querySelectorAll("button.text-blue-600")[1].addEventListener("click", function() {
-      const envKeyField = document.querySelector("input[name='envKey']");
-      const envValueField = document.querySelector("input[name='envValue']");
-      
-      if (envKeyField.value) {
-        envVars.push({
-          key: envKeyField.value,
-          value: envValueField.value || ""
-        });
-        
-        // Clear fields
-        envKeyField.value = "";
-        envValueField.value = "";
-        
-        showNotification("Environment variable added", "success");
-      } else {
-        showNotification("Please enter environment variable key", "error");
-      }
-    });
-    
-    // Add volume mapping
-    document.querySelectorAll("button.text-blue-600")[2].addEventListener("click", function() {
-      const hostPathField = document.querySelector("input[name='hostPath']");
-      const containerPathField = document.querySelector("input[name='containerPath']");
-      
-      if (hostPathField.value && containerPathField.value) {
-        volumeMappings.push({
-          hostPath: hostPathField.value,
-          containerPath: containerPathField.value
-        });
-        
-        // Clear fields
-        hostPathField.value = "";
-        containerPathField.value = "";
-        
-        showNotification("Volume mapping added", "success");
-      } else {
-        showNotification("Please enter both host and container paths", "error");
-      }
-    });
-    
-    // Handle form submission
-    submitFormBtn.addEventListener("click", function() {
-      console.log("Create container button clicked");
-      
-      const containerName = document.getElementById("containerName").value;
-      const containerImage = document.getElementById("containerImage").value;
-      const networkMode = document.getElementById("networkMode").value;
-      const restartPolicy = document.getElementById("restartPolicy").value;
-      
-      if (!containerImage) {
-        showNotification("Container image is required", "error");
-        return;
-      }
-      
-      // Prepare data for API call
-      const containerData = {
-        containerName: containerName,
-        containerImage: containerImage,
-        ports: portMappings,
-        envVars: envVars,
-        volumes: volumeMappings,
-        networkMode: networkMode,
-        restartPolicy: restartPolicy
-      };
-      
-      console.log("Sending container data:", containerData);
-      
-      // Show loading state
-      submitFormBtn.disabled = true;
-      submitFormBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Creating...';
-      
-      // Send API request
-      fetch("/create-container", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(containerData)
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+
+            // Add remove functionality
+            mappingEl
+              .querySelector("button")
+              .addEventListener("click", function () {
+                const idx = parseInt(this.getAttribute("data-index"));
+                portMappings.splice(idx, 1);
+                updatePortMappingsList();
+              });
+
+            portMappingsList.appendChild(mappingEl);
+          });
         }
-        return response.json();
-      })
-      .then(data => {
-        console.log("Response:", data);
-        if (data.success) {
-          showNotification(data.message, "success");
-          closeModal("createContainerModal");
-            // Reset form
-          document.getElementById("createContainerForm").reset();
-          portMappings = [];
-          envVars = [];
-          volumeMappings = [];
-          
-          // Clear visual lists
-          if (typeof updatePortMappingsList === 'function') {
-            updatePortMappingsList();
+
+        // Add port mapping
+        document
+          .querySelector("button.text-blue-600")
+          .addEventListener("click", function () {
+            const hostPortField = document.querySelector(
+              "input[name='hostPort']"
+            );
+            const containerPortField = document.querySelector(
+              "input[name='containerPort']"
+            );
+
+            if (hostPortField.value && containerPortField.value) {
+              // Make sure values are strings
+              const hostPort = hostPortField.value.toString();
+              const containerPort = containerPortField.value.toString();
+
+              portMappings.push({
+                hostPort: hostPort,
+                containerPort: containerPort,
+              });
+
+              console.log(
+                "Added port mapping:",
+                portMappings[portMappings.length - 1]
+              );
+              console.log("Current port mappings:", portMappings);
+
+              // Clear fields
+              hostPortField.value = "";
+              containerPortField.value = "";
+
+              // Update visual list
+              updatePortMappingsList();
+
+              showNotification(
+                `Port mapping added: ${hostPort}:${containerPort}`,
+                "success"
+              );
+            } else {
+              showNotification(
+                "Please enter both host and container ports",
+                "error"
+              );
+            }
+          });
+
+        // Add environment variable
+        document
+          .querySelectorAll("button.text-blue-600")[1]
+          .addEventListener("click", function () {
+            const envKeyField = document.querySelector("input[name='envKey']");
+            const envValueField = document.querySelector(
+              "input[name='envValue']"
+            );
+
+            if (envKeyField.value) {
+              envVars.push({
+                key: envKeyField.value,
+                value: envValueField.value || "",
+              });
+
+              // Clear fields
+              envKeyField.value = "";
+              envValueField.value = "";
+
+              showNotification("Environment variable added", "success");
+            } else {
+              showNotification(
+                "Please enter environment variable key",
+                "error"
+              );
+            }
+          });
+
+        // Add volume mapping
+        document
+          .querySelectorAll("button.text-blue-600")[2]
+          .addEventListener("click", function () {
+            const hostPathField = document.querySelector(
+              "input[name='hostPath']"
+            );
+            const containerPathField = document.querySelector(
+              "input[name='containerPath']"
+            );
+
+            if (hostPathField.value && containerPathField.value) {
+              volumeMappings.push({
+                hostPath: hostPathField.value,
+                containerPath: containerPathField.value,
+              });
+
+              // Clear fields
+              hostPathField.value = "";
+              containerPathField.value = "";
+
+              showNotification("Volume mapping added", "success");
+            } else {
+              showNotification(
+                "Please enter both host and container paths",
+                "error"
+              );
+            }
+          });
+
+        // Handle form submission
+        submitFormBtn.addEventListener("click", function () {
+          console.log("Create container button clicked");
+
+          const containerName = document.getElementById("containerName").value;
+          const containerImage =
+            document.getElementById("containerImage").value;
+          const networkMode = document.getElementById("networkMode").value;
+          const restartPolicy = document.getElementById("restartPolicy").value;
+
+          if (!containerImage) {
+            showNotification("Container image is required", "error");
+            return;
           }
-          
-          // Refresh container list
-          refreshContainers();
-        } else {
-          showNotification(data.message || "Error creating container", "error");
-        }
-      })
-      .catch(error => {
-        console.error("Error creating container:", error);
-        showNotification("Failed to create container: " + error.message, "error");
-      })
-      .finally(() => {
-        // Restore button state
-        submitFormBtn.disabled = false;
-        submitFormBtn.innerHTML = 'Create Container';
+
+          // Prepare data for API call
+          const containerData = {
+            containerName: containerName,
+            containerImage: containerImage,
+            ports: portMappings,
+            envVars: envVars,
+            volumes: volumeMappings,
+            networkMode: networkMode,
+            restartPolicy: restartPolicy,
+          };
+
+          console.log("Sending container data:", containerData);
+
+          // Show loading state
+          submitFormBtn.disabled = true;
+          submitFormBtn.innerHTML =
+            '<i class="fas fa-spinner fa-spin mr-1"></i> Creating...';
+
+          // Send API request
+          fetch("/create-container", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(containerData),
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then((data) => {
+              console.log("Response:", data);
+              if (data.success) {
+                showNotification(data.message, "success");
+                closeModal("createContainerModal");
+                // Reset form
+                document.getElementById("createContainerForm").reset();
+                portMappings = [];
+                envVars = [];
+                volumeMappings = [];
+
+                // Clear visual lists
+                if (typeof updatePortMappingsList === "function") {
+                  updatePortMappingsList();
+                }
+
+                // Refresh container list
+                refreshContainers();
+              } else {
+                showNotification(
+                  data.message || "Error creating container",
+                  "error"
+                );
+              }
+            })
+            .catch((error) => {
+              console.error("Error creating container:", error);
+              showNotification(
+                "Failed to create container: " + error.message,
+                "error"
+              );
+            })
+            .finally(() => {
+              // Restore button state
+              submitFormBtn.disabled = false;
+              submitFormBtn.innerHTML = "Create Container";
+            });
+        });
       });
-    });
-  });
-</script>
+    </script>
   </body>
 </html>
