@@ -73,7 +73,7 @@ services:
     env: "",
     volumes:
       "./nginx/html:/usr/share/nginx/html\n./nginx/conf.d:/etc/nginx/conf.d\n./nginx/logs:/var/log/nginx",
-    options: "--restart=unless-stopped --name nginx-web",
+    options: "--restart=unless-stopped",
     category: "web",
     description:
       "Nginx is a high-performance web server, reverse proxy, and load balancer.",

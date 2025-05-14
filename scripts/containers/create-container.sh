@@ -140,18 +140,6 @@ echo "Restart Policy: $container_restart_policy"
 echo "Full Command: $CMD"
 echo "=========================="
 
-# Log the full command that will be executed
-echo "======== DEBUG INFO ========"
-echo "Container Name: $container_name"
-echo "Container Image: $container_image"
-echo "Port Mappings: $container_port_json"
-echo "Environment Variables: $container_env_json"
-echo "Volumes: $container_volume_json"
-echo "Network: $container_network"
-echo "Restart Policy: $container_restart_policy"
-echo "Full Command: $CMD"
-echo "=========================="
-
 # Make sure the command has port mapping if it was provided in the JSON
 if [ "$container_port_json" != "[]" ] && [[ "$CMD" != *"-p "* ]]; then
   echo "WARNING: Port mapping was provided but not added to the command! Adding manual debug info:"

@@ -718,18 +718,32 @@ Loading configuration...
           alert('Container name and image are required!');
           return;
         }
-        
-        // Format ports as array
+          // Format ports as array
         const portsText = document.getElementById('containerPorts').value;
-        const ports = portsText ? portsText.split('\n').filter(port => port.trim()) : [];
+        const ports = portsText ? portsText.split('\n')
+          .filter(port => port.trim())
+          .map(port => {
+            const [hostPort, containerPort] = port.split(':');
+            return { hostPort, containerPort };
+          }) : [];
         
         // Format environment variables as array
         const envText = document.getElementById('containerEnv').value;
-        const envVars = envText ? envText.split('\n').filter(env => env.trim()) : [];
+        const envVars = envText ? envText.split('\n')
+          .filter(env => env.trim())
+          .map(env => {
+            const [key, value] = env.split('=');
+            return { key, value: value || '' };
+          }) : [];
         
         // Format volumes as array
         const volumesText = document.getElementById('containerVolumes').value;
-        const volumes = volumesText ? volumesText.split('\n').filter(vol => vol.trim()) : [];
+        const volumes = volumesText ? volumesText.split('\n')
+          .filter(vol => vol.trim())
+          .map(vol => {
+            const [hostPath, containerPath] = vol.split(':');
+            return { hostPath, containerPath };
+          }) : [];
         
         // Extract restart policy from options if present
         const optionsText = document.getElementById('containerOptions').value || '';
