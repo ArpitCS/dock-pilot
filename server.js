@@ -49,9 +49,9 @@ wss.on("connection", function connection(ws, req) {
         "exec",
         "-i",
         containerId,
-        "/bin/sh", 
-        "-c", 
-        "TERM=xterm /bin/bash || /bin/sh"
+        "/bin/sh",
+        "-c",
+        "TERM=xterm /bin/bash || /bin/sh",
       ]);
 
       terminal.stdout.on("data", (data) => {
@@ -70,7 +70,7 @@ wss.on("connection", function connection(ws, req) {
           })
         );
       });
-      
+
       terminal.on("error", (err) => {
         console.error("Terminal process error:", err);
         ws.send(
@@ -93,8 +93,8 @@ wss.on("connection", function connection(ws, req) {
       terminal.kill();
     }
   });
-  
-  ws.on("error", function(error) {
+
+  ws.on("error", function (error) {
     console.error("WebSocket error:", error);
   });
 });

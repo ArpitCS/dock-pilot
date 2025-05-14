@@ -515,11 +515,16 @@
             </div>
             <h3 class="text-lg font-medium text-gray-200 flex items-center">
               <i class="fas fa-terminal mr-2 text-blue-400"></i>
-              <span id="terminalContainerName" class="font-mono">Container</span>
+              <span id="terminalContainerName" class="font-mono"
+                >Container</span
+              >
             </h3>
           </div>
           <div class="flex items-center space-x-4">
-            <button id="terminalActions" class="text-gray-400 hover:text-white focus:outline-none">
+            <button
+              id="terminalActions"
+              class="text-gray-400 hover:text-white focus:outline-none"
+            >
               <i class="fas fa-ellipsis-v"></i>
             </button>
             <button
@@ -530,22 +535,34 @@
             </button>
           </div>
         </div>
-        
+
         <!-- Terminal dropdown menu (hidden by default) -->
-        <div id="terminalMenu" class="absolute right-6 top-12 bg-gray-800 rounded-md shadow-lg border border-gray-700 hidden z-10">
+        <div
+          id="terminalMenu"
+          class="absolute right-6 top-12 bg-gray-800 rounded-md shadow-lg border border-gray-700 hidden z-10"
+        >
           <ul class="py-1">
             <li>
-              <button id="clearTerminal" class="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 flex items-center">
+              <button
+                id="clearTerminal"
+                class="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 flex items-center"
+              >
                 <i class="fas fa-eraser mr-2"></i> Clear Terminal
               </button>
             </li>
             <li>
-              <button id="copyTerminalOutput" class="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 flex items-center">
+              <button
+                id="copyTerminalOutput"
+                class="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 flex items-center"
+              >
                 <i class="fas fa-copy mr-2"></i> Copy Output
               </button>
             </li>
             <li>
-              <button id="downloadTerminalOutput" class="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 flex items-center">
+              <button
+                id="downloadTerminalOutput"
+                class="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 flex items-center"
+              >
                 <i class="fas fa-download mr-2"></i> Download Log
               </button>
             </li>
@@ -555,28 +572,45 @@
         <!-- Connection status bar -->
         <div class="bg-gray-800 px-4 py-1 flex items-center">
           <div class="flex items-center">
-            <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-2"></div>
+            <div
+              class="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-2"
+            ></div>
             <span class="text-xs text-green-400">Connected</span>
           </div>
-          <span class="text-xs text-gray-500 ml-auto" id="terminal-timestamp">Session started at 10:42:15</span>
+          <span class="text-xs text-gray-500 ml-auto" id="terminal-timestamp"
+            >Session started at 10:42:15</span
+          >
         </div>
-        
+
         <!-- Terminal output with better styling -->
         <div class="flex-1 overflow-hidden">
           <div
             id="terminal-output"
             class="bg-gray-950 p-4 h-[50vh] overflow-y-auto font-mono text-sm text-gray-300 border-t border-b border-gray-800 leading-relaxed"
           >
-            <div class="mb-1 terminal-line"><span class="text-blue-400">[system]</span> Connecting to container terminal...</div>
-            <div class="mb-1 terminal-line"><span class="text-green-400">[system]</span> Connection established to container</div>
-            <div class="mb-1 terminal-line"><span class="text-yellow-400">[system]</span> Starting bash session...</div>
+            <div class="mb-1 terminal-line">
+              <span class="text-blue-400">[system]</span> Connecting to
+              container terminal...
+            </div>
+            <div class="mb-1 terminal-line">
+              <span class="text-green-400">[system]</span> Connection
+              established to container
+            </div>
+            <div class="mb-1 terminal-line">
+              <span class="text-yellow-400">[system]</span> Starting bash
+              session...
+            </div>
           </div>
         </div>
-        
+
         <!-- Terminal input area with better styling -->
         <div class="px-4 py-3 bg-gray-900 border-t border-gray-800">
           <div class="flex items-center space-x-2">
-            <span class="text-green-400 font-bold font-mono" id="terminal-prompt">$</span>
+            <span
+              class="text-green-400 font-bold font-mono"
+              id="terminal-prompt"
+              >$</span
+            >
             <input
               type="text"
               id="terminal-input"
@@ -586,22 +620,39 @@
               spellcheck="false"
             />
           </div>
-          <div class="flex flex-wrap justify-between mt-2 text-xs text-gray-500">
+          <div
+            class="flex flex-wrap justify-between mt-2 text-xs text-gray-500"
+          >
             <div class="flex items-center space-x-4">
               <div>
-                <kbd class="px-2 py-0.5 bg-gray-800 rounded text-gray-300 border border-gray-700">↑</kbd>
-                <kbd class="px-2 py-0.5 bg-gray-800 rounded text-gray-300 border border-gray-700">↓</kbd>
+                <kbd
+                  class="px-2 py-0.5 bg-gray-800 rounded text-gray-300 border border-gray-700"
+                  >↑</kbd
+                >
+                <kbd
+                  class="px-2 py-0.5 bg-gray-800 rounded text-gray-300 border border-gray-700"
+                  >↓</kbd
+                >
                 <span class="ml-1">command history</span>
               </div>
               <div>
-                <kbd class="px-2 py-0.5 bg-gray-800 rounded text-gray-300 border border-gray-700">Tab</kbd>
+                <kbd
+                  class="px-2 py-0.5 bg-gray-800 rounded text-gray-300 border border-gray-700"
+                  >Tab</kbd
+                >
                 <span class="ml-1">autocomplete</span>
               </div>
             </div>
             <div>
-              <kbd class="px-2 py-0.5 bg-gray-800 rounded text-gray-300 border border-gray-700">Ctrl</kbd>
+              <kbd
+                class="px-2 py-0.5 bg-gray-800 rounded text-gray-300 border border-gray-700"
+                >Ctrl</kbd
+              >
               <span class="mr-1">+</span>
-              <kbd class="px-2 py-0.5 bg-gray-800 rounded text-gray-300 border border-gray-700">C</kbd>
+              <kbd
+                class="px-2 py-0.5 bg-gray-800 rounded text-gray-300 border border-gray-700"
+                >C</kbd
+              >
               <span class="ml-1">cancel command</span>
             </div>
           </div>
@@ -656,7 +707,7 @@
     <!-- Inspect Container Modal -->
     <div
       id="inspectModal"
-      class="fixed inset-0 flex  items-center justify-center z-50 hidden overflow-y-auto"
+      class="fixed inset-0 flex items-center justify-center z-50 hidden overflow-y-auto"
     >
       <div class="modal-overlay absolute inset-0 opacity-50"></div>
       <div class="flex items-center justify-center min-h-screen p-4">
@@ -785,13 +836,14 @@
                   </div>
                 </div>
                 <div class="flex justify-between items-center">
+                  <!-- …Port Mapping inputs… -->
                   <button
                     type="button"
+                    id="addPortBtn"
                     class="mt-2 text-sm text-blue-600 hover:text-blue-800"
                   >
                     <i class="fas fa-plus-circle mr-1"></i> Add Port Mapping
                   </button>
-
                   <div
                     id="portMappingsList"
                     class="mt-2 flex flex-wrap gap-2"
@@ -820,13 +872,17 @@
                     />
                   </div>
                 </div>
+                <!-- …Env Var inputs… -->
                 <button
                   type="button"
+                  id="addEnvBtn"
                   class="mt-2 text-sm text-blue-600 hover:text-blue-800"
                 >
                   <i class="fas fa-plus-circle mr-1"></i> Add Environment
                   Variable
                 </button>
+                <!-- placeholder for list -->
+                <div id="envVarsList" class="mt-2 flex flex-wrap gap-2"></div>
               </div>
               <div>
                 <label
@@ -852,12 +908,19 @@
                     />
                   </div>
                 </div>
+                <!-- …Volume Mapping inputs… -->
                 <button
                   type="button"
+                  id="addVolBtn"
                   class="mt-2 text-sm text-blue-600 hover:text-blue-800"
                 >
                   <i class="fas fa-plus-circle mr-1"></i> Add Volume Mapping
                 </button>
+                <!-- placeholder for list -->
+                <div
+                  id="volumeMappingsList"
+                  class="mt-2 flex flex-wrap gap-2"
+                ></div>
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1"
@@ -1394,9 +1457,7 @@
                 <div class="text-xs text-gray-500">ID: ${containerId}</div>
                 <div class="grid-actions-container flex space-x-2">
                   <button class="grid-tooltip tooltip p-1.5 rounded hover:bg-gray-100" data-action="toggle" data-status="${
-                    status.toLowerCase().includes("up")
-                      ? "stop"
-                      : "start"
+                    status.toLowerCase().includes("up") ? "stop" : "start"
                   }">
                     <span class="tooltip-text">${
                       status.toLowerCase().includes("up")
@@ -1562,7 +1623,7 @@
       function getContainerLogs(containerId, containerName) {
         document.getElementById("logContainerName").textContent = containerName;
         currentLogContainerId = containerId; // Store the current container ID for refresh
-        
+
         const logsContainer = document.querySelector(
           "#logsModal .console-output"
         );
@@ -1607,68 +1668,82 @@
       }
 
       // Add event listeners for the refresh and download buttons
-      document.addEventListener("DOMContentLoaded", function() {
+      document.addEventListener("DOMContentLoaded", function () {
         // Get the buttons
-        const refreshLogsBtn = document.querySelector("#logsModal button:nth-child(2)");
-        const downloadLogsBtn = document.querySelector("#logsModal button:first-child");
-        
+        const refreshLogsBtn = document.querySelector(
+          "#logsModal button:nth-child(2)"
+        );
+        const downloadLogsBtn = document.querySelector(
+          "#logsModal button:first-child"
+        );
+
         // Refresh button functionality
-        refreshLogsBtn.addEventListener("click", function() {
+        refreshLogsBtn.addEventListener("click", function () {
           if (currentLogContainerId) {
-            const logsContainer = document.querySelector("#logsModal .console-output");
-            logsContainer.innerHTML = 
+            const logsContainer = document.querySelector(
+              "#logsModal .console-output"
+            );
+            logsContainer.innerHTML =
               '<div class="flex justify-center items-center h-full"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div><span class="ml-2">Refreshing logs...</span></div>';
-            
+
             fetchContainerLogs(currentLogContainerId, logsContainer);
             showNotification("Logs refreshed", "info");
           }
         });
-        
+
         // Download button functionality
-        downloadLogsBtn.addEventListener("click", function() {
+        downloadLogsBtn.addEventListener("click", function () {
           if (currentLogContainerId) {
             // Show loading state
-            downloadLogsBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Downloading...';
-            
+            downloadLogsBtn.innerHTML =
+              '<i class="fas fa-spinner fa-spin mr-2"></i>Downloading...';
+
             // Get raw logs for download
             fetch(`/get-logs/${currentLogContainerId}`)
-              .then(response => {
+              .then((response) => {
                 if (!response.ok) {
                   throw new Error("Failed to fetch logs for download");
                 }
                 return response.text();
               })
-              .then(data => {
+              .then((data) => {
                 // Create blob and download
-                const blob = new Blob([data], { type: 'text/plain' });
+                const blob = new Blob([data], { type: "text/plain" });
                 const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                const containerName = document.getElementById("logContainerName").textContent;
-                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-                
+                const a = document.createElement("a");
+                const containerName =
+                  document.getElementById("logContainerName").textContent;
+                const timestamp = new Date()
+                  .toISOString()
+                  .replace(/[:.]/g, "-");
+
                 a.href = url;
                 a.download = `${containerName}-logs-${timestamp}.txt`;
                 document.body.appendChild(a);
                 a.click();
                 window.URL.revokeObjectURL(url);
                 document.body.removeChild(a);
-                
+
                 showNotification("Logs downloaded successfully", "success");
               })
-              .catch(error => {
+              .catch((error) => {
                 console.error("Error downloading logs:", error);
-                showNotification("Failed to download logs: " + error.message, "error");
+                showNotification(
+                  "Failed to download logs: " + error.message,
+                  "error"
+                );
               })
               .finally(() => {
                 // Restore button state
-                downloadLogsBtn.innerHTML = '<i class="fas fa-download mr-2"></i>Download';
+                downloadLogsBtn.innerHTML =
+                  '<i class="fas fa-download mr-2"></i>Download';
               });
           } else {
             showNotification("No container logs to download", "error");
           }
         });
       });
-      
+
       function inspectContainer(containerId, containerName) {
         document.getElementById("inspectContainerName").textContent =
           containerName;
@@ -2742,7 +2817,7 @@
           "#createContainerModal #createContainerBtn"
         );
 
-        // Track dynamic form elements
+        // Initialize arrays to store form values
         let portMappings = [];
         let envVars = [];
         let volumeMappings = [];
@@ -2750,7 +2825,16 @@
         // Handle opening the modal with the "New Container" button
         openModalBtn.addEventListener("click", function () {
           openModal("createContainerModal");
-        }); // Function to update the port mappings visual list
+          // Reset arrays when opening modal
+          portMappings = [];
+          envVars = [];
+          volumeMappings = [];
+
+          // Clear any previous visual indicators
+          document.getElementById("portMappingsList").innerHTML = "";
+        });
+
+        // Function to update the port mappings visual list
         function updatePortMappingsList() {
           const portMappingsList = document.getElementById("portMappingsList");
           portMappingsList.innerHTML = "";
@@ -2764,11 +2848,11 @@
             mappingEl.className =
               "bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded flex items-center";
             mappingEl.innerHTML = `
-          ${mapping.hostPort}:${mapping.containerPort}
-          <button class="ml-1 text-blue-600 hover:text-blue-800" data-index="${index}">
-            <i class="fas fa-times-circle"></i>
-          </button>
-        `;
+              ${mapping.hostPort}:${mapping.containerPort}
+              <button class="ml-1 text-blue-600 hover:text-blue-800" data-index="${index}">
+                <i class="fas fa-times-circle"></i>
+              </button>
+            `;
 
             // Add remove functionality
             mappingEl
@@ -2783,109 +2867,223 @@
           });
         }
 
-        // Add port mapping
-        document
-          .querySelector("button.text-blue-600")
-          .addEventListener("click", function () {
-            const hostPortField = document.querySelector(
-              "input[name='hostPort']"
+        // Function to update env vars visual list
+        function updateEnvVarsList() {
+          const envVarsList = document.createElement("div");
+          envVarsList.id = "envVarsList";
+          envVarsList.className = "mt-2 flex flex-wrap gap-2";
+
+          if (envVars.length > 0) {
+            envVars.forEach((env, index) => {
+              const envEl = document.createElement("div");
+              envEl.className =
+                "bg-green-100 text-green-800 text-xs px-2 py-1 rounded flex items-center";
+              envEl.innerHTML = `
+                ${env.key}=${env.value}
+                <button class="ml-1 text-green-600 hover:text-green-800" data-index="${index}">
+                  <i class="fas fa-times-circle"></i>
+                </button>
+              `;
+
+              // Add remove functionality
+              envEl
+                .querySelector("button")
+                .addEventListener("click", function () {
+                  const idx = parseInt(this.getAttribute("data-index"));
+                  envVars.splice(idx, 1);
+                  updateEnvVarsList();
+                });
+
+              envVarsList.appendChild(envEl);
+            });
+          }
+
+          // Replace existing list or append to container
+          const existingList = document.getElementById("envVarsList");
+          if (existingList) {
+            existingList.parentNode.replaceChild(envVarsList, existingList);
+          } else {
+            document
+              .querySelectorAll("button.text-blue-600")[1]
+              .parentNode.appendChild(envVarsList);
+          }
+        }
+
+        // Function to update volume mappings visual list
+        function updateVolumeMappingsList() {
+          const volumesList = document.createElement("div");
+          volumesList.id = "volumeMappingsList";
+          volumesList.className = "mt-2 flex flex-wrap gap-2";
+
+          if (volumeMappings.length > 0) {
+            volumeMappings.forEach((volume, index) => {
+              const volEl = document.createElement("div");
+              volEl.className =
+                "bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded flex items-center";
+              volEl.innerHTML = `
+                ${volume.hostPath}:${volume.containerPath}
+                <button class="ml-1 text-purple-600 hover:text-purple-800" data-index="${index}">
+                  <i class="fas fa-times-circle"></i>
+                </button>
+              `;
+
+              // Add remove functionality
+              volEl
+                .querySelector("button")
+                .addEventListener("click", function () {
+                  const idx = parseInt(this.getAttribute("data-index"));
+                  volumeMappings.splice(idx, 1);
+                  updateVolumeMappingsList();
+                });
+
+              volumesList.appendChild(volEl);
+            });
+          }
+
+          // Replace existing list or append to container
+          const existingList = document.getElementById("volumeMappingsList");
+          if (existingList) {
+            existingList.parentNode.replaceChild(volumesList, existingList);
+          } else {
+            document
+              .querySelectorAll("button.text-blue-600")[2]
+              .parentNode.appendChild(volumesList);
+          }
+        }
+
+        // Cache button refs
+        const addPortBtn = document.getElementById("addPortBtn");
+        const addEnvBtn = document.getElementById("addEnvBtn");
+        const addVolBtn = document.getElementById("addVolBtn");
+
+        // ---- Add Port Mapping ----
+        addPortBtn.addEventListener("click", () => {
+          const hostPortField = document.querySelector(
+            "input[name='hostPort']"
+          );
+          const containerPortField = document.querySelector(
+            "input[name='containerPort']"
+          );
+
+          const host = hostPortField.value.trim(),
+            cont = containerPortField.value.trim();
+
+          if (host && cont) {
+            portMappings.push({ hostPort: host, containerPort: cont });
+            hostPortField.value = "";
+            containerPortField.value = "";
+            updatePortMappingsList();
+            showNotification(`Port mapping added: ${host}:${cont}`, "success");
+          } else {
+            showNotification(
+              "Please enter both host and container ports",
+              "error"
             );
-            const containerPortField = document.querySelector(
-              "input[name='containerPort']"
+          }
+        });
+
+        // ---- Add Environment Variable ----
+        addEnvBtn.addEventListener("click", () => {
+          const keyField = document.querySelector("input[name='envKey']");
+          const valueField = document.querySelector("input[name='envValue']");
+          const key = keyField.value.trim();
+
+          if (key) {
+            envVars.push({ key, value: valueField.value.trim() });
+            keyField.value = "";
+            valueField.value = "";
+            updateEnvVarsList();
+            showNotification(`Env var added: ${key}`, "success");
+          } else {
+            showNotification("Please enter environment variable key", "error");
+          }
+        });
+
+        // ---- Add Volume Mapping ----
+        addVolBtn.addEventListener("click", () => {
+          const hostPathField = document.querySelector(
+            "input[name='hostPath']"
+          );
+          const containerPathField = document.querySelector(
+            "input[name='containerPath']"
+          );
+          const hostPath = hostPathField.value.trim(),
+            contPath = containerPathField.value.trim();
+
+          if (hostPath && contPath) {
+            volumeMappings.push({ hostPath, containerPath: contPath });
+            hostPathField.value = "";
+            containerPathField.value = "";
+            updateVolumeMappingsList();
+            showNotification("Volume mapping added", "success");
+          } else {
+            showNotification(
+              "Please enter both host and container paths",
+              "error"
             );
+          }
+        });
 
-            if (hostPortField.value && containerPortField.value) {
-              // Make sure values are strings
-              const hostPort = hostPortField.value.toString();
-              const containerPort = containerPortField.value.toString();
-
-              portMappings.push({
-                hostPort: hostPort,
-                containerPort: containerPort,
-              });
-
-              console.log(
-                "Added port mapping:",
-                portMappings[portMappings.length - 1]
-              );
-              console.log("Current port mappings:", portMappings);
-
-              // Clear fields
-              hostPortField.value = "";
-              containerPortField.value = "";
-
-              // Update visual list
+        // ---- Render helpers ----
+        function updatePortMappingsList() {
+          const list = document.getElementById("portMappingsList");
+          list.innerHTML = "";
+          portMappings.forEach(({ hostPort, containerPort }, i) => {
+            const el = document.createElement("div");
+            el.className =
+              "bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded flex items-center";
+            el.innerHTML = `
+      ${hostPort}:${containerPort}
+      <button class="ml-1 text-blue-600 hover:text-blue-800" data-index="${i}">
+        <i class="fas fa-times-circle"></i>
+      </button>`;
+            el.querySelector("button").addEventListener("click", () => {
+              portMappings.splice(i, 1);
               updatePortMappingsList();
-
-              showNotification(
-                `Port mapping added: ${hostPort}:${containerPort}`,
-                "success"
-              );
-            } else {
-              showNotification(
-                "Please enter both host and container ports",
-                "error"
-              );
-            }
+            });
+            list.appendChild(el);
           });
+        }
 
-        // Add environment variable
-        document
-          .querySelectorAll("button.text-blue-600")[1]
-          .addEventListener("click", function () {
-            const envKeyField = document.querySelector("input[name='envKey']");
-            const envValueField = document.querySelector(
-              "input[name='envValue']"
-            );
-
-            if (envKeyField.value) {
-              envVars.push({
-                key: envKeyField.value,
-                value: envValueField.value || "",
-              });
-
-              // Clear fields
-              envKeyField.value = "";
-              envValueField.value = "";
-
-              showNotification("Environment variable added", "success");
-            } else {
-              showNotification(
-                "Please enter environment variable key",
-                "error"
-              );
-            }
+        function updateEnvVarsList() {
+          const list = document.getElementById("envVarsList");
+          list.innerHTML = "";
+          envVars.forEach(({ key, value }, i) => {
+            const el = document.createElement("div");
+            el.className =
+              "bg-green-100 text-green-800 text-xs px-2 py-1 rounded flex items-center";
+            el.innerHTML = `
+      ${key}=${value}
+      <button class="ml-1 text-green-600 hover:text-green-800" data-index="${i}">
+        <i class="fas fa-times-circle"></i>
+      </button>`;
+            el.querySelector("button").addEventListener("click", () => {
+              envVars.splice(i, 1);
+              updateEnvVarsList();
+            });
+            list.appendChild(el);
           });
+        }
 
-        // Add volume mapping
-        document
-          .querySelectorAll("button.text-blue-600")[2]
-          .addEventListener("click", function () {
-            const hostPathField = document.querySelector(
-              "input[name='hostPath']"
-            );
-            const containerPathField = document.querySelector(
-              "input[name='containerPath']"
-            );
-
-            if (hostPathField.value && containerPathField.value) {
-              volumeMappings.push({
-                hostPath: hostPathField.value,
-                containerPath: containerPathField.value,
-              });
-
-              // Clear fields
-              hostPathField.value = "";
-              containerPathField.value = "";
-
-              showNotification("Volume mapping added", "success");
-            } else {
-              showNotification(
-                "Please enter both host and container paths",
-                "error"
-              );
-            }
+        function updateVolumeMappingsList() {
+          const list = document.getElementById("volumeMappingsList");
+          list.innerHTML = "";
+          volumeMappings.forEach(({ hostPath, containerPath }, i) => {
+            const el = document.createElement("div");
+            el.className =
+              "bg-purple-100 text-purple-800 text-xs px-2 py-1 rounded flex items-center";
+            el.innerHTML = `
+      ${hostPath}:${containerPath}
+      <button class="ml-1 text-purple-600 hover:text-purple-800" data-index="${i}">
+        <i class="fas fa-times-circle"></i>
+      </button>`;
+            el.querySelector("button").addEventListener("click", () => {
+              volumeMappings.splice(i, 1);
+              updateVolumeMappingsList();
+            });
+            list.appendChild(el);
           });
+        }
 
         // Handle form submission
         submitFormBtn.addEventListener("click", function () {
@@ -2901,6 +3099,11 @@
             showNotification("Container image is required", "error");
             return;
           }
+
+          // Log the current state of our arrays for debugging
+          console.log("Ports to submit:", portMappings);
+          console.log("Env vars to submit:", envVars);
+          console.log("Volumes to submit:", volumeMappings);
 
           // Prepare data for API call
           const containerData = {
@@ -2946,8 +3149,12 @@
                 volumeMappings = [];
 
                 // Clear visual lists
-                if (typeof updatePortMappingsList === "function") {
-                  updatePortMappingsList();
+                document.getElementById("portMappingsList").innerHTML = "";
+                if (document.getElementById("envVarsList")) {
+                  document.getElementById("envVarsList").innerHTML = "";
+                }
+                if (document.getElementById("volumeMappingsList")) {
+                  document.getElementById("volumeMappingsList").innerHTML = "";
                 }
 
                 // Refresh container list
@@ -2975,172 +3182,206 @@
       });
     </script>
     <script>
-// Add this terminal functionality to your existing JavaScript
-document.addEventListener('DOMContentLoaded', function() {
-  let terminalSocket = null;
-  let currentContainerId = null;
-  let terminalHistory = [];
-  let historyPosition = -1;
-  const terminalOutput = document.getElementById('terminal-output');
-  const terminalInput = document.getElementById('terminal-input');
-  const terminalPrompt = document.getElementById('terminal-prompt');
-  
-  // Function to open terminal connection
-  function openTerminalConnection(containerId, containerName) {
-    // Close existing connection if any
-    if (terminalSocket) {
-      terminalSocket.close();
-    }
-    
-    // Reset terminal
-    terminalOutput.innerHTML = '<div class="mb-2 text-green-400">Connecting to container terminal...</div>';
-    currentContainerId = containerId;
-    document.getElementById('terminalContainerName').textContent = containerName;
-    
-    // Connect to WebSocket
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    terminalSocket = new WebSocket(`${protocol}//${window.location.host}/terminal/${containerId}`);
-    
-    terminalSocket.onopen = function() {
-      appendToTerminal('Connected to terminal. Type commands to interact with the container.', 'text-blue-400');
-      terminalSocket.send('$$INIT_TERMINAL$$');
-    };
-    
-    terminalSocket.onmessage = function(event) {
-      try {
-        const message = JSON.parse(event.data);
-        switch(message.type) {
-          case 'output':
-            appendToTerminal(message.data);
-            break;
-          case 'error':
-            appendToTerminal(message.data, 'text-red-400');
-            break;
-          case 'system':
-            appendToTerminal(message.data, 'text-yellow-400');
-            break;
+      // Add this terminal functionality to your existing JavaScript
+      document.addEventListener("DOMContentLoaded", function () {
+        let terminalSocket = null;
+        let currentContainerId = null;
+        let terminalHistory = [];
+        let historyPosition = -1;
+        const terminalOutput = document.getElementById("terminal-output");
+        const terminalInput = document.getElementById("terminal-input");
+        const terminalPrompt = document.getElementById("terminal-prompt");
+
+        // Function to open terminal connection
+        function openTerminalConnection(containerId, containerName) {
+          // Close existing connection if any
+          if (terminalSocket) {
+            terminalSocket.close();
+          }
+
+          // Reset terminal
+          terminalOutput.innerHTML =
+            '<div class="mb-2 text-green-400">Connecting to container terminal...</div>';
+          currentContainerId = containerId;
+          document.getElementById("terminalContainerName").textContent =
+            containerName;
+
+          // Connect to WebSocket
+          const protocol =
+            window.location.protocol === "https:" ? "wss:" : "ws:";
+          terminalSocket = new WebSocket(
+            `${protocol}//${window.location.host}/terminal/${containerId}`
+          );
+
+          terminalSocket.onopen = function () {
+            appendToTerminal(
+              "Connected to terminal. Type commands to interact with the container.",
+              "text-blue-400"
+            );
+            terminalSocket.send("$$INIT_TERMINAL$$");
+          };
+
+          terminalSocket.onmessage = function (event) {
+            try {
+              const message = JSON.parse(event.data);
+              switch (message.type) {
+                case "output":
+                  appendToTerminal(message.data);
+                  break;
+                case "error":
+                  appendToTerminal(message.data, "text-red-400");
+                  break;
+                case "system":
+                  appendToTerminal(message.data, "text-yellow-400");
+                  break;
+              }
+            } catch (e) {
+              appendToTerminal(
+                "Error processing server message: " + e.message,
+                "text-red-400"
+              );
+            }
+          };
+
+          terminalSocket.onclose = function () {
+            appendToTerminal("Terminal connection closed.", "text-yellow-400");
+            terminalSocket = null;
+          };
+
+          terminalSocket.onerror = function (error) {
+            appendToTerminal(
+              "WebSocket Error: " + error.message,
+              "text-red-400"
+            );
+          };
+
+          // Focus the input
+          terminalInput.focus();
         }
-      } catch (e) {
-        appendToTerminal('Error processing server message: ' + e.message, 'text-red-400');
-      }
-    };
-    
-    terminalSocket.onclose = function() {
-      appendToTerminal('Terminal connection closed.', 'text-yellow-400');
-      terminalSocket = null;
-    };
-    
-    terminalSocket.onerror = function(error) {
-      appendToTerminal('WebSocket Error: ' + error.message, 'text-red-400');
-    };
-    
-    // Focus the input
-    terminalInput.focus();
-  }
-  
-  // Function to append text to terminal
-  function appendToTerminal(text, className = '') {
-    // Process ANSI color codes if needed (simplified version)
-    text = text.replace(/\n/g, '<br>');
-    
-    const element = document.createElement('div');
-    element.className = className;
-    element.innerHTML = text;
-    terminalOutput.appendChild(element);
-    terminalOutput.scrollTop = terminalOutput.scrollHeight;
-  }
-  
-  // Handle terminal input submission
-  terminalInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      const command = terminalInput.value;
-      
-      if (command.trim()) {
-        // Add to history
-        terminalHistory.push(command);
-        historyPosition = terminalHistory.length;
-        
-        // Display command
-        appendToTerminal(`${terminalPrompt.textContent} ${command}`, 'text-green-400');
-        
-        if (terminalSocket && terminalSocket.readyState === WebSocket.OPEN) {
-          terminalSocket.send(command);
-        } else {
-          appendToTerminal('Not connected to container terminal.', 'text-red-400');
+
+        // Function to append text to terminal
+        function appendToTerminal(text, className = "") {
+          // Process ANSI color codes if needed (simplified version)
+          text = text.replace(/\n/g, "<br>");
+
+          const element = document.createElement("div");
+          element.className = className;
+          element.innerHTML = text;
+          terminalOutput.appendChild(element);
+          terminalOutput.scrollTop = terminalOutput.scrollHeight;
         }
-      }
-      
-      terminalInput.value = '';
-    }
-    
-    // Handle history navigation
-    if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      if (historyPosition > 0) {
-        historyPosition--;
-        terminalInput.value = terminalHistory[historyPosition];
-      }
-    } else if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      if (historyPosition < terminalHistory.length - 1) {
-        historyPosition++;
-        terminalInput.value = terminalHistory[historyPosition];
-      } else {
-        historyPosition = terminalHistory.length;
-        terminalInput.value = '';
-      }
-    }
-  });
-  
-  // Handle terminal modal open
-  function openTerminalModal(containerId, containerName) {
-    openModal("terminalModal");
-    openTerminalConnection(containerId, containerName);
-  }
-  
-  // Update the existing getTerminalAccess function
-  window.getTerminalAccess = function(containerId, containerName) {
-    openTerminalModal(containerId, containerName);
-  };
-  
-  // Update terminal button click handlers
-  document.addEventListener('click', function(e) {
-    if (e.target.closest('.fa-terminal')) {
-      e.preventDefault();
-      const row = e.target.closest('tr') || e.target.closest('.grid-view-item');
-      if (!row) return;
-      
-      const containerName = row.querySelector('.text-sm.font-medium.text-gray-900')?.innerText || 
-                          row.querySelector('h3')?.innerText || 'Container';
-      
-      const containerId = row.querySelector('.text-xs.text-gray-500')?.innerText.replace('ID: ', '') || 
-                         row.dataset.containerId || containerName;
-      
-      openTerminalModal(containerId, containerName);
-    }
-  });
-  
-  // Close terminal connection when modal closes
-  document.getElementById('closeTerminalModal').addEventListener('click', function() {
-    if (terminalSocket) {
-      terminalSocket.close();
-      terminalSocket = null;
-    }
-    closeModal('terminalModal');
-  });
-  
-  // Update the existing terminal button event handler
-  document.querySelectorAll('[data-action="terminal"]').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      e.preventDefault();
-      const container = e.target.closest('[data-container-id]');
-      const containerId = container.dataset.containerId;
-      const containerName = container.dataset.containerName || 'Container';
-      openTerminalModal(containerId, containerName);
-    });
-  });
-});
-</script>
+
+        // Handle terminal input submission
+        terminalInput.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            const command = terminalInput.value;
+
+            if (command.trim()) {
+              // Add to history
+              terminalHistory.push(command);
+              historyPosition = terminalHistory.length;
+
+              // Display command
+              appendToTerminal(
+                `${terminalPrompt.textContent} ${command}`,
+                "text-green-400"
+              );
+
+              if (
+                terminalSocket &&
+                terminalSocket.readyState === WebSocket.OPEN
+              ) {
+                terminalSocket.send(command);
+              } else {
+                appendToTerminal(
+                  "Not connected to container terminal.",
+                  "text-red-400"
+                );
+              }
+            }
+
+            terminalInput.value = "";
+          }
+
+          // Handle history navigation
+          if (e.key === "ArrowUp") {
+            e.preventDefault();
+            if (historyPosition > 0) {
+              historyPosition--;
+              terminalInput.value = terminalHistory[historyPosition];
+            }
+          } else if (e.key === "ArrowDown") {
+            e.preventDefault();
+            if (historyPosition < terminalHistory.length - 1) {
+              historyPosition++;
+              terminalInput.value = terminalHistory[historyPosition];
+            } else {
+              historyPosition = terminalHistory.length;
+              terminalInput.value = "";
+            }
+          }
+        });
+
+        // Handle terminal modal open
+        function openTerminalModal(containerId, containerName) {
+          openModal("terminalModal");
+          openTerminalConnection(containerId, containerName);
+        }
+
+        // Update the existing getTerminalAccess function
+        window.getTerminalAccess = function (containerId, containerName) {
+          openTerminalModal(containerId, containerName);
+        };
+
+        // Update terminal button click handlers
+        document.addEventListener("click", function (e) {
+          if (e.target.closest(".fa-terminal")) {
+            e.preventDefault();
+            const row =
+              e.target.closest("tr") || e.target.closest(".grid-view-item");
+            if (!row) return;
+
+            const containerName =
+              row.querySelector(".text-sm.font-medium.text-gray-900")
+                ?.innerText ||
+              row.querySelector("h3")?.innerText ||
+              "Container";
+
+            const containerId =
+              row
+                .querySelector(".text-xs.text-gray-500")
+                ?.innerText.replace("ID: ", "") ||
+              row.dataset.containerId ||
+              containerName;
+
+            openTerminalModal(containerId, containerName);
+          }
+        });
+
+        // Close terminal connection when modal closes
+        document
+          .getElementById("closeTerminalModal")
+          .addEventListener("click", function () {
+            if (terminalSocket) {
+              terminalSocket.close();
+              terminalSocket = null;
+            }
+            closeModal("terminalModal");
+          });
+
+        // Update the existing terminal button event handler
+        document.querySelectorAll('[data-action="terminal"]').forEach((btn) => {
+          btn.addEventListener("click", function (e) {
+            e.preventDefault();
+            const container = e.target.closest("[data-container-id]");
+            const containerId = container.dataset.containerId;
+            const containerName =
+              container.dataset.containerName || "Container";
+            openTerminalModal(containerId, containerName);
+          });
+        });
+      });
+    </script>
   </body>
 </html>
