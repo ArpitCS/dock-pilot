@@ -517,20 +517,17 @@
     </div>
 
     <!-- Pull Image Modal -->
-    <div id="pullImageModal" class="fixed inset-0 z-50 hidden">
-      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
-      <div
-        class="modal relative bg-white rounded-lg shadow-xl max-w-md mx-auto mt-24"
-      >
-        <div class="px-6 py-4 border-b border-gray-200">
+    <div id="pullImageModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+      <div class="modal-overlay absolute inset-0 bg-black opacity-50 cursor-pointer backdrop-filter backdrop-blur-md transition-all"></div>
+      <div class="modal modal-content relative bg-white rounded-lg shadow-xl max-w-md w-full mx-auto mt-24 flex flex-col transition-transform duration-200 scale-95">
+        <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200">
           <h3 class="text-lg font-medium text-gray-900">Pull New Image</h3>
+          <button id="closePullImageModal" class="text-gray-400 hover:text-gray-500">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
-        <div class="p-6">
-          <label
-            for="pullImageName"
-            class="block text-sm font-medium text-gray-700 mb-1"
-            >Image Name</label
-          >
+        <div class="flex-1 overflow-auto p-6">
+          <label for="pullImageName" class="block text-sm font-medium text-gray-700 mb-1">Image Name</label>
           <input
             type="text"
             id="pullImageName"
@@ -538,7 +535,7 @@
             placeholder="repository:tag (e.g. nginx:latest)"
           />
         </div>
-        <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-2">
+        <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-2 border-t border-gray-200 rounded-b-lg">
           <button
             id="cancelPullBtn"
             class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
@@ -556,16 +553,12 @@
     </div>
 
     <!-- Remove Image Modal -->
-    <div id="removeImageModal" class="fixed inset-0 z-50 hidden">
-      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
-      <div
-        class="modal relative bg-white rounded-lg shadow-xl max-w-md mx-auto mt-24"
-      >
+    <div id="removeImageModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+      <div class="modal-overlay absolute inset-0 bg-black opacity-50 cursor-pointer backdrop-filter backdrop-blur-md transition-all"></div>
+      <div class="modal modal-content relative bg-white rounded-lg shadow-xl max-w-md w-full mx-auto mt-24 flex flex-col transition-transform duration-200 scale-95">
         <div class="px-6 py-4">
           <div class="text-center">
-            <div
-              class="mx-auto mb-4 h-12 w-12 flex items-center justify-center rounded-full bg-red-100"
-            >
+            <div class="mx-auto mb-4 h-12 w-12 flex items-center justify-center rounded-full bg-red-100">
               <i class="fas fa-exclamation-triangle text-red-600"></i>
             </div>
             <h3 class="text-lg font-medium text-gray-900">Remove Image</h3>
@@ -575,7 +568,7 @@
             </p>
           </div>
         </div>
-        <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-2">
+        <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-2 border-t border-gray-200 rounded-b-lg">
           <button
             id="cancelRemoveBtn"
             class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
@@ -595,12 +588,12 @@
     <!-- Inspect Image Modal -->
     <div
       id="inspectImageModal"
-      class="fixed inset-0 z-50 hidden overflow-y-auto"
+      class="fixed inset-0 flex items-center justify-center z-50 hidden overflow-y-auto"
     >
-      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
-      <div class="flex items-center justify-center min-h-screen p-4">
+      <div class="modal-overlay absolute inset-0 bg-black opacity-50 cursor-pointer backdrop-filter backdrop-blur-md transition-all"></div>
+      <div class="flex items-center justify-center min-h-screen p-4 w-full">
         <div
-          class="modal relative bg-white rounded-lg shadow-xl w-full max-w-4xl mx-auto max-h-[85vh] flex flex-col"
+          class="modal modal-content relative bg-white rounded-lg shadow-xl w-full max-w-4xl mx-auto max-h-[85vh] flex flex-col transition-transform duration-200 scale-95"
         >
           <div
             class="flex justify-between items-center px-6 py-4 border-b border-gray-200 sticky top-0 bg-white z-10"
@@ -759,15 +752,16 @@
     </div>
 
     <!-- Tag Image Modal -->
-    <div id="tagImageModal" class="fixed inset-0 z-50 hidden">
-      <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
-      <div
-        class="modal relative bg-white rounded-lg shadow-xl max-w-md mx-auto mt-24"
-      >
-        <div class="px-6 py-4 border-b border-gray-200">
+    <div id="tagImageModal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+      <div class="modal-overlay absolute inset-0 bg-black opacity-50 cursor-pointer backdrop-filter backdrop-blur-md transition-all"></div>
+      <div class="modal modal-content relative bg-white rounded-lg shadow-xl max-w-md w-full mx-auto mt-24 flex flex-col transition-transform duration-200 scale-95">
+        <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200">
           <h3 class="text-lg font-medium text-gray-900">Tag Image</h3>
+          <button id="closeTagImageModal" class="text-gray-400 hover:text-gray-500">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
-        <div class="p-6">
+        <div class="flex-1 overflow-auto p-6">
           <p class="text-sm text-gray-500 mb-3">
             Add a new tag to image
             <span id="tagImageName" class="font-semibold"></span>
@@ -785,7 +779,7 @@
             placeholder="repository:tag (e.g. myapp:v1.2)"
           />
         </div>
-        <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-2">
+        <div class="px-6 py-4 bg-gray-50 flex justify-end space-x-2 border-t border-gray-200 rounded-b-lg">
           <button
             id="cancelTagBtn"
             class="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
@@ -1472,6 +1466,53 @@
         `;
         document.head.appendChild(style);
       }
+
+      // Modal open/close functions with animation (like containers.html)
+      function openModal(id) {
+        const modal = document.getElementById(id);
+        if (!modal) return;
+        modal.classList.remove("hidden");
+        setTimeout(() => {
+          modal.classList.add("modal-visible");
+          // Animate modal-content
+          const content = modal.querySelector(".modal-content");
+          if (content) content.classList.add("scale-100");
+        }, 10);
+      }
+      function closeModal(id) {
+        const modal = document.getElementById(id);
+        if (!modal) return;
+        modal.classList.remove("modal-visible");
+        // Animate modal-content
+        const content = modal.querySelector(".modal-content");
+        if (content) content.classList.remove("scale-100");
+        setTimeout(() => {
+          modal.classList.add("hidden");
+        }, 200);
+      }
+
+      // Add modal-visible and scale-100 classes for animation
+      if (!document.getElementById('modal-animations')) {
+        const style = document.createElement('style');
+        style.id = 'modal-animations';
+        style.textContent = `
+          .modal-content { transform: scale(0.95); transition: transform 0.2s ease; }
+          .modal-visible .modal-content, .modal-content.scale-100 { transform: scale(1); }
+        `;
+        document.head.appendChild(style);
+      }
+
+      // Add close button logic for new modals
+      document.getElementById("closePullImageModal").addEventListener("click", () => closeModal("pullImageModal"));
+      document.getElementById("closeTagImageModal").addEventListener("click", () => closeModal("tagImageModal"));
+
+      // Overlay click closes modal
+      document.querySelectorAll(".modal-overlay").forEach(overlay => {
+        overlay.addEventListener("click", function () {
+          const parent = this.closest(".fixed");
+          if (parent && parent.id) closeModal(parent.id);
+        });
+      });
     </script>
   </body>
 </html>
