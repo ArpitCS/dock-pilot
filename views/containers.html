@@ -456,7 +456,7 @@
           class="flex justify-between items-center px-6 py-4 border-b border-gray-200"
         >
           <h3 class="text-lg font-medium text-gray-900">
-            Container Logs: <span id="logCouintainerName">Container</span>
+            Container Logs: <span id="logContainerName">Container</span>
           </h3>
           <button id="closeLogsModal" class="text-gray-400 hover:text-gray-500">
             <i class="fas fa-times"></i>
@@ -1557,14 +1557,23 @@
             );
           });
       }
+      let currentLogContainerId = null;
+
       function getContainerLogs(containerId, containerName) {
         document.getElementById("logContainerName").textContent = containerName;
+        currentLogContainerId = containerId; // Store the current container ID for refresh
+        
         const logsContainer = document.querySelector(
           "#logsModal .console-output"
         );
         logsContainer.innerHTML =
           '<div class="flex justify-center items-center h-full"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div><span class="ml-2">Loading logs...</span></div>';
         openModal("logsModal");
+        fetchContainerLogs(containerId, logsContainer);
+      }
+
+      // Add a separate function to fetch logs so it can be used by both initial load and refresh
+      function fetchContainerLogs(containerId, logsContainer) {
         fetch(`/get-logs/${containerId}`)
           .then((response) => {
             if (!response.ok) {
@@ -1596,6 +1605,70 @@
             logsContainer.innerHTML = `<div class="p-4 text-red-500">Error fetching logs: ${error.message}</div>`;
           });
       }
+
+      // Add event listeners for the refresh and download buttons
+      document.addEventListener("DOMContentLoaded", function() {
+        // Get the buttons
+        const refreshLogsBtn = document.querySelector("#logsModal button:nth-child(2)");
+        const downloadLogsBtn = document.querySelector("#logsModal button:first-child");
+        
+        // Refresh button functionality
+        refreshLogsBtn.addEventListener("click", function() {
+          if (currentLogContainerId) {
+            const logsContainer = document.querySelector("#logsModal .console-output");
+            logsContainer.innerHTML = 
+              '<div class="flex justify-center items-center h-full"><div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div><span class="ml-2">Refreshing logs...</span></div>';
+            
+            fetchContainerLogs(currentLogContainerId, logsContainer);
+            showNotification("Logs refreshed", "info");
+          }
+        });
+        
+        // Download button functionality
+        downloadLogsBtn.addEventListener("click", function() {
+          if (currentLogContainerId) {
+            // Show loading state
+            downloadLogsBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Downloading...';
+            
+            // Get raw logs for download
+            fetch(`/get-logs/${currentLogContainerId}`)
+              .then(response => {
+                if (!response.ok) {
+                  throw new Error("Failed to fetch logs for download");
+                }
+                return response.text();
+              })
+              .then(data => {
+                // Create blob and download
+                const blob = new Blob([data], { type: 'text/plain' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                const containerName = document.getElementById("logContainerName").textContent;
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                
+                a.href = url;
+                a.download = `${containerName}-logs-${timestamp}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+                
+                showNotification("Logs downloaded successfully", "success");
+              })
+              .catch(error => {
+                console.error("Error downloading logs:", error);
+                showNotification("Failed to download logs: " + error.message, "error");
+              })
+              .finally(() => {
+                // Restore button state
+                downloadLogsBtn.innerHTML = '<i class="fas fa-download mr-2"></i>Download';
+              });
+          } else {
+            showNotification("No container logs to download", "error");
+          }
+        });
+      });
+      
       function inspectContainer(containerId, containerName) {
         document.getElementById("inspectContainerName").textContent =
           containerName;
