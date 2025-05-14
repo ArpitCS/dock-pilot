@@ -3,8 +3,74 @@ const path = require("path");
 const morgan = require("morgan");
 const cors = require("cors");
 const { execFile } = require("child_process");
+const fs = require("fs");
+const chalk = require("chalk");
+
+// Requirements for Terminal
+const WebSocket = require("ws");
+const http = require("http");
+const { spawn } = require("child_process");
 
 const app = express();
+const server = http.createServer(app);
+const wss = new WebSocket.Server({ server });
+
+// Handle WSS Connection
+wss.on("connection", function connection(ws, req) {
+  const url = new URL(req.url, "http://localhost");
+  const containerId = url.pathname.split("/")[2]; // Extract container ID from URL
+
+  let terminal = null;
+
+  console.log(`WebSocket connection established for container: ${containerId}`);
+
+  // Handle messages from client
+  ws.on("message", function incoming(message) {
+    const data = message.toString();
+    console.log(`Received command: ${data}`);
+
+    if (data === "$$INIT_TERMINAL$$") {
+      // Initial connection - start the terminal
+      terminal = spawn("docker", [
+        "exec",
+        "-i",
+        "-t",
+        containerId,
+        "/bin/sh",
+        "-c",
+        "TERM=xterm /bin/bash || /bin/sh",
+      ]);
+
+      terminal.stdout.on("data", (data) => {
+        ws.send(JSON.stringify({ type: "output", data: data.toString() }));
+      });
+
+      terminal.stderr.on("data", (data) => {
+        ws.send(JSON.stringify({ type: "error", data: data.toString() }));
+      });
+
+      terminal.on("close", (code) => {
+        ws.send(
+          JSON.stringify({
+            type: "system",
+            data: `Terminal process exited with code ${code}`,
+          })
+        );
+      });
+    } else if (terminal) {
+      // Send command to the container
+      terminal.stdin.write(data + "\n");
+    }
+  });
+
+  // Handle client disconnection
+  ws.on("close", function close() {
+    console.log("Terminal connection closed");
+    if (terminal) {
+      terminal.kill();
+    }
+  });
+});
 
 // Middleware
 app.use(cors());
@@ -281,104 +347,102 @@ app.post("/create-container", (req, res) => {
       networkMode,
       restartPolicy,
     } = req.body;
-    
+
     console.log("Received container creation request:", req.body);
-    
+
     // Validate required fields
     if (!containerImage) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Container image is required' 
+      return res.status(400).json({
+        success: false,
+        message: "Container image is required",
       });
     }
 
     // Build the Docker command
     let command = `docker run -d`;
-    
+
     // Add container name if provided
     if (containerName) {
       command += ` --name "${containerName}"`;
     }
-    
+
     // Add restart policy if provided
     if (restartPolicy && restartPolicy !== "no") {
       command += ` --restart ${restartPolicy}`;
     }
-    
+
     // Add network mode if provided
     if (networkMode) {
       command += ` --network ${networkMode}`;
     }
-    
+
     // Add port mappings if provided
     if (Array.isArray(ports) && ports.length > 0) {
-      ports.forEach(port => {
+      ports.forEach((port) => {
         if (port.hostPort && port.containerPort) {
           command += ` -p ${port.hostPort}:${port.containerPort}`;
         }
       });
     }
-    
+
     // Add environment variables if provided
     if (Array.isArray(envVars) && envVars.length > 0) {
-      envVars.forEach(env => {
+      envVars.forEach((env) => {
         if (env.key) {
-          command += ` -e ${env.key}=${env.value || ''}`;
+          command += ` -e ${env.key}=${env.value || ""}`;
         }
       });
     }
-    
+
     // Add volume mappings if provided
     if (Array.isArray(volumes) && volumes.length > 0) {
-      volumes.forEach(volume => {
+      volumes.forEach((volume) => {
         if (volume.hostPath && volume.containerPath) {
           command += ` -v ${volume.hostPath}:${volume.containerPath}`;
         }
       });
     }
-    
+
     // Add the image name
     command += ` ${containerImage}`;
-    
+
     console.log(`Executing command: ${command}`);
-    
+
     // Execute the Docker command
-    const { exec } = require('child_process');
+    const { exec } = require("child_process");
     exec(command, (error, stdout, stderr) => {
       if (error) {
         console.error(`Error creating container: ${error.message}`);
-        return res.status(500).json({ 
-          success: false, 
+        return res.status(500).json({
+          success: false,
           message: `Error creating container: ${error.message}`,
-          details: stderr
+          details: stderr,
         });
       }
-      
+
       console.log(`Container creation output: ${stdout}`);
       if (stderr) console.error(`Container creation stderr: ${stderr}`);
-      
-      res.json({ 
-        success: true, 
-        message: containerName ? `Container ${containerName} created successfully` : 'Container created successfully', 
-        details: stdout.trim() 
+
+      res.json({
+        success: true,
+        message: containerName
+          ? `Container ${containerName} created successfully`
+          : "Container created successfully",
+        details: stdout.trim(),
       });
     });
   } catch (error) {
     console.error(`Error in create-container route: ${error}`);
-    res.status(500).json({ 
-      success: false, 
-      message: `Internal server error: ${error.message}` 
+    res.status(500).json({
+      success: false,
+      message: `Internal server error: ${error.message}`,
     });
   }
 });
 
 // Images routes
 app.get("/get-images", (req, res) => {
-  const scriptPath = path.join(
-    __dirname,
-    "scripts",
-    "images/get-images.sh"
-  );
+  const scriptPath = path.join(__dirname, "scripts", "images/get-images.sh");
   execFile(scriptPath, (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing script: ${error}`);
@@ -404,11 +468,7 @@ app.get("/pull-image/:imageName", (req, res) => {
 
 app.get("/remove-image/:imageId", (req, res) => {
   const { imageId } = req.params;
-  const scriptPath = path.join(
-    __dirname,
-    "scripts",
-    "images/remove-image.sh"
-  );
+  const scriptPath = path.join(__dirname, "scripts", "images/remove-image.sh");
   execFile(scriptPath, [imageId], (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing script: ${error}`);
@@ -421,11 +481,7 @@ app.get("/remove-image/:imageId", (req, res) => {
 
 app.get("/inspect-image/:imageId", (req, res) => {
   const { imageId } = req.params;
-  const scriptPath = path.join(
-    __dirname,
-    "scripts",
-    "images/inspect-image.sh"
-  );
+  const scriptPath = path.join(__dirname, "scripts", "images/inspect-image.sh");
   execFile(scriptPath, [imageId], (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing script: ${error}`);
@@ -438,11 +494,7 @@ app.get("/inspect-image/:imageId", (req, res) => {
 
 app.post("/tag-image", (req, res) => {
   const { imageId, newTag } = req.body;
-  const scriptPath = path.join(
-    __dirname,
-    "scripts",
-    "images/tag-image.sh"
-  );
+  const scriptPath = path.join(__dirname, "scripts", "images/tag-image.sh");
   execFile(scriptPath, [imageId, newTag], (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing script: ${error}`);
@@ -456,5 +508,12 @@ app.post("/tag-image", (req, res) => {
 // Start the server
 const PORT = 3030;
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  const url = `http://localhost:${PORT}`;
+  const now = new Date().toLocaleString();
+
+  console.log(chalk.green.bold("========================================"));
+  console.log(chalk.blue.bold("🚀 DockPilot is now Live!"));
+  console.log(chalk.yellow.bold(`🌐 Access it at: ${chalk.underline(url)}`));
+  console.log(chalk.magenta.bold(`📅 Started on: ${now}`));
+  console.log(chalk.green.bold("========================================"));
 });
